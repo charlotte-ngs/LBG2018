@@ -64,4 +64,14 @@ The term livestock breeding is based on three other important concepts
 3. __assortative mating__
 
 
- 
+### Breeding Goal
+Breeding goals are descriptions of what an ideal animal would be for a given livestock breed. Such descriptions can occur in different forms. 
+
+1. Description of phenotypic characteristics of the ideal animal. Such descriptions may often contain combinations of trait values that are impossible to be reached. Such goals are also called _political_ breeding goals. 
+2. _Scientific_ breeding goals use mathematical functions to describe what would be desirable changes in the characteristics of our livestock animals. Hence, scientific breeding goals are not based on a given set of properties of an animal, but they allow us to assess the development of an animals properties.
+
+In this course, we will be working with the scientific version of a breeding goal.
+
+
+### Artificial Selection 
+Artificial selection corresponds to the process where animals are selected as parents
