@@ -1,0 +1,20 @@
+--- 
+title: "Livestock Breeding and Genomics"
+author: "Peter von Rohr"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [LBGFS2018.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: charlotte-ngs/LBGFS2018
+description: "These are the lecture notes for the course Livestock Breeding and Genomics. This course is taught during the fall semester 2018 at ETH Zurich."
+---
+
+# Preface {-}
+Livestock Breeding and Genomics is a masters course taught in the Institute of Agricultural Sciences at ETH Zurich. The aim of this course is to introduce the basic concepts of livestock breeding and genomics to the students. 
+
+## Prerequisites {-}
+
+## Goals {-}

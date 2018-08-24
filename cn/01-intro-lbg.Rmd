@@ -1,0 +1,26 @@
+# Introduction {#intro}
+## Terminology
+The terms `Livestock Breeding` and `Animal Breeding` are used interchangably in this course. Although, the latter is a more general term, whereas the former does focus on breeding activities in livestock species, i.e. in animals which are typically present on a farm such as cattle, pig, goat and sheep. Animal breeding in general could also include pets such as dogs or cats or even zoo animals. But those species are outside of the scope of this lecture and are not described in these course notes. 
+
+The term `Livestock Breeding` is sometimes used ambigously. In general most people do not differentiate between Livestock Breeding and animal husbandry. From a scientific point of view a `Livestock Breeder` is a person who owns a number of animals from which he or she selects parent animals and uses a designed mating scheme to achieve a certain goal with the offspring animals. Most commonly known are breeders of pet animals such as dogs, cats or birds which follow individual breeding goals which focus on specific phenotypic appearance or on special behavior traits. Livestock breeders have realized a long time ago that they have to work together in breeding associations to be able to effectively select parent animals from a large breeding population and therebye to achieve better selection responses. 
+
+
+## History
+Livestock Breeding and Genomics are two scientific areas which have seen some quite dramatic changes in the last few years. As already mentioned in the previous section, Livestock Breeding is a much older discipline than Genomics. In principle, it did exist for a very long time in a rather unsystematic form such that different people made choices about which animals they selected for their livestock herds. But to the best of my knowledge it was only in the middle of the 20th century that the area of livestock breeding made some ground-breaking progress which was spread all over the world. This progress was initiated by a researcher called Charles R. Henderson. He and his team developed a solid methodology that is still applied up to the current day.
+
+
+## Genomics {#genomics}
+Genomics started with the Human Genome project. The publication of the first draft of the complete Human genome made it possible to include information of complete genomes into statistical analyses. The introduction of genomics methodologies in the area of livestock breeding caused a shift of paradigm. In large livestock breeding populations associations between certain genetic variants and desirable expression forms of phenotypic traits can be estimated using older breeding animals. The obtained estimation results can be used to assess the genetic potential of young animals which do not have any phenotypic observations available. This procedure is termed `genomic selection` and it allows for selecting breeding animals at a much younger age which shortens the generation interval. 
+
+The basic principle of how 
+
+
+## Fundamental Questions
+In Livestock Breeding and Genomics, we are interested in addressing two fundamental questions that bothered breeders for a very long time. For this course, we put these two fundamental questions into the following form.
+
+> 1. What is the _best_ animal?
+> 2. What can breeders do to obtain the _best_ animal?
+
+
+## Statistics {#statistics}
+
