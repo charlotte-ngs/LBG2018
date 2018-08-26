@@ -26,6 +26,15 @@ In Livestock Breeding and Genomics, we are interested in addressing two fundamen
 > 1. What is the _best_ animal?
 > 2. What can breeders do to obtain the _best_ animal?
 
+The term `best` is relative, because there is no `best` animal for all situations. Animals that show high performances in one environment, may be able to produce as much in a different environment. One example for that might be Holstein cows in Europe or North America are able to produce a lot of milk, but they have difficulities to survive in Africa. Knowing that the environment plays an important role for livestock animals, we will be assuming that the animals that we are selecting for are more or less adapted to their environment.
+
+Animals are usually described or characterized in terms of appearance or performance or a combination of both. In any case, we will be talking about __traits__ where any trait is an observable or measureable characteristic of an animal.
+
+```
+cont here
+```
+
+
 
 ## Statistics {#statistics}
 The development of statistical methods ...
