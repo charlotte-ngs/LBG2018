@@ -26,9 +26,27 @@ In Livestock Breeding and Genomics, we are interested in addressing two fundamen
 > 1. What is the _best_ animal?
 > 2. What can breeders do to obtain the _best_ animal?
 
-The term `best` is relative, because there is no `best` animal for all situations. Animals that show high performances in one environment, may be able to produce as much in a different environment. One example for that might be Holstein cows in Europe or North America are able to produce a lot of milk, but they have difficulities to survive in Africa. Knowing that the environment plays an important role for livestock animals, we will be assuming that the animals that we are selecting for are more or less adapted to their environment.
+The term `best` is relative, because there is no `best` animal for all situations. Animals that show high performances in one environment, may be able to produce as much in a different environment. One example for that might be Holstein cows in Europe or North America are able to produce a lot of milk, but they have difficulities to survive in Africa. Knowing that the environment plays an important role for livestock animals, we will be assuming that the animals that we are selecting, are more or less adapted to their environment.
 
-Animals are usually described or characterized in terms of appearance or performance or a combination of both. In any case, we will be talking about __traits__ where any trait is an observable or measureable characteristic of an animal.
+Animals are usually described or characterized in terms of appearance or performance or a combination of both. In any case, we will be talking about __traits__ where any trait is an observable or measureable characteristic of an animal. Examples of _observable_ traits are 
+
+* coat color
+* size 
+* muscling
+* leg set
+* udder conformation and many more.
+
+Observable traits are mostly used to describe the appearance of an animal. In contrast to that _measurable_ traits are mostly used to describe the performance of an animal. Examples of measurable traits are 
+
+* body weight
+* milk production
+* protein and fat yield.
+
+Note, it is important to distinguish between the observed or measured values of a trait which might be `red` coat color or $343$ kg of body weight and the traits themselves which are just coat color or body weight. 
+
+
+### Genotypes and Phenotypes
+In Livestock Breeding we are mainly concerned with changing animal populations at the genetic level. The reason why we are interested in changing a population genetically is because parents do not pass their phenotypes to their offspring. Parents pass a random sample of their genes to their offspring and for each offspring every parent does transmit a different sample of their genes. Therefore when looking at the set of all genes in a population this is the one unit that is passed on from one generation to the next generation. 
 
 ```
 cont here
