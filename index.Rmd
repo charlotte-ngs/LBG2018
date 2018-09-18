@@ -246,3 +246,10 @@ knitr::kable(dfSolTable)
 ### More Material
 ```{r FurtherMatTable, echo=FALSE, results='asis'}
 
+```
+
+```{r LatestChange, echo=FALSE, results='asis'}
+cat(rmddochelper::get_latest_change(), "\n")
+```
+
+
