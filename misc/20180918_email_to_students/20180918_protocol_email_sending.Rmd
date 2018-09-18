@@ -1,0 +1,110 @@
+---
+title: "Sending E-Mail Announcements To Students"
+author: "Peter von Rohr"
+date: "2018-09-18"
+output: html_notebook
+---
+
+## Disclaimer
+This notebook contains a protocol on all the steps that were taken to send out e-mail announcements to students. The process of sending out e-mails with `gmailr` is taken from the following two resources
+
+1. https://github.com/jennybc/send-email-with-r and
+2. https://github.com/jimhester/gmailr
+
+
+## Prerequisites
+On the google developers console (console.developers.google.com), a new project was created and the GMail API was enabled. As the next step, credentials were created and the resulting json-file that contains the credentials was downloaded. More details on how to do that can be taken from https://github.com/jimhester/gmailr.
+
+
+## Getting Started
+We are following the tutorial on https://github.com/jennybc/send-email-with-r to create and send the announcement e-mails.
+
+### Required packages
+The following packages are used
+
+```{r}
+vec_pkgs <- c("gmailr", "readr", "dplyr", "purrr")
+vec_inst_pkgs <- installed.packages()
+for (p in vec_pkgs){
+  if (!p %in% vec_inst_pkgs)
+    install.packages(pkgs = p, repos = "https://cran.rstudio.com")
+}
+```
+
+
+ 
+### Dry Run
+We start with a test
+
+```{r}
+### # name of the secret file
+s_secret_file <- "lbgfs2018.googleusercontent.com.json"
+# that secret file must exist, o/w we stop here
+stopifnot(file.exists(s_secret_file))
+```
+
+Once the secret file is set, we can start
+
+```{r}
+### # start the test
+suppressPackageStartupMessages(library(gmailr))
+use_secret_file(s_secret_file)
+```
+
+The following code snippet sends a simple message to a defined address. This test is only run once, hence, we are not evaluating the following code in subsequent runs.
+
+```{r, eval=FALSE}
+test_email <- mime(
+    To = "peter.vonrohr19680917@bluewin.ch",
+    From = "peter.vonrohr@gmail.com",
+    Subject = "this is just a gmailr test",
+    body = "Can you hear me now?")
+send_message(test_email)
+```
+
+The first time when running this, we are presented with the following question:
+
+```
+Use a local file ('.httr-oauth'), to cache OAuth access credentials between R sessions?
+
+1: Yes
+2: No
+
+```
+
+Entering 1 as the answer produces the following output and opens a browser where the project must be associated with the given e-mail address. As soon as this process is done, the browser window can be closed again.
+
+```
+Adding .httr-oauth to .gitignore
+Waiting for authentication in browser...
+Press Esc/Ctrl + C to abort
+Authentication complete.
+Id: 165ed3158db06220
+To: 
+From: 
+Date: 
+Subject: 
+```
+Checking the inbox of the address specified in the above "To"-field must result in a new message. If that message is not received, then something is wrong.
+
+
+## Compose and Send E-Mails
+From the teaching system all student names were exported and just the columns with the names and the e-mails were retained. Then this information is saved in a .csv-file. This file is read into a dataframe.
+
+```{r}
+s_adr_file <- "addresses_lbgfs2018.csv"
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(purrr))
+suppressPackageStartupMessages(library(readr))
+
+(addresses <- read_csv(s_adr_file))
+```
+
+From the E-Mail addresses, we create the logins
+
+```{r}
+addresses <- addresses %>% rowwise() %>% mutate(login = strsplit(`E-Mail`, split = "@")[[1]][1])
+addresses
+```
+
+
