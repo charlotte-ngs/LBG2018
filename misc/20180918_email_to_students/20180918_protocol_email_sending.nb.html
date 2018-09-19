@@ -271,53 +271,143 @@ Subject: </code></pre>
 <p>From the teaching system all student names were exported and just the columns with the names and the e-mails were retained. Then this information is saved in a .csv-file. This file is read into a dataframe.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc19hZHJfZmlsZSA8LSBcImFkZHJlc3Nlc19sYmdmczIwMTguY3N2XCJcbnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KGRwbHlyKSlcbnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KHB1cnJyKSlcbnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KHJlYWRyKSlcbihhZGRyZXNzZXMgPC0gcmVhZF9jc3Yoc19hZHJfZmlsZSkpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc19hZHJfZmlsZSA8LSBcImFkZHJlc3Nlc19sYmdmczIwMTguY3N2XCJcbnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KGRwbHlyKSlcbnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KHB1cnJyKSlcbnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KHJlYWRyKSlcblxuYWRkcmVzc2VzIDwtIHJlYWRfY3N2KHNfYWRyX2ZpbGUpXG5gYGAifQ== -->
 <pre class="r"><code>s_adr_file &lt;- &quot;addresses_lbgfs2018.csv&quot;
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(purrr))
 suppressPackageStartupMessages(library(readr))
-(addresses &lt;- read_csv(s_adr_file))</code></pre>
+
+addresses &lt;- read_csv(s_adr_file)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBGYW1pbGllbm5hbWUgPSBjb2xfY2hhcmFjdGVyKCksXG4gIFZvcm5hbWUgPSBjb2xfY2hhcmFjdGVyKCksXG4gIFJ1Zm5hbWUgPSBjb2xfY2hhcmFjdGVyKCksXG4gIE51bW1lciA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgU3ByYWNoZSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgYEUtTWFpbGAgPSBjb2xfY2hhcmFjdGVyKClcbilcbiJ9 -->
-<pre><code>Parsed with column specification:
-cols(
-  Familienname = col_character(),
-  Vorname = col_character(),
-  Rufname = col_character(),
-  Nummer = col_character(),
-  Sprache = col_character(),
-  `E-Mail` = col_character()
-)</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6NiwibnJvdyI6OX0sInJkZiI6Ikg0c0lBQUFBQUFBQUE3VlV6WExhTUJBMkVFTnhrN1F6bldtNWRJWVhrQWVNVGVDV0ZKb2htZElEL1psY0ZWdkVDckxFU1BLMDVKVFg2UXYwMUJzUDFWdW8vQ01IM0hKcTZ4bmIwcmVmVnQrdXREc2JYem5XbFdVWVJ0V29tUldqV2xQRGc2cjZWSXdEbzVuOHZ4cEc3WVVhMU5YN1hMM04zR0MrQ2FIRSthUTU0aXRCSVpVc0I2d0pKaEpkYzBpREhLbFA0aWhDUksrZXhBSnh3N2hQSisvV1B3THR5cHhoc3RCdUdoOGttODhmVjMwaUFWK1ZoVXdSb3JIZVpReVZqSnRDVmdnNVlWS2lIRGdlc3doVHZHaWYwWUJqcXRGTEtCVGNIaEVZQnhocXZ4Y2NVYjN3OEdQSUlpamFsekJDUW1ObmxNTDJDRXJsQ2VhaFBKbXV2eEVzQlB3TGtZMWNwR1puNnY2SEtxdDdBb2FkSHZBRzdnN2lnSk5PdDBCY01FeGVkMWdnbmtMNllPQTljbnFnMC9lQTYzUjJPQjd3bk42T256NFlPb050anVPQmJzL2Q1dlFjNEhiY2t0SzZPakRFZGR4UEwyakFLQkpZK0dHUk5CVExmenpOa25kNHJtN3gzZnA3dHR1dXJGYVVIS3Q5blpUQ2FTeFd3a1l5dkxNTFY2K0Q5S1J0WDVmSG4wZ3RQOHlLNVZUSU9FQlVsdXl2d3JSeWdqM21sN2RoVWt2N3JDUkdBY2I3ck9xV3FHcmJZMjFCa1pYZnZ0VlJuTlRqYjliZERtTDZCQXFSSjA2RFZnQWx0T2RjWGR3eW5hYVhPYVBYOWFVK2h4RW1HTkhFcUkvcE0rUGIwMWs4MzVyVzN5ZEo0MFVmV1hMb2g0WHhMWmhDVEVvN056bjdZdXZkajVLZWVLOCttODNtcC9vOWxNZ050cFNZVVVXdEp0M1JMTVZYNFNYZ1daeHFENEFmeG5RQnVra09VblAySE9YajV0YTRubTFaMitTdVRLMGUwUnRjOUFDVHdPdWlRUjZyRU5JSTdLVXFmNm1UclZCaFN5YWg1bGsrSXhwSll6TWVmZ0VwZWR4eUN3WUFBQT09In0= -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Familienname"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Vorname"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Rufname"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Nummer"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Sprache"],"name":[5],"type":["chr"],"align":["left"]},{"label":["E-Mail"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Bhati","2":"Meenu","3":"Meenu","4":"17-903-584","5":"Andere","6":"meenu.bhati@usys.ethz.ch"},{"1":"Crysnanto","2":"Danang","3":"Danang","4":"17-902-701","5":"Indonesisch","6":"danang.crysnanto@usys.ethz.ch"},{"1":"Hiltebrand","2":"Charlotte","3":"Charlotte","4":"14-914-949","5":"Deutsch","6":"chiltebr@student.ethz.ch"},{"1":"Hummel","2":"Dominik Andrin","3":"Dominik","4":"15-916-851","5":"Deutsch","6":"hummeld@student.ethz.ch"},{"1":"Huser","2":"Jasmin Claudia","3":"Jasmin","4":"13-065-420","5":"Deutsch","6":"jhuser@student.ethz.ch"},{"1":"Lüdi","2":"Irene","3":"Irene","4":"15-915-523","5":"Deutsch","6":"luedii@student.ethz.ch"},{"1":"Rilko","2":"Thomas James","3":"Thomas James","4":"14-916-928","5":"Deutsch","6":"trilko@student.ethz.ch"},{"1":"Stoffel","2":"Anna Catrina","3":"Anna Catrina","4":"15-925-134","5":"Deutsch","6":"astoffel@student.ethz.ch"},{"1":"Uldry","2":"Mélissa","3":"Mélissa","4":"14-932-404","5":"Französisch","6":"muldry@student.ethz.ch"}],"options":{"columns":{"min":{},"max":[10],"total":[6]},"rows":{"min":[10],"max":[10],"total":[9]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>From the E-Mail addresses, we create the logins</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWRkcmVzc2VzIDwtIGFkZHJlc3NlcyAlPiUgcm93d2lzZSgpICU+JSBtdXRhdGUobG9naW4gPSBzdHJzcGxpdChgRS1NYWlsYCwgc3BsaXQgPSBcIkBcIilbWzFdXVsxXSlcbmFkZHJlc3Nlc1xuYGBgIn0= -->
-<pre class="r"><code>addresses &lt;- addresses %&gt;% rowwise() %&gt;% mutate(login = strsplit(`E-Mail`, split = &quot;@&quot;)[[1]][1])
-addresses</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWRkcmVzc2VzIDwtIGFkZHJlc3NlcyAlPiUgcm93d2lzZSgpICU+JSBtdXRhdGUobG9naW4gPSBzdHJzcGxpdChgRS1NYWlsYCwgc3BsaXQgPSBcIkBcIilbWzFdXVsxXSlcbmBgYCJ9 -->
+<pre class="r"><code>addresses &lt;- addresses %&gt;% rowwise() %&gt;% mutate(login = strsplit(`E-Mail`, split = &quot;@&quot;)[[1]][1])</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInJvd3dpc2VfZGYiLCJ0YmxfZGYiLCJ0YmwiLCJkYXRhLmZyYW1lIl0sIm5jb2wiOjcsIm5yb3ciOjl9LCJyZGYiOiJINHNJQUFBQUFBQUFBN1ZVelZMYk1CQjJFa0pJK0Nrem5XbHo2VXhlUUo3RXNVTnlnMEtad0RROWhMYkRWZGdLRnJFbFJwS25oUk92MHhmb3FUY2VxamRTMmRhYXhHMU9iVDBqVy92dGF2MTlLNjJtSjVkTzY3SmxXVmJWcXRVclZyV21weHRWL2FwWUcxWXovWDYxck5wTFBXbm9zYTlIMHpqcWIwT3NxREdheCtKT01zd1VOMEJyVENORnJnUm1nVUUyeDBrY2t3aFdqeE5KaEdVOVpNYjd4eDhCcEtwUGFUU0hOSTBMeFdlejUxV2Zva0RjbFlsTUNHRUovT1VFYXhyWEJhMFFpNGdyUlF5d2Q4Smp5dWk4YzhRQ1FSbWc1MWhxdUhNYzRTU2dHUEtlQ2NKZzRjN0hrTWRZZHM1eFRDUmdSNHpoempGV09oTTJVclltajk4aUtpWCtDNUlOUXhLaWMzYi9nMVdyZDRCRzNUN3lodTRLNHFDRGJxOUFYRFJLaHpzcUVFOGpBelQwbm1QNnFEdndrT3QwVjJJODVEbjlsVHdETkhLR3l6R09oM3A5ZHptbTd5QzM2NWFZYnVvTkl3SjBiNSt4Z0RNaXFmVERvbWdrVWYvWXpJdTNjNnBQOGYzajkveHZxN1RhY2JxdDlsWGFDb2VKdkpNMlVlRzlYYVI2RTJRN2JmdlFIbjhLYXZ0aDNpeUhVaVVCWWFya2Z4MW1uUk9zY2IrNkNkTmVXdWVORWhKUXVzNnJUNG51dGpYZU5wWjUrNjFiSFNkcFAvN21YYTNSOWxLTkRMUmZMb3ZCdDZBU3NCTkdPUnlDWENsWXVUS3djaVdRQ0ppRE4yZGF1dHZxZm9TbE5IUUJiQVZZWVhzbWRFdVZ3MW5XWm5sNEE5cnRGTWMwb29TbFRxRDltWXRsYzVyTWxzek5ENm1vUXVMRnJjQitXRGpmb1FtbXhYMFg4V3ZkK2FzMG1vSi9zWUhLYm5wMVAralhZckg0cVQ5UHBlQUd2MVdVTXgxYVRTL3hla2xzUlpTQUYwa21KRUIrbUxBNTh0S0NaTzc4MlRYejV0SzhrZit5dGpDcDZpQ0ZNRTJlRkZMd1ZiRWRlMXBDcHNDKzFiZVVnc3ByVk5xS0t3eHhMWjlIZ0dUYXJLZGZYdU4ybmJJR0FBQT0ifQ== -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Familienname"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Vorname"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Rufname"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Nummer"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Sprache"],"name":[5],"type":["chr"],"align":["left"]},{"label":["E-Mail"],"name":[6],"type":["chr"],"align":["left"]},{"label":["login"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"Bhati","2":"Meenu","3":"Meenu","4":"17-903-584","5":"Andere","6":"meenu.bhati@usys.ethz.ch","7":"meenu.bhati"},{"1":"Crysnanto","2":"Danang","3":"Danang","4":"17-902-701","5":"Indonesisch","6":"danang.crysnanto@usys.ethz.ch","7":"danang.crysnanto"},{"1":"Hiltebrand","2":"Charlotte","3":"Charlotte","4":"14-914-949","5":"Deutsch","6":"chiltebr@student.ethz.ch","7":"chiltebr"},{"1":"Hummel","2":"Dominik Andrin","3":"Dominik","4":"15-916-851","5":"Deutsch","6":"hummeld@student.ethz.ch","7":"hummeld"},{"1":"Huser","2":"Jasmin Claudia","3":"Jasmin","4":"13-065-420","5":"Deutsch","6":"jhuser@student.ethz.ch","7":"jhuser"},{"1":"Lüdi","2":"Irene","3":"Irene","4":"15-915-523","5":"Deutsch","6":"luedii@student.ethz.ch","7":"luedii"},{"1":"Rilko","2":"Thomas James","3":"Thomas James","4":"14-916-928","5":"Deutsch","6":"trilko@student.ethz.ch","7":"trilko"},{"1":"Stoffel","2":"Anna Catrina","3":"Anna Catrina","4":"15-925-134","5":"Deutsch","6":"astoffel@student.ethz.ch","7":"astoffel"},{"1":"Uldry","2":"Mélissa","3":"Mélissa","4":"14-932-404","5":"Französisch","6":"muldry@student.ethz.ch","7":"muldry"}],"options":{"columns":{"min":{},"max":[10],"total":[7]},"rows":{"min":[10],"max":[10],"total":[9]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>We are adding a test student with artificial data, but with a valid E-Mail address.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWRkcmVzc2VzIDwtIGFkZHJlc3NlcyAlPiVcbiAgYWRkX3JvdyhGYW1pbGllbm5hbWU9XCJTdHVkZW50XCIsIFZvcm5hbWU9XCJUZXN0XCIsIFJ1Zm5hbWU9XCJUZXN0XCIsIE51bW1lcj1OQSwgU3ByYWNoZT1OQSwgYEUtTWFpbGA9XCJwZXRlci52b25yb2hyMTk2ODA5MTdAYmx1ZXdpbi5jaFwiLCBsb2dpbj1cInB2cmxiZ2ZzMjAxOFwiKVxuI2FkZHJlc3Nlc1xuYGBgIn0= -->
+<pre class="r"><code>addresses &lt;- addresses %&gt;%
+  add_row(Familienname=&quot;Student&quot;, Vorname=&quot;Test&quot;, Rufname=&quot;Test&quot;, Nummer=NA, Sprache=NA, `E-Mail`=&quot;peter.vonrohr19680917@bluewin.ch&quot;, login=&quot;pvrlbgfs2018&quot;)
+#addresses</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Write all logins to a separate file</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0KGFkZHJlc3NlcyRsb2dpbiwgZmlsZSA9ICdsb2dpbi50eHQnLCBzZXAgPSBcIlxcblwiKVxuYGBgIn0= -->
+<pre class="r"><code>cat(addresses$login, file = 'login.txt', sep = &quot;\n&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The file <code>login.txt</code> with the usernames for the students is uploaded to the server. We are using the script <code>create_user.sh</code> from bashtools to create a new user. For testing purposes, the user <code>pvrlbgfs2018</code> is created. It is important to create users with usernames that did not exist previously, because deleteing and re-creating old usernames cause problems when trying to login to the RStudio-server via the browser.</p>
+<p>The following bash-command is used to create all users</p>
+<pre><code>cat login.txt | while read e;do echo $e;sudo /opt/bashtools/sysadmin/create_user.sh -u $e -s /bin/bash;sleep 2;done</code></pre>
+<p>Usernames and passwords are collected into a single file called <code>access.txt</code> with the following command.</p>
+<pre><code>ls -1 .*.pwd | while read f;do echo $f;cat $f &gt;&gt; access.txt;sleep 2;done</code></pre>
+<p>This file is downloaded and used to send out E-Mails with passwords to each student. To do that we have to first read the access data.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWNjZXNzIDwtIHJlYWRfY3N2KGZpbGUgPSBcImFjY2Vzcy50eHRcIiwgY29sX25hbWVzID0gYyhcImxvZ2luXCIsXCJwYXNzd29yZFwiKSlcbiNhY2Nlc3NcbmBgYCJ9 -->
+<pre class="r"><code>access &lt;- read_csv(file = &quot;access.txt&quot;, col_names = c(&quot;login&quot;,&quot;password&quot;))
+#access</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The two tibbles <code>addresses</code> and <code>access</code> are joined</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlfZGF0IDwtIGxlZnRfam9pbihhZGRyZXNzZXMsIGFjY2VzcylcbiMgPC0gbXlfZGF0ICU+JSBmaWx0ZXIobG9naW4gPT0gXCJwdnJsYmdmczIwMThcIilcbiNteV9kYXRcbmBgYCJ9 -->
+<pre class="r"><code>my_dat &lt;- left_join(addresses, access)
+# &lt;- my_dat %&gt;% filter(login == &quot;pvrlbgfs2018&quot;)
+#my_dat</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>A new tibble is created which contains the relevant fields of the E-Mails.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZW1haWxfc2VuZGVyIDwtICdQZXRlciB2b24gUm9ocjxwZXRlci52b25yb2hyQGdtYWlsLmNvbT4nICMgeW91ciBHbWFpbCBhZGRyZXNzXG5ib2R5IDwtIFwiRGVhciAlcyAlcyxcblxuWW91ciBhY2Nlc3MgZm9yIHRoZSBleGVyY2lzZSBwbGF0Zm9ybSBpczogJXNcblxuR29vZCBsdWNrIGFuZCBlbmpveSB1c2luZyB0aGUgcGxhdGZvcm0hXG5cbkJlc3QgcmVnYXJkcywgUGV0ZXIgdm9uIFJvaHJcblwiXG5lZGF0IDwtIG15X2RhdCAlPiVcbiAgICBtdXRhdGUoXG4gICAgICAgIFRvID0gYEUtTWFpbGAsXG4gICAgICAgIEZyb20gPSBlbWFpbF9zZW5kZXIsXG4gICAgICAgIFN1YmplY3QgPSAnQWNjZXNzIHRvIGV4ZXJjaXNlIHBsYXRmb3JtJyxcbiAgICAgICAgYm9keSA9IHNwcmludGYoYm9keSwgVm9ybmFtZSwgRmFtaWxpZW5uYW1lLCBwYXNzd29yZCkpICU+JVxuICAgIHNlbGVjdChUbywgRnJvbSwgU3ViamVjdCwgYm9keSlcbndyaXRlX2NzdihlZGF0LCBcImNvbXBvc2VkLWVtYWlscy5jc3ZcIilcbmBgYCJ9 -->
+<pre class="r"><code>email_sender &lt;- 'Peter von Rohr&lt;peter.vonrohr@gmail.com&gt;' # your Gmail address
+body &lt;- &quot;Dear %s %s,
+
+Your access for the exercise platform is: %s
+
+Good luck and enjoy using the platform!
+
+Best regards, Peter von Rohr
+&quot;
+edat &lt;- my_dat %&gt;%
+    mutate(
+        To = `E-Mail`,
+        From = email_sender,
+        Subject = 'Access to exercise platform',
+        body = sprintf(body, Vorname, Familienname, password)) %&gt;%
+    select(To, From, Subject, body)
+write_csv(edat, &quot;composed-emails.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Now <code>gmailr::mime()</code> is used to construct the E-Mails.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZW1haWxzIDwtIGVkYXQgJT4lXG4gIHBtYXAobWltZSlcbnN0cihlbWFpbHMsIG1heC5sZXZlbCA9IDIsIGxpc3QubGVuID0gMilcbmBgYCJ9 -->
+<pre class="r"><code>emails &lt;- edat %&gt;%
+  pmap(mime)
+str(emails, max.level = 2, list.len = 2)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="sending-the-e-mails" class="section level2">
+<h2>Sending the E-Mails</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FmZV9zZW5kX21lc3NhZ2UgPC0gc2FmZWx5KHNlbmRfbWVzc2FnZSlcbnNlbnRfbWFpbCA8LSBlbWFpbHMgJT4lIFxuICBtYXAoc2FmZV9zZW5kX21lc3NhZ2UpXG5cbnNhdmVSRFMoc2VudF9tYWlsLCBcImxiZ2ZzMjAxOF9zZW50LWVtYWlscy5yZHNcIilcbmBgYCJ9 -->
+<pre class="r"><code>safe_send_message &lt;- safely(send_message)
+sent_mail &lt;- emails %&gt;% 
+  map(safe_send_message)
+
+saveRDS(sent_mail, &quot;lbgfs2018_sent-emails.rds&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Checking for errors</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJyb3JzIDwtIHNlbnRfbWFpbCAlPiUgXG4gIHRyYW5zcG9zZSgpICU+JSBcbiAgLiRlcnJvciAlPiUgXG4gIG1hcF9sZ2woTmVnYXRlKGlzLm51bGwpKVxuc2VudF9tYWlsW2Vycm9yc11cbmBgYCJ9 -->
+<pre class="r"><code>errors &lt;- sent_mail %&gt;% 
+  transpose() %&gt;% 
+  .$error %&gt;% 
+  map_lgl(Negate(is.null))
+sent_mail[errors]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The general E-Mail sent to the students, looks as follows</p>
+<pre><code>Dear Students,
+my name is Peter von Rohr. You are receiving this E-Mail, because you registered to the course Livestock Breeding and Genomics. 
+
+The website for this course is available at: https://charlotte-ngs.github.io/LBGFS2018/
+
+Exercises for this course can be done on a separate platform (http://r4tea.rteastem.org:8787) which consists of an RStudio server. The username to access the 
+platform is the part of your E-Mail address before the `@`-sign. The password is sent to you in a separate E-Mail. 
+
+I am looking forward to seeing you on Friday at 9:15.
+Best regards and have a nice day,
+Peter von Rohr
+</code></pre>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU2VuZGluZyBFLU1haWwgQW5ub3VuY2VtZW50cyBUbyBTdHVkZW50cyIKYXV0aG9yOiAiUGV0ZXIgdm9uIFJvaHIiCmRhdGU6ICIyMDE4LTA5LTE4IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgojIyBEaXNjbGFpbWVyClRoaXMgbm90ZWJvb2sgY29udGFpbnMgYSBwcm90b2NvbCBvbiBhbGwgdGhlIHN0ZXBzIHRoYXQgd2VyZSB0YWtlbiB0byBzZW5kIG91dCBlLW1haWwgYW5ub3VuY2VtZW50cyB0byBzdHVkZW50cy4gVGhlIHByb2Nlc3Mgb2Ygc2VuZGluZyBvdXQgZS1tYWlscyB3aXRoIGBnbWFpbHJgIGlzIHRha2VuIGZyb20gdGhlIGZvbGxvd2luZyB0d28gcmVzb3VyY2VzCgoxLiBodHRwczovL2dpdGh1Yi5jb20vamVubnliYy9zZW5kLWVtYWlsLXdpdGgtciBhbmQKMi4gaHR0cHM6Ly9naXRodWIuY29tL2ppbWhlc3Rlci9nbWFpbHIKCgojIyBQcmVyZXF1aXNpdGVzCk9uIHRoZSBnb29nbGUgZGV2ZWxvcGVycyBjb25zb2xlIChjb25zb2xlLmRldmVsb3BlcnMuZ29vZ2xlLmNvbSksIGEgbmV3IHByb2plY3Qgd2FzIGNyZWF0ZWQgYW5kIHRoZSBHTWFpbCBBUEkgd2FzIGVuYWJsZWQuIEFzIHRoZSBuZXh0IHN0ZXAsIGNyZWRlbnRpYWxzIHdlcmUgY3JlYXRlZCBhbmQgdGhlIHJlc3VsdGluZyBqc29uLWZpbGUgdGhhdCBjb250YWlucyB0aGUgY3JlZGVudGlhbHMgd2FzIGRvd25sb2FkZWQuIE1vcmUgZGV0YWlscyBvbiBob3cgdG8gZG8gdGhhdCBjYW4gYmUgdGFrZW4gZnJvbSBodHRwczovL2dpdGh1Yi5jb20vamltaGVzdGVyL2dtYWlsci4KCgojIyBHZXR0aW5nIFN0YXJ0ZWQKV2UgYXJlIGZvbGxvd2luZyB0aGUgdHV0b3JpYWwgb24gaHR0cHM6Ly9naXRodWIuY29tL2plbm55YmMvc2VuZC1lbWFpbC13aXRoLXIgdG8gY3JlYXRlIGFuZCBzZW5kIHRoZSBhbm5vdW5jZW1lbnQgZS1tYWlscy4KCiMjIyBSZXF1aXJlZCBwYWNrYWdlcwpUaGUgZm9sbG93aW5nIHBhY2thZ2VzIGFyZSB1c2VkCgpgYGB7cn0KdmVjX3BrZ3MgPC0gYygiZ21haWxyIiwgInJlYWRyIiwgImRwbHlyIiwgInB1cnJyIikKdmVjX2luc3RfcGtncyA8LSBpbnN0YWxsZWQucGFja2FnZXMoKQpmb3IgKHAgaW4gdmVjX3BrZ3MpewogIGlmICghcCAlaW4lIHZlY19pbnN0X3BrZ3MpCiAgICBpbnN0YWxsLnBhY2thZ2VzKHBrZ3MgPSBwLCByZXBvcyA9ICJodHRwczovL2NyYW4ucnN0dWRpby5jb20iKQp9CmBgYAoKCiAKIyMjIERyeSBSdW4KV2Ugc3RhcnQgd2l0aCBhIHRlc3QKCmBgYHtyfQojIyMgIyBuYW1lIG9mIHRoZSBzZWNyZXQgZmlsZQpzX3NlY3JldF9maWxlIDwtICJsYmdmczIwMTguZ29vZ2xldXNlcmNvbnRlbnQuY29tLmpzb24iCiMgdGhhdCBzZWNyZXQgZmlsZSBtdXN0IGV4aXN0LCBvL3cgd2Ugc3RvcCBoZXJlCnN0b3BpZm5vdChmaWxlLmV4aXN0cyhzX3NlY3JldF9maWxlKSkKYGBgCgpPbmNlIHRoZSBzZWNyZXQgZmlsZSBpcyBzZXQsIHdlIGNhbiBzdGFydAoKYGBge3J9CiMjIyAjIHN0YXJ0IHRoZSB0ZXN0CnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KGdtYWlscikpCnVzZV9zZWNyZXRfZmlsZShzX3NlY3JldF9maWxlKQpgYGAKClRoZSBmb2xsb3dpbmcgY29kZSBzbmlwcGV0IHNlbmRzIGEgc2ltcGxlIG1lc3NhZ2UgdG8gYSBkZWZpbmVkIGFkZHJlc3MuIFRoaXMgdGVzdCBpcyBvbmx5IHJ1biBvbmNlLCBoZW5jZSwgd2UgYXJlIG5vdCBldmFsdWF0aW5nIHRoZSBmb2xsb3dpbmcgY29kZSBpbiBzdWJzZXF1ZW50IHJ1bnMuCgpgYGB7ciwgZXZhbD1GQUxTRX0KdGVzdF9lbWFpbCA8LSBtaW1lKAogICAgVG8gPSAicGV0ZXIudm9ucm9ocjE5NjgwOTE3QGJsdWV3aW4uY2giLAogICAgRnJvbSA9ICJwZXRlci52b25yb2hyQGdtYWlsLmNvbSIsCiAgICBTdWJqZWN0ID0gInRoaXMgaXMganVzdCBhIGdtYWlsciB0ZXN0IiwKICAgIGJvZHkgPSAiQ2FuIHlvdSBoZWFyIG1lIG5vdz8iKQpzZW5kX21lc3NhZ2UodGVzdF9lbWFpbCkKYGBgCgpUaGUgZmlyc3QgdGltZSB3aGVuIHJ1bm5pbmcgdGhpcywgd2UgYXJlIHByZXNlbnRlZCB3aXRoIHRoZSBmb2xsb3dpbmcgcXVlc3Rpb246CgpgYGAKVXNlIGEgbG9jYWwgZmlsZSAoJy5odHRyLW9hdXRoJyksIHRvIGNhY2hlIE9BdXRoIGFjY2VzcyBjcmVkZW50aWFscyBiZXR3ZWVuIFIgc2Vzc2lvbnM/CgoxOiBZZXMKMjogTm8KCmBgYAoKRW50ZXJpbmcgMSBhcyB0aGUgYW5zd2VyIHByb2R1Y2VzIHRoZSBmb2xsb3dpbmcgb3V0cHV0IGFuZCBvcGVucyBhIGJyb3dzZXIgd2hlcmUgdGhlIHByb2plY3QgbXVzdCBiZSBhc3NvY2lhdGVkIHdpdGggdGhlIGdpdmVuIGUtbWFpbCBhZGRyZXNzLiBBcyBzb29uIGFzIHRoaXMgcHJvY2VzcyBpcyBkb25lLCB0aGUgYnJvd3NlciB3aW5kb3cgY2FuIGJlIGNsb3NlZCBhZ2Fpbi4KCmBgYApBZGRpbmcgLmh0dHItb2F1dGggdG8gLmdpdGlnbm9yZQpXYWl0aW5nIGZvciBhdXRoZW50aWNhdGlvbiBpbiBicm93c2VyLi4uClByZXNzIEVzYy9DdHJsICsgQyB0byBhYm9ydApBdXRoZW50aWNhdGlvbiBjb21wbGV0ZS4KSWQ6IDE2NWVkMzE1OGRiMDYyMjAKVG86IApGcm9tOiAKRGF0ZTogClN1YmplY3Q6IApgYGAKQ2hlY2tpbmcgdGhlIGluYm94IG9mIHRoZSBhZGRyZXNzIHNwZWNpZmllZCBpbiB0aGUgYWJvdmUgIlRvIi1maWVsZCBtdXN0IHJlc3VsdCBpbiBhIG5ldyBtZXNzYWdlLiBJZiB0aGF0IG1lc3NhZ2UgaXMgbm90IHJlY2VpdmVkLCB0aGVuIHNvbWV0aGluZyBpcyB3cm9uZy4KCgojIyBDb21wb3NlIGFuZCBTZW5kIEUtTWFpbHMKRnJvbSB0aGUgdGVhY2hpbmcgc3lzdGVtIGFsbCBzdHVkZW50IG5hbWVzIHdlcmUgZXhwb3J0ZWQgYW5kIGp1c3QgdGhlIGNvbHVtbnMgd2l0aCB0aGUgbmFtZXMgYW5kIHRoZSBlLW1haWxzIHdlcmUgcmV0YWluZWQuIFRoZW4gdGhpcyBpbmZvcm1hdGlvbiBpcyBzYXZlZCBpbiBhIC5jc3YtZmlsZS4gVGhpcyBmaWxlIGlzIHJlYWQgaW50byBhIGRhdGFmcmFtZS4KCmBgYHtyfQpzX2Fkcl9maWxlIDwtICJhZGRyZXNzZXNfbGJnZnMyMDE4LmNzdiIKc3VwcHJlc3NQYWNrYWdlU3RhcnR1cE1lc3NhZ2VzKGxpYnJhcnkoZHBseXIpKQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMobGlicmFyeShwdXJycikpCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KHJlYWRyKSkKCihhZGRyZXNzZXMgPC0gcmVhZF9jc3Yoc19hZHJfZmlsZSkpCmBgYAoKRnJvbSB0aGUgRS1NYWlsIGFkZHJlc3Nlcywgd2UgY3JlYXRlIHRoZSBsb2dpbnMKCmBgYHtyfQphZGRyZXNzZXMgPC0gYWRkcmVzc2VzICU+JSByb3d3aXNlKCkgJT4lIG11dGF0ZShsb2dpbiA9IHN0cnNwbGl0KGBFLU1haWxgLCBzcGxpdCA9ICJAIilbWzFdXVsxXSkKYWRkcmVzc2VzCmBgYAoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU2VuZGluZyBFLU1haWwgQW5ub3VuY2VtZW50cyBUbyBTdHVkZW50cyIKYXV0aG9yOiAiUGV0ZXIgdm9uIFJvaHIiCmRhdGU6ICIyMDE4LTA5LTE4IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgojIyBEaXNjbGFpbWVyClRoaXMgbm90ZWJvb2sgY29udGFpbnMgYSBwcm90b2NvbCBvbiBhbGwgdGhlIHN0ZXBzIHRoYXQgd2VyZSB0YWtlbiB0byBzZW5kIG91dCBlLW1haWwgYW5ub3VuY2VtZW50cyB0byBzdHVkZW50cy4gVGhlIHByb2Nlc3Mgb2Ygc2VuZGluZyBvdXQgZS1tYWlscyB3aXRoIGBnbWFpbHJgIGlzIHRha2VuIGZyb20gdGhlIGZvbGxvd2luZyB0d28gcmVzb3VyY2VzCgoxLiBodHRwczovL2dpdGh1Yi5jb20vamVubnliYy9zZW5kLWVtYWlsLXdpdGgtciBhbmQKMi4gaHR0cHM6Ly9naXRodWIuY29tL2ppbWhlc3Rlci9nbWFpbHIKCgojIyBQcmVyZXF1aXNpdGVzCk9uIHRoZSBnb29nbGUgZGV2ZWxvcGVycyBjb25zb2xlIChjb25zb2xlLmRldmVsb3BlcnMuZ29vZ2xlLmNvbSksIGEgbmV3IHByb2plY3Qgd2FzIGNyZWF0ZWQgYW5kIHRoZSBHTWFpbCBBUEkgd2FzIGVuYWJsZWQuIEFzIHRoZSBuZXh0IHN0ZXAsIGNyZWRlbnRpYWxzIHdlcmUgY3JlYXRlZCBhbmQgdGhlIHJlc3VsdGluZyBqc29uLWZpbGUgdGhhdCBjb250YWlucyB0aGUgY3JlZGVudGlhbHMgd2FzIGRvd25sb2FkZWQuIE1vcmUgZGV0YWlscyBvbiBob3cgdG8gZG8gdGhhdCBjYW4gYmUgdGFrZW4gZnJvbSBodHRwczovL2dpdGh1Yi5jb20vamltaGVzdGVyL2dtYWlsci4KCgojIyBHZXR0aW5nIFN0YXJ0ZWQKV2UgYXJlIGZvbGxvd2luZyB0aGUgdHV0b3JpYWwgb24gaHR0cHM6Ly9naXRodWIuY29tL2plbm55YmMvc2VuZC1lbWFpbC13aXRoLXIgdG8gY3JlYXRlIGFuZCBzZW5kIHRoZSBhbm5vdW5jZW1lbnQgZS1tYWlscy4KCiMjIyBSZXF1aXJlZCBwYWNrYWdlcwpUaGUgZm9sbG93aW5nIHBhY2thZ2VzIGFyZSB1c2VkCgpgYGB7cn0KdmVjX3BrZ3MgPC0gYygiZ21haWxyIiwgInJlYWRyIiwgImRwbHlyIiwgInB1cnJyIikKdmVjX2luc3RfcGtncyA8LSBpbnN0YWxsZWQucGFja2FnZXMoKQpmb3IgKHAgaW4gdmVjX3BrZ3MpewogIGlmICghcCAlaW4lIHZlY19pbnN0X3BrZ3MpCiAgICBpbnN0YWxsLnBhY2thZ2VzKHBrZ3MgPSBwLCByZXBvcyA9ICJodHRwczovL2NyYW4ucnN0dWRpby5jb20iKQp9CmBgYAoKCiAKIyMjIERyeSBSdW4KV2Ugc3RhcnQgd2l0aCBhIHRlc3QKCmBgYHtyfQojIyMgIyBuYW1lIG9mIHRoZSBzZWNyZXQgZmlsZQpzX3NlY3JldF9maWxlIDwtICJsYmdmczIwMTguZ29vZ2xldXNlcmNvbnRlbnQuY29tLmpzb24iCiMgdGhhdCBzZWNyZXQgZmlsZSBtdXN0IGV4aXN0LCBvL3cgd2Ugc3RvcCBoZXJlCnN0b3BpZm5vdChmaWxlLmV4aXN0cyhzX3NlY3JldF9maWxlKSkKYGBgCgpPbmNlIHRoZSBzZWNyZXQgZmlsZSBpcyBzZXQsIHdlIGNhbiBzdGFydAoKYGBge3J9CiMjIyAjIHN0YXJ0IHRoZSB0ZXN0CnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KGdtYWlscikpCnVzZV9zZWNyZXRfZmlsZShzX3NlY3JldF9maWxlKQpgYGAKClRoZSBmb2xsb3dpbmcgY29kZSBzbmlwcGV0IHNlbmRzIGEgc2ltcGxlIG1lc3NhZ2UgdG8gYSBkZWZpbmVkIGFkZHJlc3MuIFRoaXMgdGVzdCBpcyBvbmx5IHJ1biBvbmNlLCBoZW5jZSwgd2UgYXJlIG5vdCBldmFsdWF0aW5nIHRoZSBmb2xsb3dpbmcgY29kZSBpbiBzdWJzZXF1ZW50IHJ1bnMuCgpgYGB7ciwgZXZhbD1GQUxTRX0KdGVzdF9lbWFpbCA8LSBtaW1lKAogICAgVG8gPSAicGV0ZXIudm9ucm9ocjE5NjgwOTE3QGJsdWV3aW4uY2giLAogICAgRnJvbSA9ICJwZXRlci52b25yb2hyQGdtYWlsLmNvbSIsCiAgICBTdWJqZWN0ID0gInRoaXMgaXMganVzdCBhIGdtYWlsciB0ZXN0IiwKICAgIGJvZHkgPSAiQ2FuIHlvdSBoZWFyIG1lIG5vdz8iKQpzZW5kX21lc3NhZ2UodGVzdF9lbWFpbCkKYGBgCgpUaGUgZmlyc3QgdGltZSB3aGVuIHJ1bm5pbmcgdGhpcywgd2UgYXJlIHByZXNlbnRlZCB3aXRoIHRoZSBmb2xsb3dpbmcgcXVlc3Rpb246CgpgYGAKVXNlIGEgbG9jYWwgZmlsZSAoJy5odHRyLW9hdXRoJyksIHRvIGNhY2hlIE9BdXRoIGFjY2VzcyBjcmVkZW50aWFscyBiZXR3ZWVuIFIgc2Vzc2lvbnM/CgoxOiBZZXMKMjogTm8KCmBgYAoKRW50ZXJpbmcgMSBhcyB0aGUgYW5zd2VyIHByb2R1Y2VzIHRoZSBmb2xsb3dpbmcgb3V0cHV0IGFuZCBvcGVucyBhIGJyb3dzZXIgd2hlcmUgdGhlIHByb2plY3QgbXVzdCBiZSBhc3NvY2lhdGVkIHdpdGggdGhlIGdpdmVuIGUtbWFpbCBhZGRyZXNzLiBBcyBzb29uIGFzIHRoaXMgcHJvY2VzcyBpcyBkb25lLCB0aGUgYnJvd3NlciB3aW5kb3cgY2FuIGJlIGNsb3NlZCBhZ2Fpbi4KCmBgYApBZGRpbmcgLmh0dHItb2F1dGggdG8gLmdpdGlnbm9yZQpXYWl0aW5nIGZvciBhdXRoZW50aWNhdGlvbiBpbiBicm93c2VyLi4uClByZXNzIEVzYy9DdHJsICsgQyB0byBhYm9ydApBdXRoZW50aWNhdGlvbiBjb21wbGV0ZS4KSWQ6IDE2NWVkMzE1OGRiMDYyMjAKVG86IApGcm9tOiAKRGF0ZTogClN1YmplY3Q6IApgYGAKQ2hlY2tpbmcgdGhlIGluYm94IG9mIHRoZSBhZGRyZXNzIHNwZWNpZmllZCBpbiB0aGUgYWJvdmUgIlRvIi1maWVsZCBtdXN0IHJlc3VsdCBpbiBhIG5ldyBtZXNzYWdlLiBJZiB0aGF0IG1lc3NhZ2UgaXMgbm90IHJlY2VpdmVkLCB0aGVuIHNvbWV0aGluZyBpcyB3cm9uZy4KCgojIyBDb21wb3NlIGFuZCBTZW5kIEUtTWFpbHMKRnJvbSB0aGUgdGVhY2hpbmcgc3lzdGVtIGFsbCBzdHVkZW50IG5hbWVzIHdlcmUgZXhwb3J0ZWQgYW5kIGp1c3QgdGhlIGNvbHVtbnMgd2l0aCB0aGUgbmFtZXMgYW5kIHRoZSBlLW1haWxzIHdlcmUgcmV0YWluZWQuIFRoZW4gdGhpcyBpbmZvcm1hdGlvbiBpcyBzYXZlZCBpbiBhIC5jc3YtZmlsZS4gVGhpcyBmaWxlIGlzIHJlYWQgaW50byBhIGRhdGFmcmFtZS4KCmBgYHtyfQpzX2Fkcl9maWxlIDwtICJhZGRyZXNzZXNfbGJnZnMyMDE4LmNzdiIKc3VwcHJlc3NQYWNrYWdlU3RhcnR1cE1lc3NhZ2VzKGxpYnJhcnkoZHBseXIpKQpzdXBwcmVzc1BhY2thZ2VTdGFydHVwTWVzc2FnZXMobGlicmFyeShwdXJycikpCnN1cHByZXNzUGFja2FnZVN0YXJ0dXBNZXNzYWdlcyhsaWJyYXJ5KHJlYWRyKSkKCmFkZHJlc3NlcyA8LSByZWFkX2NzdihzX2Fkcl9maWxlKQpgYGAKCkZyb20gdGhlIEUtTWFpbCBhZGRyZXNzZXMsIHdlIGNyZWF0ZSB0aGUgbG9naW5zCgpgYGB7cn0KYWRkcmVzc2VzIDwtIGFkZHJlc3NlcyAlPiUgcm93d2lzZSgpICU+JSBtdXRhdGUobG9naW4gPSBzdHJzcGxpdChgRS1NYWlsYCwgc3BsaXQgPSAiQCIpW1sxXV1bMV0pCmBgYAoKV2UgYXJlIGFkZGluZyBhIHRlc3Qgc3R1ZGVudCB3aXRoIGFydGlmaWNpYWwgZGF0YSwgYnV0IHdpdGggYSB2YWxpZCBFLU1haWwgYWRkcmVzcy4KCmBgYHtyfQphZGRyZXNzZXMgPC0gYWRkcmVzc2VzICU+JQogIGFkZF9yb3coRmFtaWxpZW5uYW1lPSJTdHVkZW50IiwgVm9ybmFtZT0iVGVzdCIsIFJ1Zm5hbWU9IlRlc3QiLCBOdW1tZXI9TkEsIFNwcmFjaGU9TkEsIGBFLU1haWxgPSJwZXRlci52b25yb2hyMTk2ODA5MTdAYmx1ZXdpbi5jaCIsIGxvZ2luPSJwdnJsYmdmczIwMTgiKQojYWRkcmVzc2VzCmBgYAoKV3JpdGUgYWxsIGxvZ2lucyB0byBhIHNlcGFyYXRlIGZpbGUKCmBgYHtyfQpjYXQoYWRkcmVzc2VzJGxvZ2luLCBmaWxlID0gJ2xvZ2luLnR4dCcsIHNlcCA9ICJcbiIpCmBgYAoKVGhlIGZpbGUgYGxvZ2luLnR4dGAgd2l0aCB0aGUgdXNlcm5hbWVzIGZvciB0aGUgc3R1ZGVudHMgaXMgdXBsb2FkZWQgdG8gdGhlIHNlcnZlci4gV2UgYXJlIHVzaW5nIHRoZSBzY3JpcHQgYGNyZWF0ZV91c2VyLnNoYCBmcm9tIGJhc2h0b29scyB0byBjcmVhdGUgYSBuZXcgdXNlci4gRm9yIHRlc3RpbmcgcHVycG9zZXMsIHRoZSB1c2VyIGBwdnJsYmdmczIwMThgIGlzIGNyZWF0ZWQuIEl0IGlzIGltcG9ydGFudCB0byBjcmVhdGUgdXNlcnMgd2l0aCB1c2VybmFtZXMgdGhhdCBkaWQgbm90IGV4aXN0IHByZXZpb3VzbHksIGJlY2F1c2UgZGVsZXRlaW5nIGFuZCByZS1jcmVhdGluZyBvbGQgdXNlcm5hbWVzIGNhdXNlIHByb2JsZW1zIHdoZW4gdHJ5aW5nIHRvIGxvZ2luIHRvIHRoZSBSU3R1ZGlvLXNlcnZlciB2aWEgdGhlIGJyb3dzZXIuCgpUaGUgZm9sbG93aW5nIGJhc2gtY29tbWFuZCBpcyB1c2VkIHRvIGNyZWF0ZSBhbGwgdXNlcnMKCmBgYApjYXQgbG9naW4udHh0IHwgd2hpbGUgcmVhZCBlO2RvIGVjaG8gJGU7c3VkbyAvb3B0L2Jhc2h0b29scy9zeXNhZG1pbi9jcmVhdGVfdXNlci5zaCAtdSAkZSAtcyAvYmluL2Jhc2g7c2xlZXAgMjtkb25lCmBgYAoKVXNlcm5hbWVzIGFuZCBwYXNzd29yZHMgYXJlIGNvbGxlY3RlZCBpbnRvIGEgc2luZ2xlIGZpbGUgY2FsbGVkIGBhY2Nlc3MudHh0YCB3aXRoIHRoZSBmb2xsb3dpbmcgY29tbWFuZC4KCmBgYApscyAtMSAuKi5wd2QgfCB3aGlsZSByZWFkIGY7ZG8gZWNobyAkZjtjYXQgJGYgPj4gYWNjZXNzLnR4dDtzbGVlcCAyO2RvbmUKYGBgCgpUaGlzIGZpbGUgaXMgZG93bmxvYWRlZCBhbmQgdXNlZCB0byBzZW5kIG91dCBFLU1haWxzIHdpdGggcGFzc3dvcmRzIHRvIGVhY2ggc3R1ZGVudC4gVG8gZG8gdGhhdCB3ZSBoYXZlIHRvIGZpcnN0IHJlYWQgdGhlIGFjY2VzcyBkYXRhLgoKYGBge3J9CmFjY2VzcyA8LSByZWFkX2NzdihmaWxlID0gImFjY2Vzcy50eHQiLCBjb2xfbmFtZXMgPSBjKCJsb2dpbiIsInBhc3N3b3JkIikpCiNhY2Nlc3MKYGBgCgpUaGUgdHdvIHRpYmJsZXMgYGFkZHJlc3Nlc2AgYW5kIGBhY2Nlc3NgIGFyZSBqb2luZWQgCgpgYGB7cn0KbXlfZGF0IDwtIGxlZnRfam9pbihhZGRyZXNzZXMsIGFjY2VzcykKIyA8LSBteV9kYXQgJT4lIGZpbHRlcihsb2dpbiA9PSAicHZybGJnZnMyMDE4IikKI215X2RhdApgYGAKCkEgbmV3IHRpYmJsZSBpcyBjcmVhdGVkIHdoaWNoIGNvbnRhaW5zIHRoZSByZWxldmFudCBmaWVsZHMgb2YgdGhlIEUtTWFpbHMuCgpgYGB7cn0KZW1haWxfc2VuZGVyIDwtICdQZXRlciB2b24gUm9ocjxwZXRlci52b25yb2hyQGdtYWlsLmNvbT4nICMgeW91ciBHbWFpbCBhZGRyZXNzCmJvZHkgPC0gIkRlYXIgJXMgJXMsCgpZb3VyIGFjY2VzcyBmb3IgdGhlIGV4ZXJjaXNlIHBsYXRmb3JtIGlzOiAlcwoKR29vZCBsdWNrIGFuZCBlbmpveSB1c2luZyB0aGUgcGxhdGZvcm0hCgpCZXN0IHJlZ2FyZHMsIFBldGVyIHZvbiBSb2hyCiIKZWRhdCA8LSBteV9kYXQgJT4lCiAgICBtdXRhdGUoCiAgICAgICAgVG8gPSBgRS1NYWlsYCwKICAgICAgICBGcm9tID0gZW1haWxfc2VuZGVyLAogICAgICAgIFN1YmplY3QgPSAnQWNjZXNzIHRvIGV4ZXJjaXNlIHBsYXRmb3JtJywKICAgICAgICBib2R5ID0gc3ByaW50Zihib2R5LCBWb3JuYW1lLCBGYW1pbGllbm5hbWUsIHBhc3N3b3JkKSkgJT4lCiAgICBzZWxlY3QoVG8sIEZyb20sIFN1YmplY3QsIGJvZHkpCndyaXRlX2NzdihlZGF0LCAiY29tcG9zZWQtZW1haWxzLmNzdiIpCmBgYAoKTm93IGBnbWFpbHI6Om1pbWUoKWAgaXMgdXNlZCB0byBjb25zdHJ1Y3QgdGhlIEUtTWFpbHMuCgpgYGB7cn0KZW1haWxzIDwtIGVkYXQgJT4lCiAgcG1hcChtaW1lKQpzdHIoZW1haWxzLCBtYXgubGV2ZWwgPSAyLCBsaXN0LmxlbiA9IDIpCmBgYAoKIyMgU2VuZGluZyB0aGUgRS1NYWlscwoKYGBge3J9CnNhZmVfc2VuZF9tZXNzYWdlIDwtIHNhZmVseShzZW5kX21lc3NhZ2UpCnNlbnRfbWFpbCA8LSBlbWFpbHMgJT4lIAogIG1hcChzYWZlX3NlbmRfbWVzc2FnZSkKCnNhdmVSRFMoc2VudF9tYWlsLCAibGJnZnMyMDE4X3NlbnQtZW1haWxzLnJkcyIpCmBgYAoKQ2hlY2tpbmcgZm9yIGVycm9ycwoKYGBge3J9CmVycm9ycyA8LSBzZW50X21haWwgJT4lIAogIHRyYW5zcG9zZSgpICU+JSAKICAuJGVycm9yICU+JSAKICBtYXBfbGdsKE5lZ2F0ZShpcy5udWxsKSkKc2VudF9tYWlsW2Vycm9yc10KYGBgCgpUaGUgZ2VuZXJhbCBFLU1haWwgc2VudCB0byB0aGUgc3R1ZGVudHMsIGxvb2tzIGFzIGZvbGxvd3MKCmBgYApEZWFyIFN0dWRlbnRzLApteSBuYW1lIGlzIFBldGVyIHZvbiBSb2hyLiBZb3UgYXJlIHJlY2VpdmluZyB0aGlzIEUtTWFpbCwgYmVjYXVzZSB5b3UgcmVnaXN0ZXJlZCB0byB0aGUgY291cnNlIExpdmVzdG9jayBCcmVlZGluZyBhbmQgR2Vub21pY3MuIAoKVGhlIHdlYnNpdGUgZm9yIHRoaXMgY291cnNlIGlzIGF2YWlsYWJsZSBhdDogaHR0cHM6Ly9jaGFybG90dGUtbmdzLmdpdGh1Yi5pby9MQkdGUzIwMTgvCgpFeGVyY2lzZXMgZm9yIHRoaXMgY291cnNlIGNhbiBiZSBkb25lIG9uIGEgc2VwYXJhdGUgcGxhdGZvcm0gKGh0dHA6Ly9yNHRlYS5ydGVhc3RlbS5vcmc6ODc4Nykgd2hpY2ggY29uc2lzdHMgb2YgYW4gUlN0dWRpbyBzZXJ2ZXIuIFRoZSB1c2VybmFtZSB0byBhY2Nlc3MgdGhlIApwbGF0Zm9ybSBpcyB0aGUgcGFydCBvZiB5b3VyIEUtTWFpbCBhZGRyZXNzIGJlZm9yZSB0aGUgYEBgLXNpZ24uIFRoZSBwYXNzd29yZCBpcyBzZW50IHRvIHlvdSBpbiBhIHNlcGFyYXRlIEUtTWFpbC4gCgpJIGFtIGxvb2tpbmcgZm9yd2FyZCB0byBzZWVpbmcgeW91IG9uIEZyaWRheSBhdCA5OjE1LgpCZXN0IHJlZ2FyZHMgYW5kIGhhdmUgYSBuaWNlIGRheSwKUGV0ZXIgdm9uIFJvaHIKCmBgYA==</div>
 
 
 

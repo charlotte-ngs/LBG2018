@@ -97,14 +97,121 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(purrr))
 suppressPackageStartupMessages(library(readr))
 
-(addresses <- read_csv(s_adr_file))
+addresses <- read_csv(s_adr_file)
 ```
 
 From the E-Mail addresses, we create the logins
 
 ```{r}
 addresses <- addresses %>% rowwise() %>% mutate(login = strsplit(`E-Mail`, split = "@")[[1]][1])
-addresses
 ```
 
+We are adding a test student with artificial data, but with a valid E-Mail address.
 
+```{r}
+addresses <- addresses %>%
+  add_row(Familienname="Student", Vorname="Test", Rufname="Test", Nummer=NA, Sprache=NA, `E-Mail`="peter.vonrohr19680917@bluewin.ch", login="pvrlbgfs2018")
+#addresses
+```
+
+Write all logins to a separate file
+
+```{r}
+cat(addresses$login, file = 'login.txt', sep = "\n")
+```
+
+The file `login.txt` with the usernames for the students is uploaded to the server. We are using the script `create_user.sh` from bashtools to create a new user. For testing purposes, the user `pvrlbgfs2018` is created. It is important to create users with usernames that did not exist previously, because deleteing and re-creating old usernames cause problems when trying to login to the RStudio-server via the browser.
+
+The following bash-command is used to create all users
+
+```
+cat login.txt | while read e;do echo $e;sudo /opt/bashtools/sysadmin/create_user.sh -u $e -s /bin/bash;sleep 2;done
+```
+
+Usernames and passwords are collected into a single file called `access.txt` with the following command.
+
+```
+ls -1 .*.pwd | while read f;do echo $f;cat $f >> access.txt;sleep 2;done
+```
+
+This file is downloaded and used to send out E-Mails with passwords to each student. To do that we have to first read the access data.
+
+```{r}
+access <- read_csv(file = "access.txt", col_names = c("login","password"))
+#access
+```
+
+The two tibbles `addresses` and `access` are joined 
+
+```{r}
+my_dat <- left_join(addresses, access)
+# <- my_dat %>% filter(login == "pvrlbgfs2018")
+#my_dat
+```
+
+A new tibble is created which contains the relevant fields of the E-Mails.
+
+```{r}
+email_sender <- 'Peter von Rohr<peter.vonrohr@gmail.com>' # your Gmail address
+body <- "Dear %s %s,
+
+Your access for the exercise platform is: %s
+
+Good luck and enjoy using the platform!
+
+Best regards, Peter von Rohr
+"
+edat <- my_dat %>%
+    mutate(
+        To = `E-Mail`,
+        From = email_sender,
+        Subject = 'Access to exercise platform',
+        body = sprintf(body, Vorname, Familienname, password)) %>%
+    select(To, From, Subject, body)
+write_csv(edat, "composed-emails.csv")
+```
+
+Now `gmailr::mime()` is used to construct the E-Mails.
+
+```{r}
+emails <- edat %>%
+  pmap(mime)
+str(emails, max.level = 2, list.len = 2)
+```
+
+## Sending the E-Mails
+
+```{r}
+safe_send_message <- safely(send_message)
+sent_mail <- emails %>% 
+  map(safe_send_message)
+
+saveRDS(sent_mail, "lbgfs2018_sent-emails.rds")
+```
+
+Checking for errors
+
+```{r}
+errors <- sent_mail %>% 
+  transpose() %>% 
+  .$error %>% 
+  map_lgl(Negate(is.null))
+sent_mail[errors]
+```
+
+The general E-Mail sent to the students, looks as follows
+
+```
+Dear Students,
+my name is Peter von Rohr. You are receiving this E-Mail, because you registered to the course Livestock Breeding and Genomics. 
+
+The website for this course is available at: https://charlotte-ngs.github.io/LBGFS2018/
+
+Exercises for this course can be done on a separate platform (http://r4tea.rteastem.org:8787) which consists of an RStudio server. The username to access the 
+platform is the part of your E-Mail address before the `@`-sign. The password is sent to you in a separate E-Mail. 
+
+I am looking forward to seeing you on Friday at 9:15.
+Best regards and have a nice day,
+Peter von Rohr
+
+```
