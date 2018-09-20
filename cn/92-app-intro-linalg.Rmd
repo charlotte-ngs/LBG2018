@@ -1,0 +1,7 @@
+# Introduction To Linear Algebra {#intro-linalg}
+Linear algebra is a large field in mathematics. From all of linear algebra, we only need some basic notions of the following two terms
+
+1. __vector__ and 
+2. __matrix__
+
+For both topics there are introductory videos on http://www.3blue1brown.com. The introduction on vectors is available at https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&index=2&t=10s. The videos on matrics can be viewed from https://www.youtube.com/watch?v=kYB8IZa5AuE&index=3&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab and https://www.youtube.com/watch?v=XkY2DOUCWMU&index=4&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab.
