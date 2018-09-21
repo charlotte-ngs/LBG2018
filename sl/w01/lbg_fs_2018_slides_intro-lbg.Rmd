@@ -141,10 +141,18 @@ where $P$ and $E$ are observed and $G$ is unknown
 
 
 ## Improving Animal Populations
-Two tools
+- Improvement via breeding $\rightarrow$ long-term
+- Two tools
 
 1. selection
+    + process to determine parents of next generation
+    + natural selection in wildlife and livestock
+    + artificial selection in livestock: fix a goal and rank
 2. mating
+    + which animal is bred to which
+    + extreme
+    + complementary
+    + heterosis - crossbreeding
 
 
 ## Statistics
