@@ -137,4 +137,40 @@ $$
 P = G + E
 $$
 
+where $P$ and $E$ are observed and $G$ is unknown
+
+
+## Improving Animal Populations
+Two tools
+
+1. selection
+2. mating
+
+
+## Statistics
+
+- BLUP
+- Bayesian methods
+
+
+## Computer Science
+
+- Methods have been developed in 1940's - 1950's
+- Progress occured later
+- Development of cheap computing power
+
+
+## Milk Yield
+
+```{r milkcompperf, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Yearly Milk Yield per Cow in the USA"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/milkcompperf.odg")
+knitr::include_graphics(path = "odg/milkcompperf.png")
+```
+
+
+## Computer Performance
+```{r moorelaw, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Computing Performance According To Moore's Law"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/moorelaw.odg")
+knitr::include_graphics(path = "odg/moorelaw.png")
+```
 

@@ -137,7 +137,8 @@ vecSlTopic = vector(mode = "character", length = nNrSemesterWeeks)
 # exam
 vecSlTopic[length(Topic)] <- "Exam"
 ### # assign slides
-### # w1
+### # w1 
+vecSlTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/sl/w01/lbg_fs_2018_slides_intro-lbg.pdf)"
 
 ### # w3
 
