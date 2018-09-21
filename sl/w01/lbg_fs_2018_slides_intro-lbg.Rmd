@@ -19,6 +19,7 @@ knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
 
 ## Who Is Who
 
+- Your name
 - Study Major
 - Why this course
 - Previous experiences in / R / statistics / ...
