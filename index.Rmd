@@ -94,12 +94,12 @@ nNrSemesterWeeks <- 14
 # define columns for weaks, dates, and subjects
 Woche <- 1:nNrSemesterWeeks
 Date <- format(seq(dCourseStart, by = "week", length.out = nNrSemesterWeeks), "%d.%m")
-Topic <- vector(mode = "character", length = nNrSemesterWeeks)
+vecCnTopic <- vector(mode = "character", length = nNrSemesterWeeks)
 # exam
-Topic[length(Topic)] <- "Exam"
+vecCnTopic[length(vecCnTopic)] <- "Exam"
 # subjects per week
 ### # w1
-
+vecCnTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/cn/01-intro-lbg.pdf)"
 ### # w2
 
 ### # w3
@@ -124,7 +124,7 @@ Topic[length(Topic)] <- "Exam"
 
 
 
-dfCnTable <- data.frame(Woche, Date, Topic, stringsAsFactors = FALSE)
+dfCnTable <- data.frame(Woche, Date, vecCnTopic, stringsAsFactors = FALSE)
 colnames(dfCnTable) <- vecTableHeaders
 knitr::kable(dfCnTable)
 ```
@@ -137,7 +137,8 @@ vecSlTopic = vector(mode = "character", length = nNrSemesterWeeks)
 # exam
 vecSlTopic[length(Topic)] <- "Exam"
 ### # assign slides
-### # w1
+### # w1 
+vecSlTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/sl/w01/lbg_fs_2018_slides_intro-lbg.pdf)"
 
 ### # w3
 
@@ -245,7 +246,17 @@ knitr::kable(dfSolTable)
 
 ### More Material
 ```{r FurtherMatTable, echo=FALSE, results='asis'}
+### # define vector for subjects
+vecAddMatTopic = vector(mode = "character", length = nNrSemesterWeeks)
+### # w1
+vecAddMatTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduction to Linear Algebra and to R/RStudio](https://charlotte-ngs.github.io/LBGFS2018/cn/91-app-intro.pdf)"
 
+### # construct the table
+dfAddMatTable <- data.frame(Woche, Date, vecAddMatTopic, stringsAsFactors = FALSE)
+
+### # generate table output
+colnames(dfAddMatTable) <- vecTableHeaders
+knitr::kable(dfAddMatTable)
 ```
 
 ```{r LatestChange, echo=FALSE, results='asis'}

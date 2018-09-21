@@ -15,3 +15,5 @@ addresses_lbgfs2018.csv
 access.txt
 login.txt
 login_test.txt
+composed-emails.csv
+lbgfs2018_sent-emails.rds

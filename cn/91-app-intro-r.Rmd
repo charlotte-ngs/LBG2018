@@ -1,0 +1,9 @@
+\cleardoublepage 
+
+# (APPENDIX) Appendix {-}
+
+# Introduction to R and RStudio {#intro-rrstudio}
+[R](https://www.r-project.org/) is an interpreted programming language for statistical computing. It has become very popular in statistics and in data science in general. [RStudio](https://www.rstudio.com) is a software company that among very different products also distributes the Integrated Development Environment called __RStudio IDE__. There is a lot of good material available for R and RStudio. We are just showing a few references here.
+
+* __R__: On the left pane of the R-website there is a __Documentation__ section. From the manual section there is a link to an introductory document at https://cran.r-project.org/doc/manuals/r-release/R-intro.html. 
+* __RStudio__: The RStudio web-site provides a great collection of webinars. Under Resources at https://resources.rstudio.com got to __RStudio Essentials__. 
