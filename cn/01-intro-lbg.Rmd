@@ -10,7 +10,7 @@ are used interchangeably in this course. Although, the latter is a more general 
 The term `Livestock Breeding` is sometimes understood ambiguously. In general, most people do not differentiate between Livestock Breeding and animal husbandry. From a scientific point of view a `Livestock Breeder` is a person who owns a number of animals from which he or she selects parent animals and uses a designed mating scheme to achieve a certain goal with the offspring animals. Most commonly known are breeders of pet animals such as dogs, cats or birds which follow individual breeding goals which focus on specific phenotypic appearance or on special behavioral traits. Around the end of the $19^{th}$ century, livestock breeders have realized that they have to work together in breeding associations to be able to effectively select parent animals from a large breeding population and thereby are able to achieve more robust selection responses in shorter amounts of time. This development is nicely documented by the archive of Swiss agricultural history available at https://www.histoirerurale.ch/afaahr/. 
 
 
-## History
+## History {#history}
 Livestock Breeding and Genomics are two scientific areas which have seen some quite dramatic changes in the last few years. As already mentioned in the previous section, Livestock Breeding started over 100 years ago and is a much older discipline than Genomics. 
 
 ### Livestock Breeding {#livestock-breeding}
@@ -50,7 +50,7 @@ Observable traits are mostly used to describe the appearance of an animal. In co
 Note, it is important to distinguish between the observed or measured values of a trait which might be `red` coat color or $343$ kg of body weight and the traits themselves which are just coat color or body weight. The observed or measured values of a trait are also called __phenotypes__. 
 
 
-### Genotypes and Phenotypes
+### Genotypes and Phenotypes {#geno-pheno}
 In Livestock Breeding we are mainly concerned with changing animal populations at the genetic level. The reason why we are interested in changing a population genetically is because parents do not pass their phenotypes to their offspring. Parents pass a random sample of their genes to their offspring. For each offspring every parent does transmit a different sample of their genes. From a genetic point of view, we want to know not only the most desirable phenotype, but also the most desirable __genotypes__. From the central dogma of molecular biology (https://en.wikipedia.org/wiki/Central_dogma_of_molecular_biology), it follows that an animal's genotype provides the genetic background of phenotypes. The relationship between phenotypes ($P$) and genotypes ($G$) can be summarized by the following equation \@ref(eq:phengenenv)
 
 \begin{equation}

@@ -1,0 +1,13 @@
+# Basics in Quantitative Genetics {#quan-gen}
+As already mentioned in section \@ref(geno-pheno), the central dogma of molecular biology tells us that the genotype is the basics of any phenotypic expression. The genotype of an individual is composed of a number of genes which are also called __loci__. In this section, we start with the simplest possible genetic architecture where the genotype is composed by just one locus. The connection between the genotype and the phenotype is modelled according to equation \@ref(eq:phengenenv). The phenotype is assumed to be a quantitative trait. That means we are not looking at binary or categorical traits. Categorical traits can just take a limited number of different levels. Examples of categorical traits are the horn status in cattle or certain color characteristics. Quantitative traits do not take discrete levels but they show specific distributions. 
+
+
+## Single Locus - Quantitative Trait {#single-locus-quant-trait}
+In Livestock there are not many examples where a quantitative trait is influenced by just one locus. But this case helps in understanding the foundation of more complex genetic architectures. We start by looking at the following idealized population (Figure \@ref(fig:idealpopsingletrait)). 
+
+```{r idealpopsingletrait, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Idealized Population With A Single Locus"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/idealpopsingletrait.odg")
+knitr::include_graphics(path = "odg/idealpopsingletrait.png")
+```
+
+The different genetic variants that are present at our Locus $G$ are called __alleles__. In our case we have two different alleles $G_1$ and $G_2$. Hence, we call the locus $G$ to be a __bi-allelic__ locus. 
