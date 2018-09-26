@@ -10,4 +10,28 @@ In Livestock there are not many examples where a quantitative trait is influence
 knitr::include_graphics(path = "odg/idealpopsingletrait.png")
 ```
 
-The different genetic variants that are present at our Locus $G$ are called __alleles__. In our case we have two different alleles $G_1$ and $G_2$. Hence, we call the locus $G$ to be a __bi-allelic__ locus. 
+
+### Terminology {#qg-terminology}
+The different genetic variants that are present at our Locus $G$ are called __alleles__. When looking at all individuals in the population for our locus, we have two different alleles $G_1$ and $G_2$. Hence, we call the locus $G$ to be a __bi-allelic__ locus. In any given individual of the population, the two alleles of the locus $G$ together are called the individuals __genotype__. All possible combinations of the two alleles at the locus $G$ leads to a total number of three genotypes. It is important to mention that the order of the alleles in a given genotype is not important. Hence, $G_1G_2$ and $G_2G_1$ are the same genotype. The two genotypes $G_1G_1$ and $G_2G_2$ are called __homozygous__ and the genotype $G_1G_2$ is called __heterozygous__. 
+
+
+## Frequencies {#qg-frequency}
+To be able to characterize our population with respect to the locus of interest, we are first looking at some frequencies. These are measures of how often a certain allele or genotype does occur in our population. For our example population shown in Figure \@ref(fig:idealpopsingletrait), the __genotype frequencies__ are
+
+\begin{align}
+f(G_1G_1) &= \frac{4}{10} = 0.4 \notag \\
+f(G_1G_2) &= \frac{3}{10} = 0.3 \notag \\
+f(G_2G_2) &= \frac{3}{10} = 0.3  (\#eq:genotypefreq)
+\end{align}
+
+The __allele frequencies__ can be determined either by counting or they can be computed from the genotype frequencies.
+
+\begin{align}
+f(G_1) &= f(G_1G_1) + {1\over 2}*f(G_1G_2) = 0.55 \notag \\
+f(G_2) &= f(G_2G_2) + {1\over 2}*f(G_1G_2) = 0.45 (\#eq:allelefreq)
+\end{align}
+
+
+## Value and Mean {#value-mean}
+The values to each genotype are assigned the following way.
+
