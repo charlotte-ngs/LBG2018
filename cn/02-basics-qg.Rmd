@@ -1,0 +1,117 @@
+# Basics in Quantitative Genetics {#quan-gen}
+As already mentioned in section \@ref(geno-pheno), the central dogma of molecular biology tells us that the genotype is the basics of any phenotypic expression. The genotype of an individual is composed of a number of genes which are also called __loci__. In this section, we start with the simplest possible genetic architecture where the genotype is composed by just one locus. The connection between the genotype and the phenotype is modelled according to equation \@ref(eq:phengenenv). The phenotype is assumed to be a quantitative trait. That means we are not looking at binary or categorical traits. Categorical traits can just take a limited number of different levels. Examples of categorical traits are the horn status in cattle or certain color characteristics. Quantitative traits do not take discrete levels but they show specific distributions. 
+
+
+## Single Locus - Quantitative Trait {#single-locus-quant-trait}
+In Livestock there are not many examples where a quantitative trait is influenced by just one locus. But this case helps in understanding the foundation of more complex genetic architectures. We start by looking at the following idealized population (Figure \@ref(fig:idealpopsingletrait)). 
+
+```{r idealpopsingletrait, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Idealized Population With A Single Locus"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/idealpopsingletrait.odg")
+knitr::include_graphics(path = "odg/idealpopsingletrait.png")
+```
+
+
+### Terminology {#qg-terminology}
+The different genetic variants that are present at our Locus $G$ are called __alleles__. When looking at all individuals in the population for our locus, we have two different alleles $G_1$ and $G_2$. Hence, we call the locus $G$ to be a __bi-allelic__ locus. In any given individual of the population, the two alleles of the locus $G$ together are called the individuals __genotype__. All possible combinations of the two alleles at the locus $G$ leads to a total number of three genotypes. It is important to mention that the order of the alleles in a given genotype is not important. Hence, $G_1G_2$ and $G_2G_1$ are the same genotype. The two genotypes $G_1G_1$ and $G_2G_2$ are called __homozygous__ and the genotype $G_1G_2$ is called __heterozygous__. 
+
+
+## Frequencies {#qg-frequency}
+To be able to characterize our population with respect to the locus of interest, we are first looking at some frequencies. These are measures of how often a certain allele or genotype does occur in our population. For our example population shown in Figure \@ref(fig:idealpopsingletrait), the __genotype frequencies__ are
+
+\begin{align}
+f(G_1G_1) &= \frac{4}{10} = 0.4 \notag \\
+f(G_1G_2) &= \frac{3}{10} = 0.3 \notag \\
+f(G_2G_2) &= \frac{3}{10} = 0.3  (\#eq:genotypefreq)
+\end{align}
+
+The __allele frequencies__ can be determined either by counting or they can be computed from the genotype frequencies.
+
+\begin{align}
+f(G_1) &= f(G_1G_1) + {1\over 2}*f(G_1G_2) = 0.55 \notag \\
+f(G_2) &= f(G_2G_2) + {1\over 2}*f(G_1G_2) = 0.45 (\#eq:allelefreq)
+\end{align}
+
+
+## Hardy-Weinberg Equilibrium {#hw-eq}
+The Hardy-Weinberg equilibrium is the central law of how allele frequencies and genotype frequencies are related in an idealized population. Given the allele frequencies 
+
+\begin{align}
+f(G_1) &= p \notag \\
+f(G_2) &= q = 1-p
+(\#eq:allelefreq)
+\end{align}
+
+During mating, we assume that in an idealized population alleles are combined independently. This leads to the genotype frequencies shown in Table \@ref(tab:tabgenfreq).
+
+```{r tabgenfreq, echo=FALSE}
+df_genfreq <- data.frame(Alleles = c("$G_1$", "$G_2$"),
+                         G1 = c("$f(G_1G_1) = p^2$", "$f(G_1G_2) = p*q$"),
+                         G2 = c("$f(G_1G_2) = p*q$", "$f(G_2G_2) = q^2$")) 
+names(df_genfreq) <- c("Alleles", "$G_1$", "$G_2$")
+knitr::kable(df_genfreq,
+  booktabs = TRUE,
+  caption = "Genotype Frequencies under Hardy-Weinberg equilibrium",
+  align = "c",
+  escape = FALSE
+)
+```
+
+Summing up the heterozygous frequencies leads to 
+
+\begin{align}
+f(G_1G_1) &= p^2 \notag \\
+f(G_1G_2) &= 2pq \notag \\
+f(G_2G_2) &= q^2
+(\#eq:genofreq)
+\end{align}
+
+Comparing these expected genotype frequencies in a idealized population under the Hardy-Weinberg equilibrium to what we found for the small example population in Figure \@ref(fig:idealpopsingletrait), we can clearly say that the small example population is not in Hardy-Weinberg equilibrium.
+
+
+## Value and Mean {#value-mean}
+Our goal is still to improve our population at the genetic level. The term improvement implies the need for a quantitative assessment of our trait of interest. Furthermore, we have to be able to associate the genotypes in the population to the quantitative values of our trait. 
+
+
+### Genotypic Values {#geno-value}
+The values $V_{ij}$ to each genotype $G_iG_j$ are assigned as shown in Figure \@ref(fig:genotypicvalue). 
+
+```{r genotypicvalue, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Genotypic Values"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/genotypicvalue.odg")
+knitr::include_graphics(path = "odg/genotypicvalue.png")
+```
+
+The origin of the genotypic values is placed in the middle between the two homozygous genotypes $G_2G_2$ and $G_1G_1$. Here we are assuming that $G_1$ is the favorable allele. This leads to values of $+a$ for genotype $G_1G_1$ and of $-a$ for genotype $G_2G_2$. The value of genotype $G_1G_2$ is set to $d$ and is called dominance deviation. Table \@ref(tab:tabsumgenvalue) summarizes the values for all genotypes.
+
+```{r tabsumgenvalue, echo=FALSE}
+knitr::kable(
+  data.frame(Variable = c("$V_{11}$", "$V_{12}$", "$V_{22}$"),
+             Genotype = c("$G_1G_1$", "$G_1G_2$", "$G_2G_2$"),
+             Values   = c("a", "d", "-a")),
+  booktabs = TRUE,
+  caption = "Values for all Genotypes",
+  align = "c",
+  escape = FALSE
+)
+```
+
+
+### Population Mean {#pop-mean}
+For the complete population, we can compute the __population mean__ ($\mu$) of all values at the locus $G$. This mean corresponds to the expected value and is computed as 
+
+\begin{align}
+\mu &= V_{11} * f(G_1G_1) + V_{12} * f(G_1G_2) + V_{22} * f(G_2G_2) \notag \\
+    &= a * p^2 + d *2pq + (-a) * q^2 \notag \\
+    &= (p-q)a + 2pqd
+(\#eq:popmean)
+\end{align}
+ 
+The population mean depends on the values $a$ and $d$ and on the allele frequencies $p$ and $q$. The larger the difference between $p$ and $q$ the more influence the value $a$ has in $\mu$, because for very different $p$ and $q$ the product $2pq$ is very small. On the other hand, if $p=q=0.5$, then $\mu = 0.5d$. For loci with $d=0$, the population mean $\mu = (p-q)a$ and hence, if in addition we have $p=q$, then $\mu=0$. 
+
+
+### Breeding Values {#breed-value}
+The term __breeding value__ is defined as follows
+
+```{definition, name = "Breeding Value"}
+
+```
+
