@@ -101,7 +101,7 @@ vecCnTopic[length(vecCnTopic)] <- "Exam"
 ### # w1
 vecCnTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/cn/01-intro-lbg.pdf)"
 ### # w2
-
+vecCnTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Basics of Quantitative Genetics](https://charlotte-ngs.github.io/LBGFS2018/cn/02-basics-qg.pdf)"
 ### # w3
 
 ### # w4
@@ -140,6 +140,9 @@ vecSlTopic[length(Topic)] <- "Exam"
 ### # w1 
 vecSlTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/sl/w01/lbg_fs_2018_slides_intro-lbg.pdf)"
 
+### # w2
+vecSlTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Basics of Quantitative Genetics](https://charlotte-ngs.github.io/LBGFS2018/sl/w02/lbg_fs_2018_slides_basics-qg.pdf)"
+
 ### # w3
 
 ### # w4
@@ -174,9 +177,8 @@ vecExTopic = vector(mode = "character", length = nNrSemesterWeeks)
 # exam
 vecExTopic[length(Topic)] <- "Exam"
 
-dfExTable <- data.frame(Woche, Date, vecExTopic, stringsAsFactors = FALSE)
-
 # w2
+vecExTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/ex/w02/lbg_fs_2018_ex01_w02.pdf)"
 
 # w3
 
@@ -202,6 +204,7 @@ dfExTable <- data.frame(Woche, Date, vecExTopic, stringsAsFactors = FALSE)
 
 
 ### # generate table output
+dfExTable <- data.frame(Woche, Date, vecExTopic, stringsAsFactors = FALSE)
 colnames(dfExTable) <- vecTableHeaders
 knitr::kable(dfExTable)
 ```
@@ -211,8 +214,6 @@ knitr::kable(dfExTable)
 ```{r SolutionTable, echo=FALSE, results='asis'}
 ### # define vector for subjects
 vecSolTopic = vector(mode = "character", length = nNrSemesterWeeks)
-### # construct the table
-dfSolTable <- data.frame(Woche, Date, vecSolTopic, stringsAsFactors = FALSE)
 # w2
 
 # w3
@@ -238,6 +239,8 @@ dfSolTable <- data.frame(Woche, Date, vecSolTopic, stringsAsFactors = FALSE)
 # w13
 
 
+### # construct the table
+dfSolTable <- data.frame(Woche, Date, vecSolTopic, stringsAsFactors = FALSE)
 ### # generate table output
 colnames(dfSolTable) <- vecTableHeaders
 knitr::kable(dfSolTable)
