@@ -355,3 +355,32 @@ V_{ij} &=   \mu + BV_{ij} + D_{ij}
 (\#eq:SeparationGenoValue)
 \end{align}
 
+
+## Variances {#variances}
+The population mean $\mu$ and derived from that the breeding values were defined as expected values. Their main purpose is to assess the state of a given population with respect to a certain genetic locus and its effect on a phenotypic trait of interest. One of our primary goals in livestock breeding is to improve the populations at the genetic level through the means of selection and mating. Selection of potential parents that produce offspring that are closer to our breeding goals is only possible, if the selection candidates show a certain level of variation in the traits that we are interested in. In populations where there is no variation which means that all individuals are exactly at the same level, it is not possible to select potential parents for the next generation. 
+
+In statistics the measure that is most often used to assess variation in a certain population is called __variance__. For any given discrete random variable $X$ the variance is defined as the second central moment of $X$ which is computed as shown in equation \@ref(eq:VarianceDiscreteRV).
+
+\begin{equation}
+Var\left[X\right] = \sum_{x_i \in \mathcal{X}} (x_i - \mu_X)^2 * f(x_i)
+(\#eq:VarianceDiscreteRV)
+\end{equation}
+
+ \vspace*{1ex}
+  \begin{tabular}{p{1cm}p{1cm}p{6cm}}
+  where & $\mathcal{X}$: &  set of all possible $x$-values\\
+        & $f(x_i)$       &  probability that $x$ assumes the value of $x_i$ \\
+        & $\mu_X $       &  expected value $E\left[X\right]$ of $X$
+  \end{tabular}
+  
+  
+In this section we will be focusing on separating the obtained variances into different components according to their causative sources. Applying the definition of variance given in equation  \@ref(eq:VarianceDiscreteRV) to the genotypic values $V_{ij}$, we obtain the following expression.
+
+\begin{align}
+\sigma_G^2 = Var\left[V\right] &=   (V_{11} - \mu)^2 * f(G_1G_1) \notag \\
+                               &  +\  (V_{12} - \mu)^2 * f(G_1G_2) \notag \\
+                               &  +\  (V_{22} - \mu)^2 * f(G_2G_2)
+\end{align}
+
+where $\mu = (p - q)a + 2pqd$ the population mean.
+

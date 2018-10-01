@@ -1,5 +1,5 @@
 ---
-title:  Livestock Breeding and Genomics - Solution 2
+title:  Livestock Breeding and Genomics - Exercise 2
 author: Peter von Rohr
 date: 2018-10-05
 output: 
@@ -21,43 +21,42 @@ __Your Task__: Construct matrices using the different options to better understa
 
 ### Parameter `data`
 * `data`: Specify the different matrix elements
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matA <- matrix(data = c(1:9), nrow = 3, ncol = 3))
 ```
 
 * `data`: without specifying the matrix elements
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matB <- matrix(nrow = 3, ncol = 3))
 ```
 
 * `data`: specifying not all matrix elements
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matC <- matrix(data = c(1,2,3), nrow = 3, ncol = 3))
 ```
 
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matC2 <- matrix(data = c(1,2,3,4), nrow = 3, ncol = 3))
 ```
 
-\pagebreak
 
 ### Parameters `nrow` and `ncol`
 * Leaving out one of both parameters
 
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matD <- matrix(data = c(1:9), nrow = 3))
 ```
 
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matE <- matrix(data = c(1:9), ncol = 3))
 ```
 
 ### Parameter `byrow`
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matF <- matrix(data = c(1:9), nrow = 3, ncol = 3, byrow = TRUE))
 ```
 
-```{r echo=TRUE, results='markup', eval=TRUE}
+```{r echo=TRUE, results='markup', eval=FALSE}
 (matG <- matrix(data = c(1:9), nrow = 3, ncol = 3, byrow = FALSE))
 ```
 
@@ -76,27 +75,14 @@ matB <- matrix(data = c(2:10), ncol = 3)
 
 Find out which matrix multiplication with `%*%` corresponds to the following statement?
 
-```{r, echo=TRUE, results='markup', eval=TRUE}
+```{r, echo=TRUE, results='markup', eval=FALSE}
 crossprod(matA,matB)
-```
-
-### Solution
-The statement `crossprod(matA,matB)` corresponds to 
-
-```{r, echo=TRUE, results='markup'}
-t(matA) %*% matB
 ```
 
 Alternatively there is the function `tcrossprod()`. Find out which matrix multiplication is executed by
 
-```{r, echo=TRUE, results='markup', eval=TRUE}
+```{r, echo=TRUE, results='markup', eval=FALSE}
 tcrossprod(matA, matB)
-```
-
-
-### Solution
-```{r, echo=TRUE, results='markup'}
-matA %*% t(matB)
 ```
 
 
@@ -111,17 +97,6 @@ Multiply the matrix `matA` with the vector `vecB` once using `%*%` and then with
 __Hint__: a vector can be converted to a matrix using the function `as.matrix()`.
 
 
-### Solution
-```{r echo=TRUE, results='markup'}
-matA %*% as.matrix(vecB)
-```
-
-```{r echo=TRUE, results='markup'}
-crossprod(t(matA), vecB)
-```
-
-
-\pagebreak
 
 ## Problem 3: Quantitative Genetics
 In a population the following numbers of genotypes were counted for a given genetic locus called $A$. 
@@ -135,38 +110,10 @@ knitr::kable(dfGenotypeFreq)
 
 a) Compute the genotype frequencies
 
-### Solution
-```{r echo=TRUE, results='markup'}
-nTotNrInd <- sum(dfGenotypeFreq$Numbers)
-vGenoTypeFreq <- dfGenotypeFreq$Numbers / nTotNrInd
-cat(paste("genotype-frequency", dfGenotypeFreq$Genotypes[1]), ": ", vGenoTypeFreq[1])
-cat(paste("genotype-frequency", dfGenotypeFreq$Genotypes[2]), ": ", vGenoTypeFreq[2])
-cat(paste("genotype-frequency", dfGenotypeFreq$Genotypes[3]), ": ", vGenoTypeFreq[3])
-```
-
 b) Compute the allele frequencies
-
-### Solution
-```{r echo=TRUE, results='markup'}
-vGenFreqP <- vGenoTypeFreq[1] + 0.5*vGenoTypeFreq[2]
-vGenFreqQ <-  vGenoTypeFreq[3] + 0.5*vGenoTypeFreq[2]
-cat("allele frequency for A1: ", vGenFreqP)
-cat("allele frequency for A2: ", vGenFreqQ)
-```
 
 c) Compute the population mean $\mu$ under the following assumptions
 
 * the difference between the genotypic values of the homozygous genotypes is $20$ and
 * the genotypic value of the heterozygous genotype is $2$.
-
-### Solution
-```{r echo=TRUE, results='markup'}
-nDeltaHom <- 20
-### # additive value A
-nAddValue <- nDeltaHom / 2
-nDom <- 2
-### # population mean
-nMu <- (vGenFreqP-vGenFreqQ) * nAddValue + 2 * vGenFreqP * vGenFreqQ * nDom
-cat("Population mean: ", nMu, "\n")
-```
 
