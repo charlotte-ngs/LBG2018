@@ -288,8 +288,8 @@ The computation of the difference between the breeding value $BV_{12}$ and $B_{2
 The analogous computation can be done by comparing the breeding values $BV_{11}$ and $BV_{12}$.
 
 \begin{align}
-    BV_{11} - BV_{12} & = & 2q\alpha - (q-p)\alpha \nonumber \\
-                      & = & \left(2q - (q-p)\right)\alpha \nonumber\\
+    BV_{11} - BV_{12} & = & 2q\alpha - (q-p)\alpha \notag \\
+                      & = & \left(2q - (q-p)\right)\alpha \notag\\
                       & = & \alpha 
   (\#eq:AdditiveBv2)
 \end{align}
@@ -348,12 +348,23 @@ The following table summarizes all genotypic values all breeding values and the 
 
 The formulas in the above shown table assume that $G_1$ is the favorable allele with frequency $f(G_1) = p$. The allele frequency of $G_2$ is $f(G_2) = q$. Since we have a bi-allelic locus $p+q=1$.
 
-Based on the definition of dominance deviation, the genotypic values $V_{ij}$ can be separated according to equation \@ref(eq:SeparationGenoValue).
+Based on the definition of dominance deviation, the genotypic values $V_{ij}$ can be decomposed into the components population mean ($\mu$), breeding value ($BV_{ij}$) and dominance deviation ($D_{ij}$) according to equation \@ref(eq:SeparationGenoValue).
 
 \begin{align}
 V_{ij} &=   \mu + BV_{ij} + D_{ij}
 (\#eq:SeparationGenoValue)
 \end{align}
+
+Taking expected values on both sides of equation \@ref(eq:SeparationGenoValue) and knowing that the population mean $\mu$ was defined as the expected value of the genotypic values in the population, i.e. $E\left[ V \right] = \mu$, it follows that the expected values of both the breeding values and the dominance deviations must be $0$. More formally, we have 
+
+\begin{align}
+E\left[ V \right] &=  E\left[ \mu + BV + D \right] \notag \\
+                  &=  E\left[ \mu \right]  + E\left[ BV \right] + E\left[ D \right] \notag \\
+                  &=  \mu
+(\#eq:ExpValueGenBvDom)
+\end{align}
+
+From the last line in equation \@ref(eq:ExpValueGenBvDom), it follows that $E\left[ BV \right] = E\left[ D \right] = 0$. This also shows that both breeding values and dominance deviations are defined as deviation from a given mean.
 
 
 ## Variances {#variances}
@@ -374,13 +385,106 @@ Var\left[X\right] = \sum_{x_i \in \mathcal{X}} (x_i - \mu_X)^2 * f(x_i)
   \end{tabular}
   
   
+\vspace*{2ex}
 In this section we will be focusing on separating the obtained variances into different components according to their causative sources. Applying the definition of variance given in equation  \@ref(eq:VarianceDiscreteRV) to the genotypic values $V_{ij}$, we obtain the following expression.
 
 \begin{align}
 \sigma_G^2 = Var\left[V\right] &=   (V_{11} - \mu)^2 * f(G_1G_1) \notag \\
                                &  +\  (V_{12} - \mu)^2 * f(G_1G_2) \notag \\
                                &  +\  (V_{22} - \mu)^2 * f(G_2G_2)
+(\#eq:VarianceGenotypicValue)
 \end{align}
 
 where $\mu = (p - q)a + 2pqd$ the population mean.
+
+Based on the decomposition of the genotypic value $V_{ij}$ given in \@ref(eq:SeparationGenoValue), the difference between $V_{ij}$ and $\mu$ can be written as the sum of the breeding value and the dominance deviation. Then $\sigma_G^2$ can be written as
+
+\begin{align}
+\sigma_G^2 = Var\left[V\right] &=   (BV_{11} + D_{11})^2 * f(G_1G_1) \notag \\
+                               &  +\  (BV_{12} + D_{12})^2 * f(G_1G_2) \notag \\
+                               &  +\  (BV_{22} + D_{22})^2 * f(G_2G_2)
+(\#eq:GeneticVarianceBVDom)
+\end{align}
+
+Inserting the expressions for the breeding values $BV_{ij}$ and for the dominance deviation $D_{ij}$ found earlier and simplifying the equation leads to the following result.
+
+\begin{align}
+  \sigma_G^2 &=  2pq\alpha^2 + \left(2pqd \right)^2 \notag\\
+             &=  \sigma_A^2 + \sigma_D^2
+(\#eq:FinalGeneticVariance)             
+\end{align}
+
+The formula in equation \@ref(eq:FinalGeneticVariance) shows that $\sigma_G^2$ consists of two components. The first component $\sigma_A^2$ is called the __genetic additive variance__ and the second component $\sigma_D^2$ is termed __dominance variance__. As shown in equation \@ref(eq:VarBV) $\sigma_A^2$ corresponds to the variance of the breeding values. Because we have already seen that the breeding values are additive in the number of favorable alleles, $\sigma_A^2$ is called genetic additive variance. Because $\sigma_D^2$ corresponds to the variance of the dominance deviation effects (see equation \@ref(eq:VarDom)) it is called dominance variance.
+
+
+## Extension To More Loci {#extension-to-more-loci}
+
+
+
+
+## Appendix: Derivations {#appendix-derivations}
+This section shows how the genetic variance in equation \@ref(eq:FinalGeneticVariance) is computed.
+
+\begin{align}
+\sigma_G^2  &=   (BV_{11} + D_{11})^2 * p^2                                       \notag \\
+            &   +\  (BV_{12} + D_{12})^2 * 2pq                                    \notag \\
+            &   +\  (BV_{22} + D_{22})^2 * q^2                                    \notag \\
+            &=      \left(2q\alpha - 2q^2d   \right)^2 * p^2                      \notag \\
+            &   +\  \left((q-p)\alpha + 2pqd \right)^2 * 2pq                      \notag \\
+            &   +\  \left(-2p\alpha - 2p^2d  \right)^2 * q^2                      \notag \\
+            &=      \left(4q^2\alpha^2 - 8q^3d\alpha + 4q^4d^2  \right) * p^2     \notag \\
+            &   +\  \left(q^2\alpha^2 - 2pq\alpha^2 + p^2\alpha^2
+                           - 4(q-p)pqd\alpha + 4p^2q^2d^2\right) * 2pq            \notag \\
+            &   +\  \left(4p^2\alpha^2 + 8p^3d\alpha + 4p^4\alpha^2 \right) * q^2 \notag \\
+            &=      4p^2q^2\alpha^2 - 8p^2q^3d\alpha + 4p^2q^4d^2                 \notag \\
+            &   +\  2pq^3\alpha^2 - 4p^2q^2\alpha^2+ 2p^3q\alpha^2                \notag \\
+            &   -\  8p^3q^2d\alpha + 8p^2q^3d\alpha + 8p^3q^3d^2                  \notag \\
+            &   +\  4p^2q^2\alpha^2 + 8p^3q^2d\alpha + 4p^4q^2d^2                 \notag \\
+            &=      4p^2q^2\alpha^2 + 4p^2q^4d^2                                  \notag \\
+            &   +\  2pq^3\alpha^2 + 2p^3q\alpha^2                                 \notag \\
+            &   +\  8p^3q^3d^2                                                    \notag \\
+            &   +\  4p^4q^2d^2                                                    \notag \\
+            &=      2pq\alpha^2 \left(p^2 + 2pq + q^2 \right)                     \notag \\
+            &   +\  \left(2pqd \right)^2 \left(p^2 + 2pq + q^2 \right)            \notag \\
+            &=      2pq\alpha^2 + \left(2pqd \right)^2                            \notag \\
+            &=      \sigma_A^2 + \sigma_D^2
+(\#eq:GenVarZWD)
+\end{align}
+
+From the last two lines of \@ref(eq:GenVarZWD) it follows that $\sigma_A^2 = 2pq\alpha^2$ and $\sigma_D^2 = \left(2pqd \right)^2$. It can be shown that $\sigma_A^2$ corresponds to the squared breeding values times the associated genotype frequencies. Because the expected values of the breeding values is zero, $\sigma_A^2$ is equivalent to the variance of the breeding values.
+
+\begin{align}
+\sigma_A^2 &= Var\left[ BV \right] = (BV_{11} - E\left[ BV \right])^2 * f(G_1G_1) 
+              + (BV_{12} - E\left[ BV \right])^2 * f(G_1G_2) 
+              + (BV_{22} - E\left[ BV \right])^2 * f(G_2G_2) \notag \\
+           &= BV_{11}^2 * f(G_1G_1) + BV_{12}^2 * f(G_1G_2) + BV_{22}^2 * f(G_2G_2) \notag \\
+           &= \left(2q \alpha \right)^2 * p^2 +  \left((q-p) \alpha \right)^2 * 2pq + \left(-2p \alpha \right)^2 * q^2 \notag \\
+           &= 4p^2 q^2 \alpha^2 + \left(q^2 \alpha^2 -2pq\alpha^2 + p^2 \alpha^2 \right) * 2pq + 4p^2q^2\alpha^2 \notag \\
+           &= 8p^2 q^2 \alpha^2 + 2pq^3\alpha^2 -4p^2q^2\alpha^2 + 2p^3q\alpha^2 \notag \\
+           &= 4p^2 q^2 \alpha^2 + 2pq^3\alpha^2  + 2p^3q\alpha^2 \notag \\
+           &= 2pq\alpha^2 \left(2pq + q^2 + p^2 \right) \notag \\
+           &= 2pq\alpha^2
+(\#eq:VarBV)
+\end{align}
+
+In the above derivation in \@ref(eq:VarBV) of the variance of the breeding values, we were using the fact that the expected value $E\left[ BV \right]=0$. This can be shown more formally as follows
+
+\begin{align}
+E\left[ BV \right]  &=  BV_{11} * f(G_1G_1) + BV_{12} * f(G_1G_2)  + BV_{22} * f(G_2G_2) \notag \\
+                    &=  2q \alpha * p^2 + (q-p) \alpha * 2pq + (-2p \alpha) * q^2 \notag \\
+                    &=  2p^2q \alpha + 2pq^2 \alpha - 2p^2q\alpha - 2pq^2\alpha \notag \\
+                    &=  0
+(\#eq:ExpectedValueBV)
+\end{align}
+
+Similarly to \@ref(eq:VarBV) we can show that $\sigma_D^2$ corresponds to the squared dominance deviations times the frequencies of the corresponding genotypes. That is the reason why $\sigma_D^2$ is called dominance variance.
+
+\begin{align}
+\sigma_D^2  &=  D_{11}^2 * f(G_1G_1) + D_{12}^2 * f(G_1G_2) + D_{22}^2 * f(G_2G_2) \notag \\
+            &=   (- 2q^2d)^2 * p^2 + (2pqd)^2 * 2pq + (- 2p^2d)^2 * q^2 \notag \\
+            &=  4p^2q^4d^2 + 8p^3q^3d^2 + 4p^4q^2d^2 \notag \\
+            &=  4p^2q^2d^2 \left( q^2 + 2pq + p^2 \right) \notag \\
+            &=  4p^2q^2d^2 
+(\#eq:VarDom)
+\end{align}
 
