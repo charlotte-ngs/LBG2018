@@ -418,7 +418,23 @@ The formula in equation \@ref(eq:FinalGeneticVariance) shows that $\sigma_G^2$ c
 
 
 ## Extension To More Loci {#extension-to-more-loci}
+When only a single locus is considered, the genotypic values ($V_{ij}$) can be decomposed according to equation \@ref(eq:SeparationGenoValue) into population mean, breeding value and dominance deviation. When a genotype refers to more than one locus, the genotypic value may contain an additional deviation caused by non-additive combination effects. Let $V_A$ be the genotypic value of locus $A$ and $V_B$ denote the genotypic value of a second locus $B$, then the total aggregate genotypic value $V$ attributed to both loci $A$ and $B$ can be written as 
 
+\begin{equation}
+V = V_A + V_B + I_{AB}
+(\#eq:AggregateGenotypicValueTwoLoci)
+\end{equation}
+
+where $I_{AB}$ is the deviation from additive combination of these genotypic values. When computing the population mean earlier in this chapter, we assumed that $I$ was zero for all combinations of genotypes. If $I$ is not zero for any combination of genes at different loci, those genes are said to __interact__ with each other or to exibit __epistasis__. The deviation $I$ is called interaction deviation or epistatic deviation. If $I$ is zero, the genes are called to act additively between loci. Hence _additive action_ may mean different things. When referring to one locus, it means absence of dominance. When referring to different loci, it means absence of epistasis.
+
+Interaction between loci may occur between pairs or between higher numbers of different loci. The complex nature of higher order interactions, i.e., interactions between higher number of loci does not need to concern us. Because in the aggregate genotypic value $V$, interaction deviations of all sorts are treated together in an overall interaction deviation $I$. This leads to the following generalized form of decomposing the overall aggregate genotype $V$ for the case of multiple loci affecting a certain trait of interest.
+
+\begin{equation}
+V = \mu + A + D + I
+(\#eq:AggregateGenotypicValueMultipleLoci)
+\end{equation}
+
+where $A$ is the sum of the breeding values attributable to the separate loci and $D$ is the sum of all dominance deviations.
 
 
 
