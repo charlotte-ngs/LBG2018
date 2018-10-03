@@ -271,7 +271,7 @@ The term $a + (q-p)d$ appears in all three breeding values. We replace this term
   \end{center}
 
 
-### Allele Substitution
+### Allele Substitution {#allele-substitution}
 Comparing the genotype $G_2G_2$ with the genotype $G_1G2$, one of the differences is in the number of $G_1$-alleles. $G_2G_2$ has zero $G_1$-alleles and $G_1G_2$ has one $G_1$-allele. They also have different breeding values. Because the breeding values are to be used to assess the value of a given genotype, any difference between the breeding values $BV_{12}$ and $B_{22}$ can be associated to that additional $G_1$ allele in $G_1G_2$ compared to $G_2G_2$. 
 
 The computation of the difference between the breeding value $BV_{12}$ and $B_{22}$ results in
@@ -406,7 +406,7 @@ Based on the decomposition of the genotypic value $V_{ij}$ given in \@ref(eq:Sep
 (\#eq:GeneticVarianceBVDom)
 \end{align}
 
-Inserting the expressions for the breeding values $BV_{ij}$ and for the dominance deviation $D_{ij}$ found earlier and simplifying the equation leads to the following result.
+Inserting the expressions for the breeding values $BV_{ij}$ and for the dominance deviation $D_{ij}$ found earlier and simplifying the equation leads to the result in \@ref(eq:FinalGeneticVariance). A more detailed derivation of $\sigma_G^2$ is given in the appendix (\@ref(appendix-derivations)) of this chapter.
 
 \begin{align}
   \sigma_G^2 &=  2pq\alpha^2 + \left(2pqd \right)^2 \notag\\
@@ -434,8 +434,17 @@ V = \mu + A + D + I
 (\#eq:AggregateGenotypicValueMultipleLoci)
 \end{equation}
 
-where $A$ is the sum of the breeding values attributable to the separate loci and $D$ is the sum of all dominance deviations.
+where $A$ is the sum of the breeding values attributable to the separate loci and $D$ is the sum of all dominance deviations. For our purposes in livestock breeding where we want to assess the genetic potential of a selection candidate to be a parent of offspring forming the next generation, the __breeding value__ is the most important quantitiy. The breeding value is of primary importance because a given parent passes a random sample of its alleles to its offspring. We have seen in section \@ref(allele-substitution) that breeding values are additive in the number of favorable alleles. Hence the more favorable alleles a given parent passes to its offspring the higher the breeding value of this parent. 
 
+On the other hand, the dominance deviation measures the effect of a certain genotype occuring in an individual and the interaction deviation estimates the effects of combining different genotypes at different loci in the genome. But because parents do not pass complete genotypes nor do they pass stetches of DNA with several loci, but only a random collection of its alleles, it is really the breeding value that is of primary importance in assessing the genetic potential of a given selection candidate. 
+
+
+## Genetic Models {#genetic-models}
+In this chapter, we have seen how to model the genetic basis of a quantitative trait when a single locus affects the trait of interest. We call this a single-locus model. When several loci have an effect on a certain trait, then we talk about a __polygenic model__. Letting the number of loci affecting a certain phenotype tend to infinity, the resulting model is called __infinitesimal model__. 
+
+From a statistical point of view, the breeding values in an infinitesimal model are considered as a random effect with a known distribution. Due to the central limit theorem, this distribution is assumed to be a normal distribution.
+
+Traditional prediction of breeding values before the introduction of genomic selection is based on the infinitesimal model. When genomic selection was introduced which takes into account the information from a large number of loci, genomic breeding values are estimated using a polygenic model.
 
 
 ## Appendix: Derivations {#appendix-derivations}
