@@ -1,0 +1,49 @@
+---
+title: "Central Limit Theorem"
+author: "Peter von Rohr"
+date: "2018-10-04"
+output: html_notebook
+---
+
+```{r}
+set.seed(9876)
+n_nr_comp <- 10
+n_nr_sample <- 10000
+```
+
+Let us start with `r n_nr_comp` components. Use a function to sample the components and compute the sum. 
+
+```{r}
+sample_comp_sum <- function(pn_nr_comp, pn_nr_sample){
+  return(sapply(1:pn_nr_comp, 
+                function(x, y) sum(runif(y))/y,
+                pn_nr_sample))
+}
+```
+
+Testing the function with 
+
+```{r}
+sample_comp_sum(pn_nr_comp = 10, pn_nr_sample = 20)
+```
+
+What happens when we draw histograms
+
+```{r}
+vec_sum_10 <- sample_comp_sum(pn_nr_comp = 10, pn_nr_sample = n_nr_sample)
+hist(vec_sum_10)
+```
+
+
+More components
+
+```{r}
+vec_sum_100 <- sample_comp_sum(pn_nr_comp = 100, pn_nr_sample = n_nr_sample)
+hist(vec_sum_100)
+```
+
+```{r}
+vec_sum_1000 <- sample_comp_sum(pn_nr_comp = 1000, pn_nr_sample = n_nr_sample)
+hist(vec_sum_1000)
+```
+

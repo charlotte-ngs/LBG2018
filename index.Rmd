@@ -103,6 +103,7 @@ vecCnTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduct
 ### # w2
 vecCnTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Basics of Quantitative Genetics](https://charlotte-ngs.github.io/LBGFS2018/cn/02-basics-qg.pdf)"
 ### # w3
+vecCnTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Basics of Quantitative Genetics (Teil 2)](https://charlotte-ngs.github.io/LBGFS2018/cn/02-basic-qg-teil2.pdf)"
 
 ### # w4
 
@@ -144,6 +145,7 @@ vecSlTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduct
 vecSlTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Basics of Quantitative Genetics](https://charlotte-ngs.github.io/LBGFS2018/sl/w02/lbg_fs_2018_slides_basics-qg.pdf)"
 
 ### # w3
+vecSlTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Basics of Quantitative Genetics (Part 2)](https://charlotte-ngs.github.io/LBGFS2018/sl/w03/lbg_fs_2018_slides_basics-qg-teil2.pdf)"
 
 ### # w4
 
@@ -181,6 +183,7 @@ vecExTopic[length(Topic)] <- "Exam"
 vecExTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/ex/w02/lbg_fs_2018_ex01_w02.pdf)"
 
 # w3
+vecExTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Matrices and Population Mean](https://charlotte-ngs.github.io/LBGFS2018/ex/W03/lbg_fs_2018_w03_ex02.pdf)"
 
 # w4
 
@@ -217,6 +220,7 @@ vecSolTopic = vector(mode = "character", length = nNrSemesterWeeks)
 # w2
 
 # w3
+vecSolTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/sol/w02/lbg_fs_2018_sol01_w02.pdf)"
 
 # w4
 
