@@ -79,11 +79,16 @@ Find out which matrix multiplication with `%*%` corresponds to the following sta
 crossprod(matA,matB)
 ```
 
+### Your solution
+
+
 Alternatively there is the function `tcrossprod()`. Find out which matrix multiplication is executed by
 
 ```{r, echo=TRUE, results='markup', eval=FALSE}
 tcrossprod(matA, matB)
 ```
+
+### Your solution
 
 
 b) Given is the vector `vecB`
@@ -96,6 +101,7 @@ Multiply the matrix `matA` with the vector `vecB` once using `%*%` and then with
 
 __Hint__: a vector can be converted to a matrix using the function `as.matrix()`.
 
+### Your solution
 
 
 ## Problem 3: Quantitative Genetics
@@ -117,3 +123,5 @@ c) Compute the population mean $\mu$ under the following assumptions
 * the difference between the genotypic values of the homozygous genotypes is $20$ and
 * the genotypic value of the heterozygous genotype is $2$.
 
+
+### Your solution
