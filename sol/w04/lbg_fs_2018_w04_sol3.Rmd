@@ -1,0 +1,151 @@
+---
+title: Livestock Breeding and Genomics - Solution 3
+author: Peter von Rohr
+date: 2018-10-12
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r ParameterAssignment, echo=FALSE}
+nHomDiff <- 15
+p_orig <- p <- 0.08
+p_incr <- 1.2 * p
+q <- 1-p
+a <- nHomDiff/2
+d <- -1.5
+alpha <- a + (q-p)*d
+```
+
+## Problem 1: Breeding Value
+We are considering a quantitative trait that depends on a given bi-allelic locus $G$. The frequency of the favorable allele corresponds to $`r p`$. Suppose that genotype frequencies follow the Hardy-Weinberg equilibrium. The difference between the homozygous genotypes corresponds to $`r nHomDiff`$. The heterozygous genotype has a value of $`r d`$. 
+
+a) Compute the breeding values and the dominance deviations for the three genotypes.
+b) Because of selecting the positive allele the frequency has increased to `r p_incr`. How does this increased allele frequency change the breeding values?
+
+__Hint__: Have a look at the summary table of all values in the course notes.
+
+
+### Solution
+
+According to the summary table of all values in the course notes, the breeding values depend on the term $\alpha$. Therefore, we start by computing $\alpha$ first. 
+
+$$\alpha = a + (q-p)d$$
+
+Based on the problem description, we know that $a = `r a`$, $p = `r p`$, $q = 1-p = `r q`$ and $d = `r d`$. Therefore 
+
+$$\alpha = `r a` + (`r q` - `r p`)*(`r d`) = `r alpha`$$
+
+
+a) The summary table of all values then looks as follows.
+
+\begin{center}
+  {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|c|}
+   \hline
+   Genotype  &  genotypic value     &  breeding value     &  dominance deviation \\
+   $G_iG_j$  &  $V_{ij}$            &  $BV_{ij}$          &  $D_{ij}$           \\
+   \hline
+   $G_1G_1$  &  $a = `r a`$         &  $2q\alpha = `r 2*q*alpha`$        &  $-2q^2d = `r -2*q^2*d`$   \\
+   \hline
+   $G_1G_2$  &  $d = `r d`$         &  $(q-p)\alpha = `r (q-p) * alpha`$ & $2pqd = `r 2*p*q*d`$   \\
+   \hline
+   $G_2G_2$  &  $-a = `r -a`$       &  $-2p\alpha = `r -2*p*alpha`$       & $-2p^2d = `r -2*p^2*d`$    \\
+   \hline
+   \end{tabular}}
+\end{center}
+
+
+```{r ChangedAllelFreq, echo=FALSE}
+p <- p_incr
+q <- 1-p
+alpha <- a + (q-p)*d
+```
+
+b) Based on the change in the allele frequency to $p = `r p`$ and $q = `r q`$. The value of $\alpha$ changes to $\alpha = `r alpha`$. This has consequences for the whole summary table.
+
+\begin{center}
+  {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|c|}
+   \hline
+   Genotype  &  genotypic value     &  breeding value     &  dominance deviation \\
+   $G_iG_j$  &  $V_{ij}$            &  $BV_{ij}$          &  $D_{ij}$           \\
+   \hline
+   $G_1G_1$  &  $a = `r a`$         &  $2q\alpha = `r 2*q*alpha`$        &  $-2q^2d = `r -2*q^2*d`$   \\
+   \hline
+   $G_1G_2$  &  $d = `r d`$         &  $(q-p)\alpha = `r (q-p) * alpha`$ & $2pqd = `r 2*p*q*d`$   \\
+   \hline
+   $G_2G_2$  &  $-a = `r -a`$       &  $-2p\alpha = `r -2*p*alpha`$       & $-2p^2d = `r -2*p^2*d`$    \\
+   \hline
+   \end{tabular}}
+\end{center}
+
+
+Due to the increment in the allele frequency $p$ from `r p_orig` to `r p_incr` the value of $\alpha$ got bigger. But the breeding values decreased, because the negative influence of incrementing $p$ on the breeding values was bigger than the positive change of $\alpha$.
+
+
+## Problem 2: Allele Substitution
+What is the meaning of the term __allele substituion__ an how big is it in 1a) and 1b)?
+
+
+### Solution
+
+
+Allelesubstitution tritt auf, wenn bei einem Gentyp ein negatives Allel durch ein positives ersetzt wird. Dieser Vorgang kommt durch die Selektion auf die positiven Allele zustande. Die Allelsubstitution entspricht der Differenz der Zuchtwerten von zwei Genotypen, welche sich je durch ein positves Allel unterscheiden. Die Allelsubstitution ist konstant und ist immer gleich $\alpha$.
+
+
+## Aufgabe 3: Einlesen von Daten in R
+Auf der Webseite der Vorlesung ist eine Datei im csv-Format unter 
+
+`https://charlotte-ngs.github.io/LBGHS2017/ex/w4/iris.csv` abgelegt. Lesen Sie dieses Datei mit dem Befehl `read.csv2` ein und testen Sie die Auswirkung, ob Sie beim Einlesen die Option `stringsAsFactors=FALSE` angeben oder nicht.
+
+__Hinweis__: Sie können die csv-Datei zuerst herunterladen und auf Ihrem Rechner speichern und dann vom lokalen Dateisystem einlesen. Sie können aber auch den oben angegebenen URL direkt in der Funktion `read.csv2` verwenden. Mehr Informationen dazu gibt es unter `?read.csv2`.
+
+
+__Lösung__
+
+```{r SaveIrisData, echo=FALSE}
+bOnline <- FALSE
+sDataFn <- "iris.csv"
+if (!bOnline & !file.exists(sDataFn))
+  write.csv2(iris, file = sDataFn, row.names = FALSE)
+```
+
+* Einlesen direkt mit dem URL:
+
+```{r ReadIrisDataOnline, eval=bOnline, echo=bOnline, results='markup'}
+dfIris1 <- read.csv2(file = "https://charlotte-ngs.github.io/LBGHS2017/ex/w4/iris.csv")
+str(dfIris1)
+dfIris2 <- read.csv2(file = "https://charlotte-ngs.github.io/LBGHS2017/ex/w4/iris.csv", 
+                     stringsAsFactors = FALSE)
+str(dfIris2)
+```
+
+* Einlesen vom lokalen Rechner
+
+```{r ReadIrisDataOffline, echo=TRUE, results='markup'}
+dfIris1 <- read.csv2(file = "iris.csv")
+str(dfIris1)
+dfIris2 <- read.csv2(file = "iris.csv", stringsAsFactors = FALSE)
+str(dfIris2)
+```
+
+
+## Zusatzaufgabe: Plot in R
+Stellen Sie die Werte in den Kolonnen `Sepal.Length` und `Petal.Length` des Datensatzes aus der Datei `iris.csv` in einem Diagramm dar. Der Plot sollte ungefähr wie folgt aussehen:
+
+```{r IrisPlot, echo=FALSE}
+bIsSolution <- TRUE
+if(!bIsSolution)
+  plot(dfIris2$Sepal.Length, dfIris2$Petal.Length)
+```
+
+__Lösung__:
+
+```{r IrisPlotSolution, echo=bIsSolution}
+plot(dfIris2$Sepal.Length, dfIris2$Petal.Length)
+```
