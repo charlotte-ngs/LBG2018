@@ -67,9 +67,46 @@ where $a_s$ and $a_d$ correspond to the breeding values of parents $s$ and $d$, 
 
 
 ## Basic Principle of Predicting Breeding Values {#principle-predic-breedingvalue}
+The prediction of breeding values mostly follows the same principles. From the point of view of statistics, estimations or predictions are always a function of the observed data. When looking at the model in \@ref(eq:breedvalpredmodifiedmodel), we can probably guess that the observed phenotypic records ($y_{ij}$) must be corrected somehow for the identifiable environmental effects represented by $\mu_i$. The second influence that we want to consider when predicting breeding values is how "closely related" the observed record $y_{ij}$ is to the breeding value. For traits where the infuence of the genetic component is not very strong, it is probably a good idea to down-weigh the information from $y_{ij}$. 
+
+The two principles just described can be generalized as follows. Breeding values are predicted according to the following two steps. 
+
+1. Observations are corrected for the mean performance values of animals under the same environmental conditions. The conditions are described by the effects captured in $\mu_i$. 
+2. The corrected observations are weighted by a factor that reflects the amount of information that is available for the prediction of an animals breeding value.
+
+In what follows, we have a look at how breeding values are predicted from different sources of information.
+
+
+## Animal's Own Performance
+### Single Record
+When one phenotypic observation per animal is the only information we have available, the predictor $\hat{a_i}$ of the breeding value $a_i$ of animal $i$ can be derived according to the following line of argument. Let us assume for a moment that we know the true breeding value $a_i$ for a population of animals. In addition to that each animal $i$ has one observation $y_i$ available. Then we plot the values of $a_i$ against the values of $y_i$ for the complete population. 
+
+```{r regbreedingvaluesinglerecord, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Regression of Breeding Values onto Phenotypic Observations"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/regbreedingvaluesinglerecord.odg")
+knitr::include_graphics(path = "odg/regbreedingvaluesinglerecord.png")
+```
+
+The plot in Figure \@ref(fig:regbreedingvaluesinglerecord) suggests that we fit a regression of the breeding values onto the phenotypic records. The fitted regression is represented by the red line. Hence as soon as we can draw the regression line, we can predict breeding values based on the phenotypic observations. The predicted breeding value $\hat{a_i}$ for a given $y_i$ corresponds to the value on the red line corresponding to the value of $y_i$. The slope of the regression line corresponds to the regression coefficient $b$. From regression theory, the coefficient $b$ is computed as 
+
+\begin{align}
+b &= \frac{cov(a,y)}{var(y)} \notag \\
+  &= \frac{cov(a,\mu + a + e)}{var(y)}  \notag \\
+  &= \frac{cov(a,a)}{var(y)}  \notag \\
+  &= \frac{var(a)}{var(y)}  \notag \\
+  &= h^2
+(\#eq:regcoeffaony)
+\end{align}
+
+We are using the regression coefficient to predict the breeding value for animal $i$ based on a single record $y_i$. 
+
+\begin{align}
+\hat{a_i} &= b * (y_i - \mu) \notag \\
+          &= h^2 * (y_i - \mu)
+(\#eq:predbreedvalueownsinglerecord)
+\end{align}
 
 
 
 
 
-
+ 
