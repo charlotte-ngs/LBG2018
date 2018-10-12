@@ -1,0 +1,112 @@
+# Genetic Evaluations {#gen-eval}
+In chapter \@ref(quan-gen), we have already seen that the __breeding value__ is a really important concept. The Definition \@ref(def:defbreedingvalue) of the term breeding value has some important consequences. 
+
+* The breeding value is based on the average of a large number of offspring. This is necessary, because offspring inherit a random sample of a parents alleles. But not all offspring receive the same sample of alleles. Taking the average of a large number of offspring reduces the effect of sampling and therebye lets the breeding value converge to a stable value. 
+* The breeding value is defined as a deviation from the population mean. This population mean depends on allele frequencies which are specific for each population. Therefore breeding values can only be compared within one population.
+* Because the breeding value is defined as a deviation, the expected value of the breeding values and the mean of all breeding values are $0$ by definition.
+
+
+## Introduction {#intro-predict-breeding-value}
+Because, in the more traditional setting^[That means, at this moment, we are ignoring all recent developments made such as genomic selection.] of livestock breeding, we do not have information about allele frequencies and about genotypic values, we have to predict breeding values. For this prediction we can use different sources of information. Currently, we are assuming that this information is all based on records of phenotypic observations. 
+
+
+### The Basic Model {#basic-model}
+Although, the phenotypic observation might originate from different sources, we can use one basic model for all of the breeding value predictions. We have already seen a different form of this model in equation \@ref(eq:phengenenv) in section \@ref(geno-pheno).  The original model from equation \@ref(eq:phengenenv) is modified and extended to the model shown below.
+
+\begin{equation}
+y_{ij} = \mu_i + g_i + e_{ij}
+(\#eq:breedvalpredbasicmodel)
+\end{equation}
+
+\begin{tabular}{lll}
+where  &  &  \\
+       &  $y_{ij}$  &  $j^{th}$ record of animal $i$ \\
+       &  $\mu_i$   &  identifiable fixed environmental effect \\
+       &  $g_i$     &  sum of all additive ($a$), dominance ($d$) and epistatic effects of the genotype of animal $i$ \\
+       &  $e_{ij}$  &  random environmental effects of animal $i$
+\end{tabular}
+
+The additive genetic part of $g_i$ in equation \@ref(eq:breedvalpredbasicmodel) represents the average genetic effect that animal $i$ receives from its parents. It is therefore called the __breeding value__. Because the additive genetic effect is a function of the alleles passed from the parents to the progeny, it is the only component that can be selected for and is therefore the main component of interest. Due to the major interest in the genetic additive component, the terms in the basic model in \@ref(eq:breedvalpredbasicmodel) are re-arranged as follows.
+
+\begin{equation}
+y_{ij} = \mu_i + a_i + e_{ij}^*
+(\#eq:breedvalpredmodifiedmodel)
+\end{equation}
+
+\begin{tabular}{lll}
+where  &  &  \\
+       &  $y_{ij}$  &  $j^{th}$ record of animal $i$ \\
+       &  $\mu_i$   &  identifiable fixed environmental effect \\
+       &  $a_i$       &  sum of all additive ($a$) genetic effects of the genotype of animal $i$ \\
+       &  $e_{ij}^*$  &  dominance, epistatic and random environmental effects of animal $i$
+\end{tabular}
+
+The same re-arrangment of terms in the basic model is illstrated by Figure \@ref(fig:basicmodelrearrterm)
+
+```{r basicmodelrearrterm, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Re-arrangment of Terms Representing Genetic Effects"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/basicmodelrearrterm.odg")
+knitr::include_graphics(path = "odg/basicmodelrearrterm.png")
+```
+  
+Equation \@ref(eq:breedvalpredmodifiedmodel) constitutes the linear model that forms the basis for most problems of breeding value prediction in livestock breeding. Usually it is assumed that the phenotypic observations $y_{ij}$ follow a multivariate normal distribution. We have already seen in section \@ref(genetic-models) that the additive genetic effect ($a_i$) is thought to be the sum of a large number of unlinked loci that all contribute a very small amount to the total breeding value. Then by the central limit theorem it follows that $a_i$ converges to a normal distribution. By the same reasoning that the environmental effect $e_{ij}^*$ is composed of very many small contributions, also $e_{ij}^*$ converges to a normal distribution. From distribution theory it is known that the sum of two normally distributed random variables (like $a_i$ and $e_{ij}^*$) plus a fixed term (like $\mu$) is again a random variable that follows a normal distribution. We can conclude that the assumption that all the random effects ($y_{ij}$, $a_i$ and $e_{ij}^*$) in model \@ref(eq:breedvalpredmodifiedmodel) is consistent with distribution theory. Furthermore the central limit theorem implies that in principle the number of breeding values from single loci tends to infinity. That means the total breeding value $a_i$ corresponds to a sum of infinitely many contributions. Based on the fact that in theory $a_i$ is composed of an infinite number of infinitely small components, the model in \@ref(eq:breedvalpredmodifiedmodel) is called the __infinitesimal model__. 
+
+Concerning the variances, it is assumed that $var(y_{ij})$, $var(a_i)$ and $var(e_{ij})$ are all known. Covariances ($cov(a_i, e_{ij})$) between genetic and environmental effects and covariances ($cov(e_{ij}^*, e_{kl}^*)$) between environmental effects of mates $i$ and $k$ are assumed to be zero, respectively. 
+
+Also $\mu_i$ which is used to represent the mean performance of animals in the same identifiable environment such as herd or management group or have the same sex or age, is assumed to be known.
+
+
+### Decomposition of Breeding Value
+As already mentioned earlier, the breeding value $a_i$ of an individual $i$ represents the average additive genetic effect that animal $i$ receives from its parents $s$ and $d$. Hence $a_i$ can be decomposed into 
+
+\begin{equation}
+a_i = {1\over 2} a_s + {1\over 2} a_d + m_i
+(\#eq:breedingvalueanimalparent)
+\end{equation}
+
+where $a_s$ and $a_d$ correspond to the breeding values of parents $s$ and $d$, respectively and $m_i$ is the deviation of $a_i$ from the average breeding values of the parents and is called __Mendelian sampling__. The term $m_i$ is necessary, because two fullsibs $i$ and $k$ both having parents $s$ and $d$ receive different random samples of the set of parental alleles. Hence the breeding values $a_i$ and $a_k$ of fullsibs $i$ and $k$ are not going to be the same. The difference between breeding values $a_i$ and $a_k$ is reflected in the different Mendelian sampling terms $m_i$ and $m_k$ for fullsibs $i$ and $k$. 
+
+
+## Basic Principle of Predicting Breeding Values {#principle-predic-breedingvalue}
+The prediction of breeding values mostly follows the same principles. From the point of view of statistics, estimations or predictions are always a function of the observed data. When looking at the model in \@ref(eq:breedvalpredmodifiedmodel), we can probably guess that the observed phenotypic records ($y_{ij}$) must be corrected somehow for the identifiable environmental effects represented by $\mu_i$. The second influence that we want to consider when predicting breeding values is how "closely related" the observed record $y_{ij}$ is to the breeding value. For traits where the infuence of the genetic component is not very strong, it is probably a good idea to down-weigh the information from $y_{ij}$. 
+
+The two principles just described can be generalized as follows. Breeding values are predicted according to the following two steps. 
+
+1. Observations are corrected for the mean performance values of animals under the same environmental conditions. The conditions are described by the effects captured in $\mu_i$. 
+2. The corrected observations are weighted by a factor that reflects the amount of information that is available for the prediction of an animals breeding value.
+
+In what follows, we have a look at how breeding values are predicted from different sources of information.
+
+
+## Animal's Own Performance
+### Single Record
+When one phenotypic observation per animal is the only information we have available, the predictor $\hat{a_i}$ of the breeding value $a_i$ of animal $i$ can be derived according to the following line of argument. Let us assume for a moment that we know the true breeding value $a_i$ for a population of animals. In addition to that each animal $i$ has one observation $y_i$ available. Then we plot the values of $a_i$ against the values of $y_i$ for the complete population. 
+
+```{r regbreedingvaluesinglerecord, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Regression of Breeding Values onto Phenotypic Observations"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/regbreedingvaluesinglerecord.odg")
+knitr::include_graphics(path = "odg/regbreedingvaluesinglerecord.png")
+```
+
+The plot in Figure \@ref(fig:regbreedingvaluesinglerecord) suggests that we fit a regression of the breeding values onto the phenotypic records. The fitted regression is represented by the red line. Hence as soon as we can draw the regression line, we can predict breeding values based on the phenotypic observations. The predicted breeding value $\hat{a_i}$ for a given $y_i$ corresponds to the value on the red line corresponding to the value of $y_i$. The slope of the regression line corresponds to the regression coefficient $b$. From regression theory, the coefficient $b$ is computed as 
+
+\begin{align}
+b &= \frac{cov(a,y)}{var(y)} \notag \\
+  &= \frac{cov(a,\mu + a + e)}{var(y)}  \notag \\
+  &= \frac{cov(a,a)}{var(y)}  \notag \\
+  &= \frac{var(a)}{var(y)}  \notag \\
+  &= h^2
+(\#eq:regcoeffaony)
+\end{align}
+
+We are using the regression coefficient to predict the breeding value for animal $i$ based on a single record $y_i$. 
+
+\begin{align}
+\hat{a_i} &= b * (y_i - \mu) \notag \\
+          &= h^2 * (y_i - \mu)
+(\#eq:predbreedvalueownsinglerecord)
+\end{align}
+
+
+
+
+
+ 
