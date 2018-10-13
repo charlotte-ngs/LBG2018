@@ -1,7 +1,7 @@
 ---
 title:  Livestock Breeding and Genomics
 author: Peter von Rohr
-date:   20.09.2017
+date:   20.09.2018
 output: 
   html_document:
     toc_float: true
@@ -105,7 +105,8 @@ vecCnTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Basics of
 ### # w3
 vecCnTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Basics of Quantitative Genetics (Teil 2)](https://charlotte-ngs.github.io/LBGFS2018/cn/02-basic-qg-teil2.pdf)"
 
-### # w4
+### # w4 cn/03-prediction-bv.pdf
+vecCnTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Genetic Evaluation](https://charlotte-ngs.github.io/LBGFS2018/cn/03-prediction-bv.pdf)"
 
 ### # w5
 
@@ -147,7 +148,9 @@ vecSlTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Basics of
 ### # w3
 vecSlTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Basics of Quantitative Genetics (Part 2)](https://charlotte-ngs.github.io/LBGFS2018/sl/w03/lbg_fs_2018_slides_basics-qg-teil2.pdf)"
 
-### # w4
+### # w4 w04/lbg_fs_2018_slides_gen-eval.pdf
+vecSlTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Genetic Evaluation](https://charlotte-ngs.github.io/LBGFS2018/sl/w04/lbg_fs_2018_slides_gen-eval.pdf)"
+
 
 ### # w5
 
@@ -185,7 +188,8 @@ vecExTopic[which(Date == format(as.Date("2018/09/28"), "%d.%m"))] <- "[Introduct
 # w3
 vecExTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Matrices and Population Mean](https://charlotte-ngs.github.io/LBGFS2018/ex/W03/lbg_fs_2018_w03_ex02.pdf)"
 
-# w4
+# w4 w04/lbg_fs_2018_w04_ex3.pdf
+vecExTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Breeding Values, Allele Substitution and Data Input Mean](https://charlotte-ngs.github.io/LBGFS2018/ex/w04/lbg_fs_2018_w04_ex3.pdf)"
 
 # w5
 
@@ -222,7 +226,8 @@ vecSolTopic = vector(mode = "character", length = nNrSemesterWeeks)
 # w3
 vecSolTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Introduction to Livestock Breeding and Genomics](https://charlotte-ngs.github.io/LBGFS2018/sol/w02/lbg_fs_2018_sol01_w02.pdf)"
 
-# w4
+# w4 Matrices and Population Mean w03/lbg_fs_2018_w03_sol02.pdf
+vecSolTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Matrices and Population Mean](https://charlotte-ngs.github.io/LBGFS2018/sol/w03/lbg_fs_2018_w03_sol02.pdf)"
 
 # w5
 
@@ -257,6 +262,9 @@ knitr::kable(dfSolTable)
 vecAddMatTopic = vector(mode = "character", length = nNrSemesterWeeks)
 ### # w1
 vecAddMatTopic[which(Date == format(as.Date("2018/09/21"), "%d.%m"))] <- "[Introduction to Linear Algebra and to R/RStudio](https://charlotte-ngs.github.io/LBGFS2018/cn/91-app-intro.pdf)"
+
+# w4 w04/lbg_fs_2018_w04_ex3.pdf
+vecAddMatTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Iris Dataset](https://charlotte-ngs.github.io/LBGFS2018/ex/w04/iris.csv)"
 
 ### # construct the table
 dfAddMatTable <- data.frame(Woche, Date, vecAddMatTopic, stringsAsFactors = FALSE)
