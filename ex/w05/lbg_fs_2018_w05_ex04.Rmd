@@ -1,5 +1,5 @@
 ---
-title: Livestock Breeding and Genomics - Solution 4
+title: Livestock Breeding and Genomics - Exercise 4
 author: Peter von Rohr
 date: 2018-10-19
 output: pdf_document
@@ -36,34 +36,6 @@ b) Compute the reliability of $\hat{a_i}$ from 1a)
 
   -->
   
-  
-### Solution
-
-a) The predicted breeding value based on a single own performance record is
-
-\begin{equation}
-\hat{a} = h^2(y - \mu) \notag
-\end{equation}
-
-
-```{r ResultComputeBreedingValue}
-### # Compute predicted breeding value in R
-hat_a_el <- h2*(y-mu)
-```
-
-Plug-in the computed values into the equation.
-
-\begin{equation}
-\hat{a} = h^2(y - \mu) = `r h2` * (`r y`\ \text{kg} - `r mu`\ \text{kg}) = `r hat_a_el`\ \text{kg} \notag
-\end{equation}
-
-b) The reliability corresponds to the squared correlation between the true breeding value and the selection criterion. 
-
-\begin{equation}
-B = r_{a,y}^2 = h^2 = `r h2`\notag
-\end{equation}
-
-
 
 ## Problem 2: Breeding Value Prediction Based on Repeated Observations
 ```{r SetupEx2}
@@ -99,31 +71,6 @@ c) Compare the reliability from 2b) with the reliability from Problem 1.
   --       mu2:          population mean                               --
   -->
 
-### Solution
-
-a) The predicted breeding value based on repeated records is
-```{r ResultHatARepMeas}
-hat_a_rep_meas <- round((nr_measure * h2)/(1+(nr_measure - 1)*rep)*(mean_weight - mu2), digits = 2)
-```
-$$\hat{a}_i = \frac{nh^2}{1+(n-1)t}(\bar{y}_i - \mu) 
-            = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`)
-            = `r hat_a_rep_meas`$$
-
-b) The reliability for the predicted breeding value from 2a) is
-```{r relreprecord}
-rel_rep_rec <- (nr_measure * h2)/(1+(nr_measure - 1)*rep)
-```
-
-
-$$B = r_{a,\bar{y}}^2  = b = \frac{nh^2}{1+(n-1)t} 
-                 = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}
-                 = `r round(rel_rep_rec, digits = 2)`$$
-                 
-c) The reliability of the predicted breeding values based on repeated records is larger than the reliability of the prediction based on one record. The relation between the two reliabilities is 
-
-$$ \frac{r_{a,\bar{y}}^2}{r_{a,y}^2} = \frac{n}{1+(n-1)t} = \frac{`r nr_measure`}{1+(`r nr_measure-1`*`r rep`)}
-  = `r round(nr_measure/((nr_measure-1)*rep), digits = 2)`$$
-
 
 ## Problem 3: Predicted Breeding Value and Confidence Interval
 During the lecture, the concept of __reliability__ ($B$) was introduced as a measure for the accuracy of a breeding value. The reliability corresponds to the squared correlation coefficient of the true breeding value ($a$) and the selection criterion ($y$). Hence 
@@ -153,6 +100,7 @@ hat_a_el_sd <- h2*phen_sd
 Based on the properties of the normal distribution 95% of the probability mass are within $\pm 1.96$ standard deviations around the expected value. Therefore the lower ($ug$) and the upper ($og$) limits of the $95\%$-confidence interval are defined as 
 
 ```{r ConvIntHatAEl}
+hat_a_el <- h2*(y-mu)
 conv_int_hat_a_el_ug <- hat_a_el - 1.96 * hat_a_el_sd
 conv_int_hat_a_el_og <- hat_a_el + 1.96 * hat_a_el_sd
 ```
@@ -176,37 +124,10 @@ Compute the $95\%$-confidence interval for the predicted breeding values in Prob
   -->
   
   
-### Solution 
-For the computation of the confidence interval, we need the standard deviation of the predicted breeding value. For the example with the repeated measure, this corresponds to
-
-```{r ResultHatARepMeasSd}
-hat_a_rep_meas_sd <- nr_measure * h2/(1+(nr_measure-1)*rep) *  
-    sqrt(rep + (1-rep)/nr_measure) * phen_sd
-hat_a_rep_meas_sd <- round(hat_a_rep_meas_sd, digits = 2)
-```
-
-\begin{align}
-\sqrt{var(\hat{a})} &= \sqrt{var(b(\bar{y}-\mu))} = b * \sqrt{var(\bar{y})} \notag\\
-  &= \frac{nh^2}{1+(n-1)t} * \sqrt{\left[ t + (1-t)/n \right]\ var(y)}\notag\\
-  &= \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)} 
-    * \sqrt{\left[ `r rep` + (1-`r rep`)/`r nr_measure` \right]} * `r phen_sd` \notag\\
-  &= `r hat_a_rep_meas_sd`  \notag
-\end{align}
-
-The lower and the upper limits of the confidence interval are
-
-$$ug = \hat{a} - 1.96 * \sqrt{var(\hat{a})} = `r hat_a_rep_meas` - 1.96 * `r hat_a_rep_meas_sd`
-     = `r hat_a_rep_meas - 1.96 * hat_a_rep_meas_sd`$$
-
-$$og = \hat{a} + 1.96 * \sqrt{var(\hat{a})} = `r hat_a_rep_meas` + 1.96 * `r hat_a_rep_meas_sd`
-     = `r hat_a_rep_meas + 1.96 * hat_a_rep_meas_sd`$$
-
 
 ## Problem 4: Response To Selection
 ```{r problem4setup}
 sel_int <- 1.4
-sigma_tilde_y <- phen_sd * sqrt((1+(nr_measure-1)*rep)/nr_measure)
-sel_resp <- sel_int * rel_rep_rec * sigma_tilde_y
 ```
 
 Assuming that we select for the predicted breeding value based on repeated measures, the response to that selection schema per generation can be computed as 
@@ -216,22 +137,4 @@ R &= i * r_{a,\tilde{y}}^2 * \sigma_{\tilde{y}} \notag
 \end{align}
 
 Compute the response to selection $R$ for the results that you found in Problem 2. The selection intensity $i$ can be assumed to be $`r sel_int`$ and the phenotypic standard deviation is taken to be the same value as in Problem 3, $\sigma_y = `r phen_sd`$.
-
-
-### Solution
-We insert the compute value into the equation for $R$. We have to remember that 
-
-\begin{align}
-var(\tilde{y}) &= t * \sigma_y^2 + {1\over n} (1-t) * \sigma_y^2 \notag \\
-               &= {1\over n}\left( n*t + (1-t) \right) \sigma_y^2 \notag \\
-               &= \frac{1 + (n-1)t}{n} \sigma_y^2 \notag
-\end{align}
-
-and $\sigma_{\tilde{y}} = \sqrt{var(\tilde{y})} = \sigma_y * \sqrt{\frac{1 + (n-1)t}{n}} = `r phen_sd` * \sqrt{\frac{1 + (`r nr_measure`-1)*`r rep`}{`r nr_measure`}} = `r round(sigma_tilde_y, digits = 2)`$
-
-\begin{align}
-R  &=  i * r_{a,\tilde{y}}^2 * \sigma_{\tilde{y}} \notag \\
-   &=  `r sel_int` * `r round(rel_rep_rec, digits=2)` * `r round(sigma_tilde_y, digits = 2)` \notag \\
-   &=  `r round(sel_resp, digits=2)` \notag
-\end{align}
 

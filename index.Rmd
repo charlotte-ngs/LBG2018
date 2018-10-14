@@ -191,7 +191,8 @@ vecExTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Matrices 
 # w4 w04/lbg_fs_2018_w04_ex3.pdf
 vecExTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Breeding Values, Allele Substitution and Data Input Mean](https://charlotte-ngs.github.io/LBGFS2018/ex/w04/lbg_fs_2018_w04_ex3.pdf)"
 
-# w5
+# w5 ex/w05/lbg_fs_2018_w05_ex04.pdf
+vecExTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Breeding Value Prediction, Confidence Interval and Selection Response](https://charlotte-ngs.github.io/LBGFS2018/ex/w05/lbg_fs_2018_w05_ex04.pdf)"
 
 # w6
 
@@ -229,9 +230,11 @@ vecSolTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Introduc
 # w4 Matrices and Population Mean w03/lbg_fs_2018_w03_sol02.pdf
 vecSolTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Matrices and Population Mean](https://charlotte-ngs.github.io/LBGFS2018/sol/w03/lbg_fs_2018_w03_sol02.pdf)"
 
-# w5
+# w5 sol/w04/lbg_fs_2018_w04_sol3.pdf
+vecSolTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Breeding Values, Allele Substitution and Data Input Mean](https://charlotte-ngs.github.io/LBGFS2018/sol/w04/lbg_fs_2018_w04_sol3.pdf)"
 
-# w6
+# w6 sol/w05/lbg_fs_2018_w05_sol04.pdf
+# vecSolTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[Breeding Value Prediction, Confidence Interval and Selection Response](https://charlotte-ngs.github.io/LBGFS2018/sol/w05/lbg_fs_2018_w05_sol04.pdf)"
 
 # w7
 
