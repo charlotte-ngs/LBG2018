@@ -77,8 +77,8 @@ The two principles just described can be generalized as follows. Breeding values
 In what follows, we have a look at how breeding values are predicted from different sources of information.
 
 
-## Animal's Own Performance
-### Single Record
+## Animal's Own Performance {#own-performance}
+### Single Record {#single-record}
 When one phenotypic observation per animal is the only information we have available, the predictor $\hat{a_i}$ of the breeding value $a_i$ of animal $i$ can be derived according to the following line of argument. Let us assume for a moment that we know the true breeding value $a_i$ for a population of animals. In addition to that each animal $i$ has one observation $y_i$ available. Then we plot the values of $a_i$ against the values of $y_i$ for the complete population. 
 
 ```{r regbreedingvaluesinglerecord, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Regression of Breeding Values onto Phenotypic Observations"}

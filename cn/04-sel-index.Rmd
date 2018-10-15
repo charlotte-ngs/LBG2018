@@ -1,0 +1,50 @@
+# Selection Index {#selection-index}
+So far we have seen how to predict breeding values based on a single own-performance record (\@ref(single-record)), based on repeated records (\@ref(repeatedrecords)) and based on progeny records (\@ref(progenyrecords)). For real livestock breeding populations, these three procedures are not flexible enough, because we want to predict breeding values for a given selection candidate based on all available information. In the past, two different methods were developed which fullfill the requirement of considering all available information in the prediction of breeding values. Theses methods are 
+
+1. Selection Index Theory ([@Hazel1943] and [@HL1943]) and 
+2. Best Linear Unbiased Prediction (BLUP) ([@Henderson1973] and [@Henderson1975])
+
+Both methods are based on the same genetic model. The main difference between the two methods consists in the way how they correct for identifiable systematic environmental effects. We start with a treatment of selection index theory. In chapter \@ref(blup), the BLUP-based methods will be introduced.
+
+
+## Introduction {#sel-index-intro}
+In principle, prediction of breeding values aims at assessing the genetic potential of a selection candidate that is due to additive gene effects based on all available information, such that the correlation between true and predicted breeding value is maximal. Because, we want to do this for a large number of selection candidates, we can formulate our aim in a more general way. For a given population, we want to predict breeding values for all animals in the population using all available information, such that the correlation between true and predicted breeding values are maximized. An alternative objective for the prediction to the maximization of the correlation between true and predicted breeding values is the minimization of the mean squarred error of the prediction. The description of the aims of our procedure to predict breeding values shows that we are dealing with two different concepts of breeding value. 
+
+1. __True breeding value__ which corresponds to the sum of all additive gene-effects
+2. __Predicted breeding value__ which is a function of the phenotypic observations ($y$) that is determined by statistical methods. As a prediction it is always associated with a certain error which we want to be minimal.
+
+The prediction of breeding values has three different objectives.
+
+1. Selection candidates are ranked according to the predicted breeding values. Hence, it provides a criterion for selecting parents out of a pool of selection candidates
+2. Predicted breeding values are used to assess the response to selection and is important for planning a breeding program
+3. Predicted breeding values are one criterion that affect the price of breeding animals and the price of seamen.
+
+The definition \@ref(def:defbreedingvalue) of the term breeding value has several problems when it comes to its potential usefulness for predicting breeding values. 
+
+* It is impossible to generate an infinite number of progeny before having a reliable prediction of the breeding value
+* Due to the above mentioned objectives, we want to have a prediction of the breeding value available as early as possible.
+* The predicted breeding value should be as accurate as possible
+
+To address these issues, the above mentioned methods were developed. We start with the method of the selection index.
+
+
+## Selection Index Method {#sel-ind-method}
+The selection index is a method to predict the breeding value of an animal ($i$) by using all available information on the animal and on its relatives. The result of the selection index method is an assignment of a numerical value ($I$) to each animal. All animals in the population can then be ranked according to their index value. The ranking according to the index value can be used as selection criterion. In principle the index $I$ is defined as linear combination of all available informations. This can be written as 
+
+\begin{equation}
+I = \hat{a_i} = b_1 y_1 + b_2 y_2 + \cdots + b_n y_n = b^Ty
+(\#eq:selindexdef)
+\end{equation}
+
+where $b$ is a vector of index weights and $y$ is a vector of information sources. Here we assume that all values in $y$ are corrected for appropriate mean levels. The resulting index value $I$ in \@ref(eq:selindexdef) is used as the predicted breeding value $\hat{a_i}$. From a statistical point of view equation  \@ref(eq:selindexdef) corresponds to a multiple linear regression. The vector of index weights $b$ are understood as partial regression coefficients.
+
+
+## Aggregate Genotype {#aggregate-genotype}
+In most practical livestock breeding scenarios, we want to improve a population at the genetic level with respect to more than one trait or characteristic, simultaneously. This requires a procedure that enables us to combine the breeding values of several trait into one selection criterion. This criterion is called the __aggregate genotype__ $H$. It is defined as 
+
+\begin{equation}
+H = w_1 a_1 + w_2 a_2 + \cdots + w_m a_m = w^T a
+(\#eq:defaggregategenotype)
+\end{equation}
+
+where $a$ corresponds to the vector of true breeding values and $w$ is a vector of economic values. The economic value $w_k$ for a given trait $k$ is defined as the marginal change in profit caused by a small change in the population mean ($\mu_k$) of the trait $k$. 
