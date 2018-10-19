@@ -108,7 +108,8 @@ vecCnTopic[which(Date == format(as.Date("2018/10/05"), "%d.%m"))] <- "[Basics of
 ### # w4 cn/03-prediction-bv.pdf
 vecCnTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Genetic Evaluation](https://charlotte-ngs.github.io/LBGFS2018/cn/03-prediction-bv.pdf)"
 
-### # w5
+### # w5 04-selection-index.pdf
+vecCnTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Selection Index Theory](https://charlotte-ngs.github.io/LBGFS2018/cn/04-selection-index.pdf)"
 
 ### # w6
 
