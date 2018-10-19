@@ -106,3 +106,45 @@ where & $a$  &   vector of true breeding values \\
     + reduce environmental impact
 
 
+## Change in Profit
+
+```{r changeinprofit, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/changeinprofit.odg")
+knitr::include_graphics(path = "odg/changeinprofit.png")
+```
+ 
+ 
+## Selection Index Construction
+
+* Index Construction means: finding unknown vector of weights $b$ in $I$
+* Objective: $I$ has to approximate $H$ as good as possible
+* Criterion: 
+
+\begin{equation}
+E(H-I)^2 \rightarrow \text{ min} \notag
+\end{equation}
+
+* Result: Index normal equations
+
+\begin{equation}
+Pb = Gw  \notag
+\end{equation}
+
+
+## Solution
+
+* Compute $b$ from index normal equation
+
+\begin{align}
+Pb  &=  Gw  \notag \\
+P^{-1}Pb  &=  P^{-1}Gw  \notag \\
+       b  &=  P^{-1}Gw  \notag
+\end{align}
+
+* Accuracy of index $I$
+
+\begin{equation}
+r_{HI}  =  \frac{cov(H,I)}{\sigma_H \sigma_I} =  \frac{\sigma_I}{\sigma_H} \notag
+\end{equation}
+
+

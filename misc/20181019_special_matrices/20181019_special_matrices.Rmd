@@ -1,0 +1,96 @@
+---
+title: "Special Matrices"
+author: "Peter von Rohr"
+date: "10/19/2018"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Transpose
+
+* For any matrix $A_{m,n}$ its __transpose__ is called $A^T$
+* $A^T$ is a matrix with $n$ rows and $m$ columns
+* Element $(A)_{ij}$ in $A$ corresponds to element $(A^T)_{ji}$ in $A^T$
+* In R:
+
+```{r transposer, echo=TRUE}
+(A <- matrix(c(1:6), nrow = 3, ncol = 2, byrow = TRUE))
+t(A)
+```
+
+
+## Symmetric Matrices
+
+* Matrices which are identical to its transpose are called __symmetric__
+* Hence for a symmetric matrix $S$
+
+$$S = S^T$$
+
+```{r computesymmatrix}
+S <- crossprod(A)
+```
+
+```{r showsymmmatrix, echo=TRUE}
+S
+t(S)
+```
+
+
+
+
+## Identity Matrix
+
+* Name: $I_n$
+* Dimensions: $n\times n$
+* Example $n=3$
+
+```{r identiylatex, results='asis'}
+cat("$$I_3 = \\left[ ")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = diag(1,nrow = 3, ncol = 3)), sep = "\n"), "\n")
+cat("\\right] $$\n")
+```
+
+* In R:
+
+```{r identityr, echo=TRUE}
+diag(1, nrow = 3, ncol = 3)
+```
+
+
+## Importance of $I_n$
+
+* Neutral element of matrix multiplication
+* For any matrix $A_{m,n}$:
+
+$$ A \cdot I_n = I_m \cdot A = A$$
+
+
+## Diagonal Matrices
+
+* Matrices with non-zero elements only on diagonal
+* Diagonal matrices are symmetric
+* In R:
+
+```{r diagonalmatrixr, echo=TRUE}
+D <- diag(c(5,8,-3))
+D
+```
+
+
+## Inverse Matrix
+
+* The matrix $B$ is called the __inverse__ of matrix $A$, if their product $A \cdot B$ is the identity matrix $I$
+
+$$A \cdot B = I$$
+* If it exists, the inverse matrix of matrix $A$ is called $A^{-1}$
+* In R the inverse of matrix $S$ is computed as:
+
+```{r inversematr, echo=TRUE}
+solve(S)
+```
+
+
+
