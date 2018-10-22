@@ -1,1 +1,5 @@
 # Best Linear Unbiased Prediction (BLUP) {#blup}
+The prediction of breeding values using the selection index method always required to correct the information sources for an appropriate population mean. So far we have assumed this correction factors to be known. In reality, the computation of these comparison factors is a problem. This problem is one of the reasons that nowadays the predictions of all breeding values are no longer based on the selection index method, but on a method that is called BLUP. The selection index method is still useful when it comes to predict the aggregate genotype which will be the topic of a later chapter. In this chapter, we first want to have a closer look at the problem of computing these correction factors with which the information sources must be adjusted with. After that, the BLUP method will be introduced.
+
+
+## Problem of Correction 
