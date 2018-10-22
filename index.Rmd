@@ -196,9 +196,10 @@ vecExTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Breeding 
 # w5 ex/w05/lbg_fs_2018_w05_ex04.pdf
 vecExTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Breeding Value Prediction, Confidence Interval and Selection Response](https://charlotte-ngs.github.io/LBGFS2018/ex/w05/lbg_fs_2018_w05_ex04.pdf)"
 
-# w6
+# w6 ex/w06/lbg_fs_2018_w06_ex05.pdf
+vecExTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[Breeding Value Prediction, Own Performance and Progeny Records](https://charlotte-ngs.github.io/LBGFS2018/ex/w06/lbg_fs_2018_w06_ex05.pdf)"
 
-# w7
+# w7 
 
 # w8
 
@@ -238,7 +239,8 @@ vecSolTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Breeding
 # w6 sol/w05/lbg_fs_2018_w05_sol04.pdf
 # vecSolTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[Breeding Value Prediction, Confidence Interval and Selection Response](https://charlotte-ngs.github.io/LBGFS2018/sol/w05/lbg_fs_2018_w05_sol04.pdf)"
 
-# w7
+# w7 sol/w06/lbg_fs_2018_w06_sol05.pdf
+# vecSolTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Breeding Value Prediction, Own Performance and Progeny Records](https://charlotte-ngs.github.io/LBGFS2018/sol/w06/lbg_fs_2018_w06_sol05.pdf)"
 
 # w8
 
