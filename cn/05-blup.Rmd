@@ -1,5 +1,25 @@
 # Best Linear Unbiased Prediction (BLUP) {#blup}
-The prediction of breeding values using the selection index method always required to correct the information sources for an appropriate population mean. So far we have assumed this correction factors to be known. In reality, the computation of these comparison factors is a problem. This problem is one of the reasons that nowadays the predictions of all breeding values are no longer based on the selection index method, but on a method that is called BLUP. The selection index method is still useful when it comes to predict the aggregate genotype which will be the topic of a later chapter. In this chapter, we first want to have a closer look at the problem of computing these correction factors with which the information sources must be adjusted with. After that, the BLUP method will be introduced.
+The prediction of breeding values using the selection index method always required to correct the information sources for an appropriate comparison value. So far we have referred to that comparison value as the population mean and we have assumed this correction value to be known. In reality, the computation of these comparison values is a difficult problem. This problem is one of the reasons that nowadays the predictions of all breeding values are no longer based on the selection index method, but on a method that is called BLUP. The selection index method is still useful when it comes to predicting the aggregate genotype which will be the topic of a later chapter. In this chapter, we first want to have a closer look at the problem of computing these correction factors with which the information sources must be adjusted with. After that, the BLUP method will be introduced.
 
 
 ## Problem of Correction 
+In theory, the population mean is the ideal correction value for all information sources. From our standard model we can derive
+
+\begin{equation}
+y = \mu + a + e  \qquad \rightarrow \qquad \bar{y} = \bar{mu} + \bar{a} + \bar{e} = \mu
+(\#standardmodelcorrectionvalue)
+\end{equation}
+
+Because, we defined the true breeding value $a$ and the non-identifiable environmental effects $e$ as deviations from a common mean, the average effect of all identifiable environmental components is captured by the population mean $\mu$. But this is only true in an idealized population where all selection candidates are kept in the same environment and where they deliver their performances at the same time. In real world scenarios, this is unrealistic, because e.g. own performance values and progeny performances cannot be deliverd at the same time. Futhermore, selection candidates are kept in different herds in different environments. All these factors do have an influence on the performance of the recorded animals and hence on the predicted breeding values. But good methods for predicting breeding values should be able to correct for such environmental influences. If that is not the case, environmental factors will __bias__ the predicted breeding values. To avoid such biases, performance records were subdivided into environmental classes. In dairy cattle such classes were formed based on herds, calving year, calving season and age at first calving. In pigs, performance records might be divided into herds, years and fattening batches. From now on, we call the combination of these environmental effects on the performance records as __identifiable systematic fixed effects__. For the prediction of breeding values, we assume that these fixed effects in a given comparison class have all the same influence on the performance of the animals that are in the same class. Hence if we group all animals who show the same levels of all fixed effects into one comparison class, any biases from the identifiable environment can be avoided. 
+
+The more environmental factors can be considered in forming the comparison classes, the better we can correct our performance records for the environmental effects. But when the number of environmental factors increases the number of animals per comparison class decreases. From the statistical point of view, the small number of observations in comparison classes reduce the accuracy with which the environmental fixed effects can be estimated. With smaller comparison groups, the risk that the average breeding value of animals in such a comparison is not zero increases. In case the average breeding value in a comparison group is not zero, predicted breeding values show a deviation which is called __bias__. The occurence of bias can be shown as follows. Let us assume the average performace of all animals in a comparison group (CG) to be $\bar{y}_{CG}$:
+
+\begin{equation}
+\bar{y}_{CG} = 
+\end{equation}
+
+
+
+
+
+
