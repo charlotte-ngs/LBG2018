@@ -7,7 +7,7 @@ In theory, the population mean is the ideal correction value for all information
 
 \begin{equation}
 y = \mu + a + e  \qquad \rightarrow \qquad \bar{y} = \bar{mu} + \bar{a} + \bar{e} = \mu
-(\#standardmodelcorrectionvalue)
+(\#eq:standardmodelcorrectionvalue)
 \end{equation}
 
 Because, we defined the true breeding value $a$ and the non-identifiable environmental effects $e$ as deviations from a common mean, the average effect of all identifiable environmental components is captured by the population mean $\mu$. But this is only true in an idealized population where all selection candidates are kept in the same environment and where they deliver their performances at the same time. In real world scenarios, this is unrealistic, because e.g. own performance values and progeny performances cannot be deliverd at the same time. Futhermore, selection candidates are kept in different herds in different environments. All these factors do have an influence on the performance of the recorded animals and hence on the predicted breeding values. But good methods for predicting breeding values should be able to correct for such environmental influences. If that is not the case, environmental factors will __bias__ the predicted breeding values. To avoid such biases, performance records were subdivided into environmental classes. In dairy cattle such classes were formed based on herds, calving year, calving season and age at first calving. In pigs, performance records might be divided into herds, years and fattening batches. From now on, we call the combination of these environmental effects on the performance records as __identifiable systematic fixed effects__. For the prediction of breeding values, we assume that these fixed effects in a given comparison class have all the same influence on the performance of the animals that are in the same class. Hence if we group all animals who show the same levels of all fixed effects into one comparison class, any biases from the identifiable environment can be avoided. 
@@ -15,8 +15,88 @@ Because, we defined the true breeding value $a$ and the non-identifiable environ
 The more environmental factors can be considered in forming the comparison classes, the better we can correct our performance records for the environmental effects. But when the number of environmental factors increases the number of animals per comparison class decreases. From the statistical point of view, the small number of observations in comparison classes reduce the accuracy with which the environmental fixed effects can be estimated. With smaller comparison groups, the risk that the average breeding value of animals in such a comparison is not zero increases. In case the average breeding value in a comparison group is not zero, predicted breeding values show a deviation which is called __bias__. The occurence of bias can be shown as follows. Let us assume the average performace of all animals in a comparison group (CG) to be $\bar{y}_{CG}$:
 
 \begin{equation}
-\bar{y}_{CG} = 
+\bar{y}_{CG} = \mu + \bar{a}_{CG} + \bar{e}_{CG}
+(\#eq:meanphencontemporarygroup)
 \end{equation}
+
+In case the average breeding value $\bar{a}_{CG}$ is zero, the population mean $\mu$ measures the average identifiable environment effect. If $\bar{a}_{CG}$ is not zero, then the predicted breeding value $\hat{a}_i$ using the selection index $I$ corresponds to
+
+\begin{align}
+I  &=  b(y_i - (\mu + \bar{a}_{CG})) \notag \\
+   &=  b(y_i - \mu) - b\bar{a}_{CG} \notag \\
+   &=  \hat{a}_i  - b\bar{a}_{CG}
+(\#eq:selectionindexbias)   
+\end{align}
+
+The second term in the result of \@ref(eq:selectionindexbias) measures the __bias__. This depends on the average breeding values of the animals of the contemporary group. If the average breeding value of all animals in the contemporary group is zero, then the predicted breeding value from \@ref(eq:selectionindexbias) is unbiased. Because we have to know the breeding values of the animals in the contemporary group to get an unbiased prediction of the breeding value for a given animal and the breeding values of the animals in the comparison group must also be predicted, this consists of a "chicken-and-egg" problem which cannot be solved. 
+
+The solution to this was presented by Charles R. Henderson in several publications ([@Henderson1973] and [@Henderson 1975]). The key idea behind the solution is to estimate the identifiable environmental factors as fixed effects and to predict the breeding values simultaneously in a linear mixed effects model. The properties of the methodology developed by Henderson are similar to those of the selection index method. But the main advantage of Henderson's methodologies is that phenotypic records do not need to be corrected before breeding values can be corrected. But the effects of the identifiable environmental factors are also a result which come out of the analysis. The methodology developed by Henderson is generally called __BLUP__ and the properties are directly incorporated into the name where 
+
+* __B__ stands for __best__ which means that the correlation between the true ($a$) and the predicted breeding value ($\hat{a}$) is maximal or the prediction error variance ($var(a - \hat{a})$) is minimal.
+* __L__ stands for __linear__ which means the predicted breeding values are linear functions of the observations ($y$)
+* __U__ stands for __unbiased__ which means that the expected values of the predicted breeding values are equal to the true breeding values
+* __P__ stands for __prediction__ 
+
+BLUP based approaches have found widespread usage in genetic evaluations. They are used for both traditional predictions of breeding values and also to predict genomic breeding values. The popularity of BLup is not only due to the theoretical foundations behind BLUP, but Henderson has also developed efficient algorithms to be able to compute predicted breeding values for very large livestock breeding populations. Together with the availablity of large computational resources at a very low price, BLUP has become the de-facto standard methodology for predicting breeding values.
+
+
+## Numeric Example
+We want to use a concrete numeric example of a small population to explain how breeding values are predicted using the BLUP methodology. The phenotypic observations consist of measurements of the trait __weaning weight__ in beef cattle. Table \@ref(tab:TableBeefExample) gives an overview of the dataset.
+
+```{r TableBeefExample, echo=FALSE, results='asis'}
+### # fix the numbers parents and offspring
+n_nr_sire <- 3
+n_nr_dam <- 8
+n_nr_parents <- n_nr_sire + n_nr_dam
+n_nr_offspring <- 16
+n_nr_animals <- n_nr_parents + n_nr_offspring
+### # assign parents to offspring and herds to records
+vec_sire_id <- c(rep(1,8), rep(2,6), rep(3,2))
+vec_dam_id <- rep(4:11,2)
+vec_herd_codes <- c(rep(1,4), rep(2,4), rep(1,4), rep(2,4))
+### # vector of observations
+vec_weaning_weight <-  c(2.61,2.31,2.44,2.41,2.51,2.55,2.14,2.61,2.34,1.99,3.1,2.81,2.14,2.41,2.54,3.16)
+
+### # create a tibble from the data
+tbl_beef_data <- dplyr::data_frame( Animal = (n_nr_parents + 1):n_nr_animals,
+                                    Sire   = vec_sire_id,
+                                    Dam    = vec_dam_id[order(vec_dam_id)],
+                                    Herd   = vec_herd_codes,
+                                    `Weaning Weight` = vec_weaning_weight )
+### # count number of observations
+n_nr_observation <- nrow(tbl_beef_data)
+
+### # parameters
+h2 <- .25
+n_var_p <- round(var(tbl_beef_data$`Weaning Weight`), digits = 4)
+n_var_g <- round(h2 * n_var_p, digits = 4)
+n_pop_mean <- round(mean(tbl_beef_data$`Weaning Weight`), digits = 2)
+
+### # show the data frame
+knitr::kable( tbl_beef_data, 
+              booktabs = TRUE, 
+              longtable = TRUE,
+              caption = "Example Data Set for Weaning Weight in Beef Cattle" )
+```
+
+
+
+## Mixed Linear Effects Model
+
+
+
+## Appendix: Derivation of BLUP
+Consider the mixed linear model
+
+$$y = Xb + Zu + e$$
+with $E(y) = Xb$, $E(a) = 0$ and $E(e) = 0$, $var(u) = G$ and $var(e) = R$, hence $var(y) = V = ZGZ^T + R$
+
+Suppose, we want to predict a linear function $k^Tb + a$, using a linear function $L^Ty$ of $y$. Predictor $L^Ty$ is chosen such that 
+
+$$E(L^Ty) = E(k^Tb + a)= E(k^Tb) + E(a) = k^Tb\rightarrow L^TXb = k^Tb \rightarrow k=X^TL$$
+
+and such that the prediction error variance (PEV) is minimal.
+
 
 
 
