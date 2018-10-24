@@ -14,7 +14,7 @@ description: "These are the lecture notes for the course Livestock Breeding and 
 
 ```{r setup-preq, echo=FALSE, results='hide'}
 ### # required packages from CRAN
-vec_reqpkgs_cran <- c("knitr", "rmarkdown", "roxygen2", "bookdown", "caTools", "citr", "devtools")
+vec_reqpkgs_cran <- c("knitr", "rmarkdown", "roxygen2", "bookdown", "caTools", "citr", "devtools", "kableExtra")
 vec_instpkgs <- installed.packages()
 for (p in vec_reqpkgs_cran){
   if (!p %in% vec_instpkgs)

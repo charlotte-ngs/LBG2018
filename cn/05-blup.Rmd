@@ -28,19 +28,19 @@ I  &=  b(y_i - (\mu + \bar{a}_{CG})) \notag \\
 (\#eq:selectionindexbias)   
 \end{align}
 
-The second term in the result of \@ref(eq:selectionindexbias) measures the __bias__. This depends on the average breeding values of the animals of the contemporary group. If the average breeding value of all animals in the contemporary group is zero, then the predicted breeding value from \@ref(eq:selectionindexbias) is unbiased. Because we have to know the breeding values of the animals in the contemporary group to get an unbiased prediction of the breeding value for a given animal and the breeding values of the animals in the comparison group must also be predicted, this consists of a "chicken-and-egg" problem which cannot be solved. 
+The second term in the result of \@ref(eq:selectionindexbias) measures the __bias__. This depends on the average breeding values of the animals of the comparison group. If the average breeding value of all animals in the comparison group is zero, then the predicted breeding value from \@ref(eq:selectionindexbias) is unbiased. Because we have to know the breeding values of the animals in the comparison group to get an unbiased prediction of the breeding value for a given animal and the breeding values of the animals in the comparison group must also be predicted, this consists of a "chicken-and-egg" problem which cannot be solved. 
 
-The solution to this was presented by Charles R. Henderson in several publications ([@Henderson1973] and [@Henderson 1975]). The key idea behind the solution is to estimate the identifiable environmental factors as fixed effects and to predict the breeding values simultaneously in a linear mixed effects model. The properties of the methodology developed by Henderson are similar to those of the selection index method. But the main advantage of Henderson's methodologies is that phenotypic records do not need to be corrected before breeding values can be corrected. But the effects of the identifiable environmental factors are also a result which come out of the analysis. The methodology developed by Henderson is generally called __BLUP__ and the properties are directly incorporated into the name where 
+The solution to this was presented by Charles R. Henderson in several publications ([@Henderson1973] and [@Henderson1975]). The key idea behind the solution is to estimate the identifiable environmental factors as fixed effects and to predict the breeding values as random effects simultaneously in a linear mixed effects model. The properties of the methodology developed by Henderson are similar to those of the selection index method. But the main advantage of Henderson's methodologies is that phenotypic records do not need to be corrected before breeding values can be predicted. But the effects of the identifiable environmental factors are also a result which come out of the analysis. The methodology developed by Henderson is called __BLUP__ and the properties of this methodology are directly incorporated into the name where 
 
 * __B__ stands for __best__ which means that the correlation between the true ($a$) and the predicted breeding value ($\hat{a}$) is maximal or the prediction error variance ($var(a - \hat{a})$) is minimal.
 * __L__ stands for __linear__ which means the predicted breeding values are linear functions of the observations ($y$)
 * __U__ stands for __unbiased__ which means that the expected values of the predicted breeding values are equal to the true breeding values
 * __P__ stands for __prediction__ 
 
-BLUP based approaches have found widespread usage in genetic evaluations. They are used for both traditional predictions of breeding values and also to predict genomic breeding values. The popularity of BLup is not only due to the theoretical foundations behind BLUP, but Henderson has also developed efficient algorithms to be able to compute predicted breeding values for very large livestock breeding populations. Together with the availablity of large computational resources at a very low price, BLUP has become the de-facto standard methodology for predicting breeding values.
+BLUP based approaches have found widespread usage in genetic evaluations. They are used for both traditional predictions of breeding values and also for predicting genomic breeding values. The popularity of BLup is not only due to the theoretical foundations behind BLUP, but Henderson has also developed efficient algorithms to be able to compute predicted breeding values for very large livestock breeding populations. The theoretic foundations, the development of efficient algorithms ogether with the availablity of large computational resources at a very low price have made BLUP to become the de-facto standard methodology for predicting breeding values.
 
 
-## Numeric Example
+## Numeric Example {#blupnumericexample}
 We want to use a concrete numeric example of a small population to explain how breeding values are predicted using the BLUP methodology. The phenotypic observations consist of measurements of the trait __weaning weight__ in beef cattle. Table \@ref(tab:TableBeefExample) gives an overview of the dataset.
 
 ```{r TableBeefExample, echo=FALSE, results='asis'}
@@ -74,14 +74,73 @@ n_pop_mean <- round(mean(tbl_beef_data$`Weaning Weight`), digits = 2)
 
 ### # show the data frame
 knitr::kable( tbl_beef_data, 
+              format = "latex",
               booktabs = TRUE, 
               longtable = TRUE,
               caption = "Example Data Set for Weaning Weight in Beef Cattle" )
 ```
 
+We assume the phenotypic variance ($\sigma_p^2$) to be `r n_var_p` and the heritability $(h^2)$ corresponds to `r h2`. 
 
 
-## Mixed Linear Effects Model
+## Mixed Linear Effects Model {#mixedlineareffectsmodel}
+A simple linear model contains fixed effects such as _herd_ or _sex_ of an animal and tries to explain the observations as linear functions of such effects. Because the effects considered in a model cannot account for all influences of a given set of observations, every model must have a random residual component. If a linear model contains besides the residuals any additional random effects, then this model is called a __mixed linear effects model__. 
+
+
+### Fixed Versus Random Effects {#fixedversusrandomeffects}
+Unforunately, there is no unique and generally accepted definition of which effects should be fixed and which should be random. There are generally accepted guidelines of how to classify effects as fixed or as random. Table \@ref(tab:fixedversusrandom) lists a few criteria that might be helpful.
+
+```{r fixedversusrandom, echo=FALSE, results='asis'}
+tbl_fixed_versus_random <- tibble::data_frame(`fixed effect` = c("classes can be defined exactly",
+                                                                 "the value of a class does not have an apriori expected value",
+                                                                 "values are exactly estimable",
+                                                                 "the expected value of a class effect is of primary interest",
+                                                                 "fixed effects can be corrected for"),
+                                              `random effects` = c("realized value come from an underlying distribution",
+                                                                   "each realisation is unique",
+                                                                   "observations are infuenced by the variance of the random effect",
+                                                                   "main interest is on the variance not on the expected value", 
+                                                                   ""))
+suppressPackageStartupMessages( library(dplyr) ) 
+knitr::kable(tbl_fixed_versus_random, 
+             format = "latex",
+             booktabs = TRUE, 
+             longtable = TRUE,
+             caption = "Classification Factors of Fixed and Random Effects") %>%
+  kableExtra::kable_styling(full_width = F)  %>%
+  kableExtra::column_spec(1, width = "22em") %>%
+  kableExtra::column_spec(2, width = "22em")
+```
+
+Certain factors such as herd, sex, breed or feeding regimes can be classified unambiguously as fixed effects. On the other hand breeding values are always random effects. Because, we know that breeding values have an expected value of $0$ and have a certain variance, they must be modelled as random effects where these properties can be integrated into the model. Furthermore, each animal has a different realisation of a breeding value. Exceptions are mono-clonal twins and clones.
+
+From a practical point of view, the software program that is used to analyse the data has also an influence on whether a certain effect is treated as fixed or as random. If a certain effect has very many levels such as herds, then it is sometimes better for the analysis to treat such an effect as random. 
+
+
+### Model Specification
+In a linear mixed effects model a single observation $y_{ijk}$ is decomposed according to equation \@ref(eq:linearmixedeffectmodelsingleobservation)
+
+\begin{equation}
+y_{ijk} = \beta_i + u_j + e_{ijk}
+(\#eq:linearmixedeffectmodelsingleobservation)
+\end{equation}
+
+where $\beta_i$ stands for the $i-^{th}$ level of a fixed effect, $u_j$ is the $j-{th}$ realisation of the random effect $u$ and $e_{ijk}$  is the residual effect of the $k-^{th}$ observation}.  Because, we do not want to model just one observation, but we want to include all observations of a complete population, it is helpful to convert the model in \@ref(eq:linearmixedeffectmodelsingleobservation) into matrix-vector notation. This is shown in equation \@ref(eq:linearmixedeffectmodelmatrixvector)
+
+\begin{equation}
+y = X\beta + Zu + e
+(\#eq:linearmixedeffectmodelsingleobservation)
+\end{equation}
+
+
+
+
+
+## Sire Model
+
+
+## Animal Model
+In a first example model for our dataset in Table \@ref(tab:TableBeefExample), we treat the effect of herd $h$ as fixed effect and we include the breeding value of animal $i$ as random effect.
 
 
 
