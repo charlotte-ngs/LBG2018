@@ -16,7 +16,7 @@ Welcome to the website of
 
 
 ## Topics for Master Theses
-Topics for Master Theses at Qualitas AG together with ETH are shown here.
+Topics for Master Theses at Qualitas AG together with ETH are shown [here](https://charlotte-ngs.github.io/LBGFS2018/misc/20181026_master_thesis_topics/MasterThesisTopics_FS2018.html).
 
 
 ## Description
@@ -111,7 +111,8 @@ vecCnTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Genetic E
 ### # w5 04-selection-index.pdf
 vecCnTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Selection Index](https://charlotte-ngs.github.io/LBGFS2018/cn/04-selection-index.pdf)"
 
-### # w6
+### # w6 cn/05-blup.pdf
+vecCnTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[BLUP](https://charlotte-ngs.github.io/LBGFS2018/cn/05-blup.pdf)"
 
 ### # w7
 
@@ -156,7 +157,9 @@ vecSlTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Genetic E
 ### # w5 w05/lbg_fs_2018_slides_selection-index.pdf
 vecSlTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Selection Index](https://charlotte-ngs.github.io/LBGFS2018/sl/w05/lbg_fs_2018_slides_selection-index.pdf)"
 
-### # w6
+### # w6 w06/lbg_fs_2018_slides_blup.pdf
+vecSlTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[BLUP](https://charlotte-ngs.github.io/LBGFS2018/sl/w06/lbg_fs_2018_slides_blup.pdf)"
+
 
 ### # w7
 
@@ -237,7 +240,7 @@ vecSolTopic[which(Date == format(as.Date("2018/10/12"), "%d.%m"))] <- "[Matrices
 vecSolTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Breeding Values, Allele Substitution and Data Input Mean](https://charlotte-ngs.github.io/LBGFS2018/sol/w04/lbg_fs_2018_w04_sol3.pdf)"
 
 # w6 sol/w05/lbg_fs_2018_w05_sol04.pdf
-# vecSolTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[Breeding Value Prediction, Confidence Interval and Selection Response](https://charlotte-ngs.github.io/LBGFS2018/sol/w05/lbg_fs_2018_w05_sol04.pdf)"
+vecSolTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[Breeding Value Prediction, Confidence Interval and Selection Response](https://charlotte-ngs.github.io/LBGFS2018/sol/w05/lbg_fs_2018_w05_sol04.pdf)"
 
 # w7 sol/w06/lbg_fs_2018_w06_sol05.pdf
 # vecSolTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Breeding Value Prediction, Own Performance and Progeny Records](https://charlotte-ngs.github.io/LBGFS2018/sol/w06/lbg_fs_2018_w06_sol05.pdf)"

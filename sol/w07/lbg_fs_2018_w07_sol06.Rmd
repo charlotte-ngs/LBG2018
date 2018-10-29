@@ -1,0 +1,137 @@
+---
+title: Livestock Breeding and Genomics - Solution 6
+author: Peter von Rohr
+date: 2018-10-26
+#output: pdf_document 
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_sections: false
+    includes:
+      in_header: header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r PrepareBeefExample, results='hide'}
+n_nr_sire <- 3
+n_nr_dam <- 8
+n_nr_parents <- n_nr_sire + n_nr_dam
+n_nr_offspring <- 16
+n_nr_animals <- n_nr_parents + n_nr_offspring
+dam_id <- rep(4:11,2)
+
+tbl_beef_data <- dplyr::data_frame(Animal = (n_nr_parents + 1):n_nr_animals,
+                                   Sire = c(rep(1,8), rep(2,6), rep(3,2)),
+                                   Dam = dam_id[order(dam_id)],
+                                   Herd = c(rep(1,4), rep(2,4), rep(1,4), rep(2,4)),
+                                   `Weaning Weight`= c(2.61,2.31,2.44,2.41,2.51,2.55,2.14,2.61,2.34,1.99,3.1,2.81,2.14,2.41,2.54,3.16))
+# names(tbl_beef_data) <- c("Animal", "Sire", "Weaning Weight")
+n_nr_observation <- nrow(tbl_beef_data)
+
+### # parameters
+h2 <- .25
+n_var_p <- round(var(tbl_beef_data$`Weaning Weight`), digits = 4)
+n_var_g <- round(h2 * n_var_p, digits = 4)
+n_pop_mean <- round(mean(tbl_beef_data$`Weaning Weight`), digits = 2)
+```
+
+## Prediction of Breeding Values for Single Traits Using the Selection Index Method
+
+The selection index method can also be used to predict breeding values for a single trait. This can be achieved by setting the aggregate genotype $H$ to the true breeding value $a$ of the single trait. When $H$ contains just one trait, then the economic value $w$ is set to $1$. The index I is defined as 
+
+$$I = b^Ty^*$$
+
+The vector $b$ of index weights is computed according to the general formula 
+
+\begin{equation}
+b = P^{-1}Gw \text{ with } w = 1 \rightarrow b = P^{-1}G
+(\#eq:IndexWeight)
+\end{equation}
+
+where $P$ is the variance-covariance matrix between all traits in the index and $G$ corresponds to the covariance matrix between the traits in the aggregate genotype and the traits in the index. Depending on what type of information sources are used to predict the breeding value, the matrices $P$ and $G$ have a different structure.
+
+
+### Own Performance
+Assuming that the only information available to be considered in the index $I$ is an own performance phenotypic observation of the same trait that is in the aggregate genotype. The matrix $P$ corresponds to the phenotypic variance $\sigma_p^2$ and because we have the same trait in $I$ as we have in $H$, the matrix $G$ corresponds to the additive genetic variance $\sigma_a^2$. Then 
+
+$$b = P^{-1}G = \frac{\sigma_a^2}{\sigma_p^2} = h^2$$
+
+Hence 
+
+$$\hat{a}_i = I = b * y^* = h^2(y - \mu)$$
+
+assuming $y^*$ to be the observation corrected for the population mean. The predicted breeding value for a trait which is the same as in the aggregate genotype using the selection method is the same as we found using the regression method. 
+
+
+## Problem 1: Repeated Measurements
+```{r SetupEx06Problem01}
+y <- 320
+mu <- 250
+h2 <- 0.45
+geb_gew <- 52
+mu2 <- 170
+rep <- 0.65
+nr_measure <- 10
+wean_weight <- y
+slope <- (wean_weight-geb_gew)/(nr_measure-1)
+measure <- c(1:nr_measure)
+weight <- round(slope*(measure-1) + geb_gew, digits = 0)
+mean_weight <- mean(weight)
+dfWeightTable <- data.frame(Measurement = measure, Weight = weight)
+```
+
+Verify that the predicted breeding value based on repeated phenotypic observations using the selection index gives the same result as with the regression method. You can use the same data as in Problem 2 of Exercise 4 which is shown once again in Table \@ref(tab:KnitrShowTableRepeatedMeasurements). In addition to the data in Table \@ref(tab:KnitrShowTableRepeatedMeasurements), the following parameters are assumed. 
+
+* The heritability ($h^2 = `r h2`$) 
+* The population mean for the repeated observations of the weight is  $`r mu2`$ kg
+* The repeatability of the weight measurements is $t = `r rep`$. 
+
+
+```{r KnitrShowTableRepeatedMeasurements}
+knitr::kable(dfWeightTable, 
+             booktabs = TRUE,
+             longtable = TRUE, 
+             caption = "Repeated Weight Measurements")
+```
+
+
+### Solution
+The predicted breeding values using the regression method (see Solution 4, Problem 2) is computed as 
+
+```{r ResultHatARepMeasRegression}
+hat_a_rep_meas <- round((nr_measure * h2)/(1+(nr_measure - 1)*rep)*(mean_weight - mu2), digits = 2)
+```
+$$\hat{a}_i = \frac{nh^2}{1+(n-1)t}(\bar{y}_i - \mu) 
+            = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`)
+            = `r hat_a_rep_meas`$$
+            
+          
+The predicted breeding value $\hat{a}_i$ using the selection index $I$ corresponds to 
+
+\begin{equation}
+\hat{a}_i = I = b * \bar{y}^* = b * (\bar{y} - \mu)
+(\#eq:hatarepeatedmeasurementsselectionindex)
+\end{equation}
+
+The vector $b$ of index weights is computed according to equation \@ref(eq:IndexWeight). We first have to determine the matrices $P$ and $G$. 
+
+$$P = var(\bar{y}) = \frac{1 + (n-1)t}{n} * \sigma_y^2$$
+
+$$G = cov(a, \bar{y}) = \sigma_a^2$$
+
+Using the results for $P$ and $G$, we get
+
+$$b = P^{-1}G = \frac{n \sigma_a^2}{(1 + (n-1)t)\sigma_y^2} = \frac{nh^2}{1 + (n-1)t}$$
+
+Inserting the result of $b$ into \@ref(eq:hatarepeatedmeasurementsselectionindex) leads to 
+
+\begin{align}
+\hat{a}_i = I &=  b * (\bar{y} - \mu) \notag \\
+              &=  \frac{nh^2}{1 + (n-1)t} * (\bar{y} - \mu) \notag \\
+              &= \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`) \notag \\
+              &= `r hat_a_rep_meas` \notag
+\end{align}
+

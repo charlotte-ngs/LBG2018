@@ -82,7 +82,7 @@ slope <- (wean_weight-geb_gew)/(nr_measure-1)
 measure <- c(1:nr_measure)
 weight <- round(slope*(measure-1) + geb_gew, digits = 0)
 mean_weight <- mean(weight)
-dfWeightTable <- data.frame(Messung = measure, Gewicht = weight)
+dfWeightTable <- data.frame(Measurement = measure, Weight = weight)
 knitr::kable(dfWeightTable)
 ```
 
