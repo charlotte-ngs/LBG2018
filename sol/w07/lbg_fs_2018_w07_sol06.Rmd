@@ -13,6 +13,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
 ```
 
 ```{r PrepareBeefExample, results='hide'}
@@ -37,6 +38,7 @@ n_var_p <- round(var(tbl_beef_data$`Weaning Weight`), digits = 4)
 n_var_g <- round(h2 * n_var_p, digits = 4)
 n_pop_mean <- round(mean(tbl_beef_data$`Weaning Weight`), digits = 2)
 ```
+
 
 ## Prediction of Breeding Values for Single Traits Using the Selection Index Method
 
@@ -135,3 +137,93 @@ Inserting the result of $b$ into \@ref(eq:hatarepeatedmeasurementsselectionindex
               &= `r hat_a_rep_meas` \notag
 \end{align}
 
+This result confirms that the predicted breeding values of both the regression method and the selection index are identical.
+
+
+## Combining Information From Different Sources
+```{r sourcecombinesetup}
+n_nr_fullsib <- 2
+n_nr_halfsib <- 4
+```
+
+In a next step, we want to combine information from different sources to predict the breeding value of a single animal. We assume that a selection candidate has two full-sibs and four half-sibs on a testing station. This is a situation that is quite common in pig breeding. The following diagram shows all animals and their relationships among eachother.
+
+```{r testingstationanimal, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/testingstationanimal.odg")
+knitr::include_graphics(path = "odg/testingstationanimal.png")
+```
+ 
+ Our selection candidate does not yet have an own performance record. Our goal is to combine the average phenotypic performance $\bar{y}_{FS}$ of the two full sibs as one source of information and the average phenotypic performance $\bar{y}_{HS}$ of the four half sibs as the second source of information. These information are used to predict the breeding value for our selection candidate $i$ using the selection index. For this we have to compute the vector $b$ of index weights. This requires to setup the matrices $P$ and $G$. 
+ 
+ The matrix $P$ has the following structure
+ 
+ $$P = \left[ 
+   \begin{array}{lr}
+   var(\bar{y}_{FS})  &  cov(\bar{y}_{FS}, \bar{y}_{HS}) \\
+   cov(\bar{y}_{FS}, \bar{y}_{HS})  &  var(\bar{y}_{HS})
+   \end{array}
+ \right]
+ $$
+ 
+ The phenotypic variance of the average performance of full-sibs is already known as 
+ 
+ $$var(\bar{y}_{FS}) = \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}} * \sigma_y^2$$
+ 
+ To compute $var(\bar{y}_{HS})$, the same formula can be used as for $var(\bar{y}_{FS})$ because the four half-sibs to the selection candidate are also full-sibs to each other.
+ 
+ $$var(\bar{y}_{HS}) = \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}} * \sigma_y^2$$
+ 
+ For the covariance, we best look at how $\bar{y}_{FS}$ and $\bar{y}_{HS}$ can be decomposed. 
+ 
+ $$\bar{y}_{FS} = \frac{y_4 + y_5}{2} 
+                = {1\over 2} \left(\mu + {1\over 2}a_1 + {1\over 2}a_2 + m_4 + e_4 +  \mu + {1\over 2}a_1 + {1\over 2}a_2 + m_5 + e_5 \right) 
+                = \mu + {1\over 2}a_1 + {1\over 2}a_2 + {1\over 2}m_4 + {1\over 2}m_5 + {1\over 2}e_4 + {1\over 2}e_5
+$$
+                
+ Similarly for $\bar{y}_{HS}$
+ 
+ $$\bar{y}_{HS} = {1\over 4}\sum_{j=6}^9 y_j = {1\over 4}\sum_{j=6}^9 \left(\mu + {1\over 2} a_1 + {1 \over 2} a_3 + m_j + e_j \right)
+                = \mu + {1\over 2} a_1 + {1 \over 2} a_3 + {1\over 4}\sum_{j=6}^9 m_j + {1\over 4}\sum_{j=6}^9e_j 
+ $$
+
+The results of the decompositions of $\bar{y}_{FS}$ and $\bar{y}_{HS}$ can be used. At this point we assume that there is no relationship between parents $1$, $2$ and $3$ and the covariances between all the $a_j$, $m_j$ and $e_j$ terms are all $0$. Hence we can write
+
+$$ cov(\bar{y}_{FS}, \bar{y}_{HS}) = cov(\mu + {1\over 2}a_1 + {1\over 2}a_2 + {1\over 2}m_4 + {1\over 2}m_5 + {1\over 2}e_4 + {1\over 2}e_5, 
+                                         \mu + {1\over 2} a_1 + {1 \over 2} a_3 + {1\over 4}\sum_{j=6}^9 m_j + {1\over 4}\sum_{j=6}^9e_j )
+                                   = cov({1\over 2}a_1, {1\over 2}a_1) = {1\over 4} \sigma_a^2 =  {1\over 4} h^2 \sigma_y^2       
+
+$$
+
+Now the matrix $P$ is completely determined as
+
+ $$P = \left[ 
+   \begin{array}{lr}
+   \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}} * \sigma_y^2  &   {1\over 4} h^2 \sigma_y^2  \\
+    {1\over 4} h^2 \sigma_y^2                       &  \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}} * \sigma_y^2
+   \end{array}
+ \right]
+ $$
+ 
+ 
+ The matrix $G$ contains the genetic covariance between the true breeding value $a_i$ of selection candidate $i$ and the information sources. Hence we can write, 
+ 
+ $$G =  \left[ 
+   \begin{array}{c}
+   cov(a_i, \bar{y}_{FS}) \\
+   cov(a_i, \bar{y}_{HS})
+   \end{array} 
+ \right]
+ $$
+ 
+ For the single component, we can use the above decompositions of $\bar{y}_{FS}$ and $\bar{y}_{HS}$ and the decomposition of $a_i$
+ 
+$$a_i = {1\over 2}a_1 + {1\over 2}a_2 + m_i$$
+ 
+ Hence
+ 
+$$cov(a_i, \bar{y}_{FS}) = cov({1\over 2}a_1 + {1\over 2}a_2 + m_i, \mu + {1\over 2}a_1 + {1\over 2}a_2 + {1\over 2}m_4 + {1\over 2}m_5 + {1\over 2}e_4 + {1\over 2}e_5)
+                         = cov({1\over 2}a_1 + {1\over 2}a_2, {1\over 2}a_1 + {1\over 2}a_2
+                         =
+ 
+ $$
+ 
