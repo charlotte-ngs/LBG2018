@@ -67,6 +67,7 @@ $$\hat{a}_i = I = b * y^* = h^2(y - \mu)$$
 
 assuming $y^*$ to be the observation corrected for the population mean. The predicted breeding value for a trait which is the same as in the aggregate genotype using the selection method is the same as we found using the regression method. 
 
+\pagebreak
 
 ## Problem 1: Repeated Measurements
 ```{r SetupEx06Problem01}
@@ -445,13 +446,25 @@ The predicted breeding value $\hat{a}_i$ corresponds to the index $I$ which is c
 where $y^{*}$ corresponds to the information sources ($\bar{y}_{FS}$ and $\bar{y}_{HS}$) corrected for the population mean $\mu$. With that the vector $y^*$ can be written as
 
 ```{r computeystart, echo=FALSE, results='hide'}
+### # compute averages of fullsibs and halfsibs, use the ungroup() function to avoid adding the grouping variable
 suppressPackageStartupMessages( library(dplyr) )
-tbl_bar_y_sib <- tbl_weigth_sib %>% group_by(Sire, Dam) %>% summarise(mean = mean(Weigth))
-tbl_bar_y_fs <- tbl_bar_y_sib %>% filter(Dam == 2) %>% select(mean)
+tbl_bar_y_sib <- tbl_weigth_sib %>% 
+            group_by(Sire, Dam) %>% 
+            summarise(mean = mean(Weigth))
+tbl_bar_y_fs <- tbl_bar_y_sib %>% 
+             filter(Dam == 2) %>% 
+                    ungroup() %>% 
+                 select(mean)
 n_bar_y_fs <- as.vector(tbl_bar_y_fs$mean)
-tbl_var_y_hs <- tbl_bar_y_sib %>% filter(Dam == 3) %>% select(mean)
+tbl_var_y_hs <- tbl_bar_y_sib %>% 
+             filter(Dam == 3) %>% 
+                    ungroup() %>% 
+                 select(mean)
 n_bar_y_hs <- as.vector(tbl_var_y_hs$mean)
 vec_y_star_sib <- matrix(c(n_bar_y_fs - n_mean_weight_sib, n_bar_y_hs - n_mean_weight_sib), ncol = 1)
+
+### # index
+n_index_value <- crossprod(vec_b_sib, vec_y_star_sib)
 ```
 
 
@@ -496,4 +509,5 @@ Together with the vector $b$, we get
       `r vec_y_star_sib[2,1]`
    \end{array} 
  \right]
+ = `r round(n_index_value, digits=2)` \notag
 \end{equation}
