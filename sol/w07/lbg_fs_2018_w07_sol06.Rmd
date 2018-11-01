@@ -1,0 +1,546 @@
+---
+title: Livestock Breeding and Genomics - Solution 6
+author: Peter von Rohr
+date: 2018-10-26
+#output: pdf_document 
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_sections: false
+    includes:
+      in_header: header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+```{r PrepareBeefExample, results='hide', eval=FALSE}
+n_nr_sire <- 3
+n_nr_dam <- 8
+n_nr_parents <- n_nr_sire + n_nr_dam
+n_nr_offspring <- 16
+n_nr_animals <- n_nr_parents + n_nr_offspring
+dam_id <- rep(4:11,2)
+
+tbl_beef_data <- dplyr::data_frame(Animal = (n_nr_parents + 1):n_nr_animals,
+                                   Sire = c(rep(1,8), rep(2,6), rep(3,2)),
+                                   Dam = dam_id[order(dam_id)],
+                                   Herd = c(rep(1,4), rep(2,4), rep(1,4), rep(2,4)),
+                                   `Weaning Weight`= c(2.61,2.31,2.44,2.41,2.51,2.55,2.14,2.61,2.34,1.99,3.1,2.81,2.14,2.41,2.54,3.16))
+# names(tbl_beef_data) <- c("Animal", "Sire", "Weaning Weight")
+n_nr_observation <- nrow(tbl_beef_data)
+
+### # parameters
+h2 <- .25
+n_var_p <- round(var(tbl_beef_data$`Weaning Weight`), digits = 4)
+n_var_g <- round(h2 * n_var_p, digits = 4)
+n_pop_mean <- round(mean(tbl_beef_data$`Weaning Weight`), digits = 2)
+```
+
+
+## Prediction of Breeding Values for Single Traits Using the Selection Index Method
+
+The selection index method can also be used to predict breeding values for a single trait. This can be achieved by setting the aggregate genotype $H$ to the true breeding value $a$ of the single trait. When $H$ contains just one trait, then the economic value $w$ is set to $1$. The index I is defined as 
+
+$$I = b^Ty^*$$
+
+The vector $b$ of index weights is computed according to the general formula 
+
+\begin{equation}
+b = P^{-1}Gw \text{ with } w = 1 \rightarrow b = P^{-1}G
+(\#eq:IndexWeight)
+\end{equation}
+
+where $P$ is the variance-covariance matrix between all traits in the index and $G$ corresponds to the covariance matrix between the traits in the aggregate genotype and the traits in the index. Depending on what type of information sources are used to predict the breeding value, the matrices $P$ and $G$ have a different structure.
+
+
+### Own Performance
+Assuming that the only information available to be considered in the index $I$ is an own performance phenotypic observation of the same trait that is in the aggregate genotype. The matrix $P$ corresponds to the phenotypic variance $\sigma_p^2$ and because we have the same trait in $I$ as we have in $H$, the matrix $G$ corresponds to the additive genetic variance $\sigma_a^2$. Then 
+
+$$b = P^{-1}G = \frac{\sigma_a^2}{\sigma_p^2} = h^2$$
+
+Hence 
+
+$$\hat{a}_i = I = b * y^* = h^2(y - \mu)$$
+
+assuming $y^*$ to be the observation corrected for the population mean. The predicted breeding value for a trait which is the same as in the aggregate genotype using the selection method is the same as we found using the regression method. 
+
+\pagebreak
+
+## Problem 1: Repeated Measurements
+```{r SetupEx06Problem01}
+y <- 320
+mu <- 250
+h2 <- 0.45
+geb_gew <- 52
+mu2 <- 170
+rep <- 0.65
+nr_measure <- 10
+wean_weight <- y
+slope <- (wean_weight-geb_gew)/(nr_measure-1)
+measure <- c(1:nr_measure)
+weight <- round(slope*(measure-1) + geb_gew, digits = 0)
+mean_weight <- mean(weight)
+sd_weight <- sd(weight)
+dfWeightTable <- data.frame(Measurement = measure, Weight = weight)
+```
+
+Verify that the predicted breeding value based on repeated phenotypic observations using the selection index gives the same result as with the regression method. You can use the same data as in Problem 2 of Exercise 4 which is shown once again in Table \@ref(tab:KnitrShowTableRepeatedMeasurements). In addition to the data in Table \@ref(tab:KnitrShowTableRepeatedMeasurements), the following parameters are assumed. 
+
+* The heritability ($h^2 = `r h2`$) 
+* The population mean for the repeated observations of the weight is  $`r mu2`$ kg
+* The repeatability of the weight measurements is $t = `r rep`$. 
+* The phenotypic standard deviation is $\sigma_p = `r round(sd_weight, digits = 2)`$.
+
+
+```{r KnitrShowTableRepeatedMeasurements}
+knitr::kable(dfWeightTable, 
+             booktabs = TRUE,
+             longtable = TRUE, 
+             caption = "Repeated Weight Measurements")
+```
+
+
+### Solution
+The predicted breeding values using the regression method (see Solution 4, Problem 2) is computed as 
+
+```{r ResultHatARepMeasRegression}
+hat_a_rep_meas <- round((nr_measure * h2)/(1+(nr_measure - 1)*rep)*(mean_weight - mu2), digits = 2)
+```
+$$\hat{a}_i = \frac{nh^2}{1+(n-1)t}(\bar{y}_i - \mu) 
+            = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`)
+            = `r hat_a_rep_meas`$$
+            
+          
+The predicted breeding value $\hat{a}_i$ using the selection index $I$ corresponds to 
+
+\begin{equation}
+\hat{a}_i = I = b * \bar{y}^* = b * (\bar{y} - \mu)
+(\#eq:hatarepeatedmeasurementsselectionindex)
+\end{equation}
+
+The vector $b$ of index weights is computed according to equation \@ref(eq:IndexWeight). We first have to determine the matrices $P$ and $G$. 
+
+$$P = var(\bar{y}) = \frac{1 + (n-1)t}{n} * \sigma_y^2$$
+
+$$G = cov(a, \bar{y}) = \sigma_a^2$$
+
+Using the results for $P$ and $G$, we get
+
+$$b = P^{-1}G = \frac{n \sigma_a^2}{(1 + (n-1)t)\sigma_y^2} = \frac{nh^2}{1 + (n-1)t}$$
+
+Inserting the result of $b$ into \@ref(eq:hatarepeatedmeasurementsselectionindex) leads to 
+
+\begin{align}
+\hat{a}_i = I &=  b * (\bar{y} - \mu) \notag \\
+              &=  \frac{nh^2}{1 + (n-1)t} * (\bar{y} - \mu) \notag \\
+              &= \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`) \notag \\
+              &= `r hat_a_rep_meas` \notag
+\end{align}
+
+This result confirms that the predicted breeding values of both the regression method and the selection index are identical.
+
+
+## Combining Information From Different Sources
+```{r sourcecombinesetup}
+n_nr_fullsib <- 2
+n_nr_halfsib <- 4
+```
+
+In a next step, we want to combine information from different sources to predict the breeding value of a single animal. We assume that a selection candidate has two full-sibs and four half-sibs on a testing station. This is a situation that is quite common in pig breeding. The following diagram shows all animals and their relationships among eachother.
+
+```{r testingstationanimal, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/testingstationanimal.odg")
+knitr::include_graphics(path = "odg/testingstationanimal.png")
+```
+ 
+ Our selection candidate does not yet have an own performance record. Our goal is to combine the average phenotypic performance $\bar{y}_{FS}$ of the two full sibs as one source of information and the average phenotypic performance $\bar{y}_{HS}$ of the four half sibs as the second source of information. These information are used to predict the breeding value for our selection candidate $i$ using the selection index. For this we have to compute the vector $b$ of index weights. This requires to setup the matrices $P$ and $G$. 
+ 
+ The matrix $P$ has the following structure
+ 
+ $$P = \left[ 
+   \begin{array}{lr}
+   var(\bar{y}_{FS})  &  cov(\bar{y}_{FS}, \bar{y}_{HS}) \\
+   cov(\bar{y}_{FS}, \bar{y}_{HS})  &  var(\bar{y}_{HS})
+   \end{array}
+ \right]
+ $$
+ 
+ The phenotypic variance of the average performance of full-sibs is already known as 
+ 
+ $$var(\bar{y}_{FS}) = \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}} * \sigma_y^2$$
+ 
+ To compute $var(\bar{y}_{HS})$, the same formula can be used as for $var(\bar{y}_{FS})$ because the four half-sibs to the selection candidate are also full-sibs to each other.
+ 
+ $$var(\bar{y}_{HS}) = \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}} * \sigma_y^2$$
+ 
+ For the covariance, we best look at how $\bar{y}_{FS}$ and $\bar{y}_{HS}$ can be decomposed. 
+ 
+\begin{align}
+\bar{y}_{FS} = \frac{y_4 + y_5}{2} 
+                &=  {1\over 2} \left(\mu + {1\over 2}a_1 + {1\over 2}a_2 + m_4 + e_4 +  \mu + {1\over 2}a_1 + {1\over 2}a_2 + m_5 + e_5 \right) \notag \\
+                &= \mu + {1\over 2}a_1 + {1\over 2}a_2 + {1\over 2}m_4 + {1\over 2}m_5 + {1\over 2}e_4 + {1\over 2}e_5 \notag
+\end{align}
+                
+ Similarly for $\bar{y}_{HS}$
+ 
+\begin{align}
+\bar{y}_{HS} = {1\over 4}\sum_{j=6}^9 y_j  &=  {1\over 4}\sum_{j=6}^9 \left(\mu + {1\over 2} a_1 + {1 \over 2} a_3 + m_j + e_j \right) \notag \\
+                &= \mu + {1\over 2} a_1 + {1 \over 2} a_3 + {1\over 4}\sum_{j=6}^9 m_j + {1\over 4}\sum_{j=6}^9e_j \notag
+\end{align}
+
+The results of the decompositions of $\bar{y}_{FS}$ and $\bar{y}_{HS}$ can be used. At this point we assume that there is no relationship between parents $1$, $2$ and $3$ and the covariances between all the $a_j$, $m_j$ and $e_j$ terms are all $0$. Hence we can write
+
+\begin{align}
+cov(\bar{y}_{FS}, \bar{y}_{HS}) &= cov(\mu + {1\over 2}a_1 + {1\over 2}a_2 + {1\over 2}m_4 + {1\over 2}m_5 + {1\over 2}e_4 + {1\over 2}e_5, 
+                                         \mu + {1\over 2} a_1 + {1 \over 2} a_3 + {1\over 4}\sum_{j=6}^9 m_j + {1\over 4}\sum_{j=6}^9e_j ) \notag \\
+                                &= cov({1\over 2}a_1, {1\over 2}a_1) = {1\over 4} \sigma_a^2 =  {1\over 4} h^2 \sigma_y^2       
+\end{align}
+
+Now the matrix $P$ is completely determined as
+
+$$P = \left[ 
+   \begin{array}{lr}
+   \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}} * \sigma_y^2  &   {1\over 4} h^2 \sigma_y^2  \\
+    {1\over 4} h^2 \sigma_y^2                       &  \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}} * \sigma_y^2
+   \end{array}
+ \right]
+$$
+ 
+ 
+ 
+ 
+ The matrix $G$ contains the genetic covariance between the true breeding value $a_i$ of selection candidate $i$ and the information sources. Hence we can write, 
+ 
+ $$G =  \left[ 
+   \begin{array}{c}
+   cov(a_i, \bar{y}_{FS}) \\
+   cov(a_i, \bar{y}_{HS})
+   \end{array} 
+ \right]
+ $$
+ 
+ For the single component, we can use the above decompositions of $\bar{y}_{FS}$ and $\bar{y}_{HS}$ and the decomposition of $a_i$
+ 
+$$a_i = {1\over 2}a_1 + {1\over 2}a_2 + m_i$$
+ 
+ Hence
+ 
+\begin{align}
+cov(a_i, \bar{y}_{FS})  &=  cov({1\over 2}a_1 + {1\over 2}a_2 + m_i, \mu + {1\over 2}a_1 + {1\over 2}a_2 + {1\over 2}m_4 + {1\over 2}m_5 + {1\over 2}e_4 + {1\over 2}e_5) \notag \\
+                        &= cov({1\over 2}a_1 + {1\over 2}a_2, {1\over 2}a_1 + {1\over 2}a_2 \notag \\
+                        &= cov({1\over 2}(a_1 + a_2), {1\over 2}(a_1 + a_2)) \notag \\
+                        &= {1\over 4} cov((a_1 + a_2), (a_1 + a_2)) \notag \\
+                        &= {1\over 4} (cov(a_1,a_1) + cov(a_2,a_2)) \notag \\
+                        &= {1\over 4} (\sigma_a^2 + \sigma_a^2) \notag \\
+                        &= {1\over 2} \sigma_a^2 \notag
+\end{align}
+ 
+ Similarly
+ 
+ \begin{align}
+ cov(a_i, \bar{y}_{HS})  &= cov({1\over 2}a_1 + {1\over 2}a_2 + m_i, \mu + {1\over 2} a_1 + {1 \over 2} a_3 + {1\over 4}\sum_{j=6}^9 m_j + {1\over 4}\sum_{j=6}^9e_j ) \notag \\
+                         &= cov({1\over 2}a_1 + {1\over 2}a_2, {1\over 2} a_1 + {1 \over 2} a_3)  \notag \\
+                         &= cov({1\over 2}a_1, {1\over 2} a_1)  \notag \\
+                         &= {1\over 4} \sigma_a^2  \notag
+ \end{align}
+ 
+ Together, we get the matrix $G$ to be
+ 
+$$G =  \left[ 
+   \begin{array}{c}
+   cov(a_i, \bar{y}_{FS}) \\
+   cov(a_i, \bar{y}_{HS})
+   \end{array} 
+ \right]
+ =
+ \left[ 
+   \begin{array}{c}
+    {1\over 2} \sigma_a^2 \\
+   {1\over 4} \sigma_a^2
+   \end{array} 
+ \right]
+ =
+ \left[ 
+   \begin{array}{c}
+     {1\over 2} h^2 \sigma_y^2 \\
+     {1\over 4} h^2 \sigma_y^2
+   \end{array} 
+ \right]
+$$
+
+Now we have all the components ready to set up the selection index normal equations as
+
+$$P * b = G$$
+
+Inserting the above components leads to 
+
+\begin{equation}
+\left[ 
+   \begin{array}{lr}
+   \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}} * \sigma_y^2  &   {1\over 4} h^2 \sigma_y^2  \\
+    {1\over 4} h^2 \sigma_y^2                       &  \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}} * \sigma_y^2
+   \end{array}
+ \right]
+ *
+\left[ 
+   \begin{array}{c}
+     b_1 \\
+     b_2
+   \end{array}
+ \right]
+=
+ \left[ 
+   \begin{array}{c}
+     {1\over 2} h^2 \sigma_y^2 \\
+     {1\over 4} h^2 \sigma_y^2
+   \end{array} 
+ \right]
+(\#eq:indexnormaleq)
+\end{equation}
+
+Because both sides of \@ref(eq:indexnormaleq) contain $\sigma_y^2$ as a common factor, both sides can be divided by $\sigma_y^2$ leading to the following simpler form of the normal equations.
+
+\begin{equation}
+\left[ 
+   \begin{array}{lr}
+   \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}}  &   {1\over 4} h^2   \\
+    {1\over 4} h^2                     &  \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}}
+   \end{array}
+ \right]
+ *
+\left[ 
+   \begin{array}{c}
+     b_1 \\
+     b_2
+   \end{array}
+ \right]
+=
+ \left[ 
+   \begin{array}{c}
+     {1\over 2} h^2  \\
+     {1\over 4} h^2 
+   \end{array} 
+ \right]
+(\#eq:indexnormaleqsimple)
+\end{equation}
+
+ 
+## Problem 2: Compute Vector $b$ of Index Weights and Predict Breeding Value
+ 
+```{r problem2datasetup, echo=FALSE, results='hide'}
+### # seed
+set.seed(3342)
+
+### # number of parents
+n_nr_parents_sib <- 3
+### # number of full sibs and number of half-sibs
+n_nr_fullsib <- 2
+n_nr_halfsib <- 4
+n_nr_sib <- n_nr_fullsib + n_nr_halfsib
+### # vector of sire ids
+sire_id <- rep(1,n_nr_sib)
+### # dam id
+dam_id <- c(rep(2, n_nr_fullsib), rep(3, n_nr_halfsib))
+
+### assume mean and sd to generate the full-sib and the half sib data
+n_mean_weight_sib <- 250.4
+n_sd_weight_sib <- 31.8
+n_h2_sib <- .36
+
+### # vector of observations
+vec_weigth_sib <- round(rnorm(n_nr_sib, mean = n_mean_weight_sib, sd = n_sd_weight_sib), digits = 2)
+
+### # put everything into a tibble
+tbl_weigth_sib <- tibble::data_frame(Measurement = c(1:n_nr_sib),
+                                     Sire        = sire_id,
+                                     Dam         = dam_id,
+                                     Weigth      = vec_weigth_sib)
+```
+ 
+Take the above derived index equation with the information from half-sibs and full-sibs from our selection candidate. Use the numeric values from Table \@ref(tab:showweighttable) to solve for the vector $b$ and to predict the breeding value of selection candidate $i$. We assume that our selection candidate $i$ has animals $1$ and $2$ as parents. The heritability is assumed to be $h^2 = `r n_h2_sib`$ and the phenotypic standard deviation corresponds to $\sigma_y = `r n_sd_weight_sib`$. The population mean $\mu$ is assumed to be `r n_mean_weight_sib`. 
+ 
+```{r showweighttable, echo=FALSE}
+knitr::kable(tbl_weigth_sib, 
+             booktabs = TRUE,
+             longtable = TRUE, 
+             caption = "Phenotypic Measurements for Full-Sibs and Half-Sibs")
+```
+ 
+ 
+### Solution
+The vector $b$ of index weights are computed from the index normal equations given in \@ref(eq:indexnormaleq). We start by inserting the numbers into the matrices $P$ and $G$ and then solve for $b$. 
+
+```{r computematp, echo=FALSE, results='hide'}
+n_var_weight_sib <- n_sd_weight_sib^2
+mat_p11 <- (1 + (n_nr_fullsib-1)*n_h2_sib/2)/n_nr_fullsib
+mat_p12 <- 1/4 * n_h2_sib 
+mat_p22 <- (1 + (n_nr_halfsib-1)*n_h2_sib/2)/n_nr_halfsib
+mat_p <- matrix(c(mat_p11, mat_p12, mat_p12, mat_p22), ncol = 2, byrow = TRUE)
+```
+
+\begin{align}
+P &= \left[ 
+   \begin{array}{lr}
+   \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}}  &   {1\over 4} h^2  \\
+    {1\over 4} h^2                     &  \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}}
+   \end{array}
+\right] \notag \\
+  &=
+ \left[ 
+   \begin{array}{lr}
+   \frac{1 + (`r n_nr_fullsib`-1) * `r n_h2_sib`/2}{`r n_nr_fullsib`}  &   {1\over 4} `r n_h2_sib`  \\
+    {1\over 4} `r n_h2_sib`                                            &  \frac{1 + (`r n_nr_halfsib`-1) * `r n_h2_sib`/2}{`r n_nr_halfsib`}
+   \end{array}
+\right] \notag \\
+  &=
+ \left[ 
+   \begin{array}{lr}
+   `r mat_p11` &  `r mat_p12` \\
+   `r mat_p12`  &  `r mat_p22`
+   \end{array}
+\right] \notag
+\end{align}
+
+
+The matrix $G$ 
+
+```{r computematg, echo=FALSE, results='hide'}
+mat_g11 <- 1/2 * n_h2_sib 
+mat_g12 <- 1/4 * n_h2_sib
+mat_g <- matrix(c(mat_g11, mat_g12), ncol = 1)
+```
+
+\begin{align}
+G  &=  \left[ 
+   \begin{array}{c}
+     {1\over 2} h^2 \\
+     {1\over 4} h^2
+   \end{array} 
+ \right] \notag \\
+  &= \left[ 
+   \begin{array}{c}
+     {1\over 2} * `r n_h2_sib` \\
+     {1\over 4} * `r n_h2_sib`
+   \end{array} 
+ \right] \notag \\
+ &= \left[ 
+   \begin{array}{c}
+     `r mat_g11` \\
+     `r mat_g12`
+   \end{array} 
+ \right] \notag
+\end{align}
+
+The vector $b$ can  be computed as
+
+```{r computevecb, echo=FALSE, results='hide'}
+vec_b_sib <- solve(mat_p) %*% mat_g
+```
+
+\begin{align}
+b  &=  P^{-1} * G \notag \\
+   &=   \left[ 
+   \begin{array}{lr}
+   `r mat_p11` &  `r mat_p12` \\
+   `r mat_p12`  &  `r mat_p22`
+   \end{array}
+\right]^{-1} * 
+\left[ 
+   \begin{array}{c}
+     `r mat_g11` \\
+     `r mat_g12`
+   \end{array} 
+ \right] \notag \\
+ &= 
+ \left[ 
+   \begin{array}{c}
+   `r vec_b_sib[1,1]` \\
+   `r vec_b_sib[2,1]`
+   \end{array} 
+ \right] \notag
+\end{align}
+
+The predicted breeding value $\hat{a}_i$ corresponds to the index $I$ which is computed as
+
+\begin{equation}
+\hat{a}_i = I = b^T * y^{*} \notag
+\end{equation}
+
+where $y^{*}$ corresponds to the information sources ($\bar{y}_{FS}$ and $\bar{y}_{HS}$) corrected for the population mean $\mu$. With that the vector $y^*$ can be written as
+
+```{r computeystart, echo=FALSE, results='hide'}
+### # compute averages of fullsibs and halfsibs, use the ungroup() function to avoid adding the grouping variable
+suppressPackageStartupMessages( library(dplyr) )
+tbl_bar_y_sib <- tbl_weigth_sib %>% 
+            group_by(Sire, Dam) %>% 
+            summarise(mean = mean(Weigth))
+tbl_bar_y_fs <- tbl_bar_y_sib %>% 
+             filter(Dam == 2) %>% 
+                    ungroup() %>% 
+                 select(mean)
+n_bar_y_fs <- as.vector(tbl_bar_y_fs$mean)
+tbl_var_y_hs <- tbl_bar_y_sib %>% 
+             filter(Dam == 3) %>% 
+                    ungroup() %>% 
+                 select(mean)
+n_bar_y_hs <- as.vector(tbl_var_y_hs$mean)
+vec_y_star_sib <- matrix(c(n_bar_y_fs - n_mean_weight_sib, n_bar_y_hs - n_mean_weight_sib), ncol = 1)
+
+### # index
+n_index_value <- crossprod(vec_b_sib, vec_y_star_sib)
+```
+
+
+\begin{equation}
+y^* = \left[ 
+   \begin{array}{c}
+      \bar{y}_{FS} - \mu \\
+      \bar{y}_{HS} - \mu
+   \end{array} 
+ \right] 
+ =
+ \left[ 
+   \begin{array}{c}
+      `r n_bar_y_fs` - `r n_mean_weight_sib` \\
+      `r n_bar_y_hs` - `r n_mean_weight_sib`
+   \end{array} 
+ \right]
+ =
+ \left[ 
+   \begin{array}{c}
+      `r vec_y_star_sib[1,1]` \\
+      `r vec_y_star_sib[2,1]`
+   \end{array} 
+ \right]
+ \notag 
+\end{equation}
+
+
+Together with the vector $b$, we get
+
+\begin{equation}
+\hat{a}_i = I = b^T * y^*
+  =  \left[ 
+   \begin{array}{c}
+   `r vec_b_sib[1,1]` \\
+   `r vec_b_sib[2,1]`
+   \end{array} 
+ \right]^T * 
+  \left[ 
+   \begin{array}{c}
+      `r vec_y_star_sib[1,1]` \\
+      `r vec_y_star_sib[2,1]`
+   \end{array} 
+ \right]
+ = `r round(n_index_value, digits=2)` \notag
+\end{equation}
+
+
+
+
+
+
+
