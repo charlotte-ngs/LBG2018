@@ -125,7 +125,7 @@ y_{ijk} = \beta_i + u_j + e_{ijk}
 (\#eq:linearmixedeffectmodelsingleobservation)
 \end{equation}
 
-where $\beta_i$ stands for the $i-^{th}$ level of a fixed effect, $u_j$ is the $j-{th}$ realization of the random effect $u$ and $e_{ijk}$  is the residual effect of the $k-^{th}$ observation.  Because, we do not want to model just one observation, but we want to include all observations of a complete population, it is helpful to convert the model in \@ref(eq:linearmixedeffectmodelsingleobservation) into matrix-vector notation. This is shown in equation \@ref(eq:linearmixedeffectmodelmatrixvector)
+where $\beta_i$ stands for the $i-^{th}$ level of a fixed effect, $u_j$ is the $j-{th}$ realization of the random effect $u$ and $e_{ijk}$  is the residual effect of the $k-^{th}$ observation}.  Because, we do not want to model just one observation, but we want to include all observations of a complete population, it is helpful to convert the model in \@ref(eq:linearmixedeffectmodelsingleobservation) into matrix-vector notation. This is shown in equation \@ref(eq:linearmixedeffectmodelmatrixvector)
 
 \begin{equation}
 y = X\beta + Zu + e
@@ -176,7 +176,7 @@ We call $\hat{u}$ the best linear unbiased prediction of $u$ or shorter $\hat{u}
 (\#eq:hatbetahatblue)
 \end{equation}
 
-The matrix $(X^T V^{-1} X)^-$ denotes the generalized inverse of the matrix $(X^T V^{-1} X)$. The generalized inverse $K^-$ can be replaced with the simple inverse $K^{-1}$, whenever the columns of matrix $K$ are linearly independent^[For our examples that are shown here, we can always use the simple inverse.]. Analogously to $\hat{u}$, $\hat{beta}$ is called the best linear unbiased estimator of the fixed effects $\beta$. In short, we can state $\hat{\beta} = BLUE(\beta)$. 
+The matrix $(X^T V^{-1} X)^-$ denotes the generalized inverse of the matrix $(X^T V^{-1} X)$. The generalized inverse $K^-$ can be replaced with the simple inverse $K^{-1}$, whenever the columns of matrix $K$ are linearly independent^[For our examples that are shown here, we can always use the simple inverse.]. Analogously to $\hat{u}$, $\hat{\beta}$ is called the best linear unbiased estimator of the fixed effects $\beta$. In short, we can state $\hat{\beta} = BLUE(\beta)$. 
 
 
 ### Mixed Model Equations

@@ -1,0 +1,125 @@
+# Genetic Covariances Between Animals {#geneticcovariancesbetweenanimals}
+The prediction of breeding values using BLUP as shown in chapter \@ref(blup) uses linear mixed effects models where the breeding value of each animal is included as a random effect. Linear mixed effect models in general and specifically Hendersons mixed model equations require us to be able to specify the variance-covariance matrix of all random effects. When using the animal model, the breeding value of each animal is included as a random effect in the linear mixed effects model. As a consequence of that we need to determine the covariance between the true breeding values of all animals. Figure \@ref(fig:animalcov) tries to display the structure of the required variance-covariance diagrammatically.
+
+```{r animalcov, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Genetic Covariance Between Animals"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/animalcov.odg")
+knitr::include_graphics(path = "odg/animalcov.png")
+```
+ 
+The variance-covariance matrix shown at the bottom of Figure \@ref(fig:animalcov) has the variances of the true breeding values on the diagonal and all the covariances between the true breeding values of all animals as offdiagonal elements. From the formulation of the linear mixed effect model in \@ref(eq:linearmixedeffectmodelmatrixvector), we defined the variance-covariance matrix of the random effects $u$ to be $G$ (see equation \@ref(eq:variancerandomeffects)). When predicting breeding values with the animal model, the random effects are now called $a$ and the variance-covariance matrix of all components in the vector $a$ is defined as 
+
+\begin{equation}
+var(a) = G = A * \sigma_a^2
+(\#eq:genvarcovarmatrixanimalmodel)
+\end{equation}
+
+where the matrix $A$ is called __numerator relationship matrix__.
+
+
+## Similarity Between Individuals {#similaritybetweenindividuals}
+At the genetic level there are two different kinds of similarity
+
+1. Identity by descent (IBD)
+2. Identity by state
+
+```{r ibdibs, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Identity by State Versus Identity by Descent"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/ibdibs.odg")
+knitr::include_graphics(path = "odg/ibdibs.png")
+```
+
+Figure \@ref(fig:ibdibs) illustrates the difference between the two type of identities. The type of graph shown in Figure  \@ref(fig:ibdibs) is called a __pedigree__ which is commonly used to display the relationship between animals in a population. The rectangle symbols denote male animals and the round symbols stand for female animals. The horizontal connections between female and male animals denote a mating. All animals connected to a vertical line and follow below are progeny of the connected parents. 
+
+The notations inside of the symbols stand for the different genotypes of the animals on a given locus. The red arrows denote the path of two $A_1$-alleles which are copies of the same ancestral allele. These two copies are called __identical by descent__ (IBD). The green arrows show the path of two alleles which are identical by state which do not originate from the same copy of any given ancestral alleles. 
+
+
+## Numerator Relationship Matrix {#numeratorrelationshipmatrix} 
+The probability of identical genes by descent (IBD) occurring in two individuals is termed the coancestry or the coefficient of kinship [@FM1996]. The additive genetic relationship between two individuals is twice their coancestry. The matrix that expresses the additive genetic relationship among animals in a population is called the __numerator relationship matrix__ $A$. The matrix $A$ is symmetric and its diagonal elements $(A)_{ii}$ are equal to $1 + F_i$ where $F_i$ is the __coefficient of inbreeding __ of animal $i$. The coefficient of inbreeding $F_i$ indicates whether an animal $i$ is inbred or not. $F_i$ is defined to be half the additive genetic relationship between the parents of $i$. Hence the diagonal element $(A)_{ii}$ of matrix $A$ corresponds to twice the probability that two gametes taken at random from an animal $i$ will carry IBD-alleles.
+
+The off-diagonal elements $(A)_{ij}$ equals the numerator of the coefficent of relationship between animals $i$ and $j$. Multiplying the matrix $A$ by the additive genetic variance $\sigma_a^2$ leads to the covariance among breeding values. Thus if $a_i$ is the breeding value of animal $i$ then 
+
+\begin{equation}
+var(a_i) = (A)_{ii} \sigma_a^2 = (1 + F_i) \sigma_a^2
+(\#eq:vartruebreedingvalue)
+\end{equation}
+
+
+### Algorithm To Compute $A$ {#algorithmtocomputea}
+The matrix $A$ can be computed using either the 
+
+1. path coefficient method od 
+2. recursive method.
+
+The second method is especially suitable for an implementation by a software program. In what follows the recursive method to compute the components of $A$ is described now. Initially, animals in a pedigree are numbered from $1$ to $n$ and ordered such that parents precede their progeny. The following rules are then  used to compute the components of $A$. 
+
+* If both parents $s$ and $d$ of animal $i$ are known then 
+    + the diagonal element $(A)_{ii}$ corresponds to: $(A)_{ii} = {1\over 2} (A)_{sd}$ and
+    + the offdiagonal element $(A)_{ji}$ is computed as:  $(A)_{ji} = {1\over 2} ((A)_{js} + (A)_{jd})$
+    + because $A$ is symmetric $(A)_{ji} = (A)_{ij}$
+    
+* If only one parent $s$ is known and assumed unrelated to the mate
+    + $(A)_{ii} = 1$
+    + $(A)_{ij} = (A)_{ji} = {1\over 2} ((A)_{js}$
+    
+* If both parents are unknown    
+    + $(A)_{ii} = 1$
+    + $(A)_{ij} = (A)_{ji} = 0$
+    
+
+### Numeric Example
+```{r pedexamplesetup, echo=FALSE, results='hide'}
+suppressPackageStartupMessages( library(pedigreemm) )
+n_nr_ani_ped <- 6
+n_nr_parent <- 2
+tbl_ped <- dplyr::data_frame(Calf = c((n_nr_parent+1):n_nr_ani_ped),
+                             Sire = c(1, 1, 4, 5),
+                             Dam  = c(2, NA, 3, 2))
+ped <- pedigree(sire = c(rep(NA, n_nr_parent), tbl_ped$Sire), dam = c(rep(NA, n_nr_parent), tbl_ped$Dam), label = as.character(1:n_nr_ani_ped))
+matA <- as.matrix(getA(ped = ped))
+```
+
+We are given the following pedigree and we want to compute the matrix $A$ using the recursive method described in \@ref(algorithmtocomputea). 
+
+```{r tabpedexample, echo=FALSE}
+knitr::kable(tbl_ped,
+             booktabs = TRUE,
+             longtable = TRUE,
+             caption = "Example Pedigree To Compute Additive Genetic Relationship Matrix")
+```
+
+The first step of the computations of $A$ are the numbering and the ordering of all the animals. This is already done in the pedigree shown in Table \@ref(tab:tabpedexample). The components of $A$ are computed row-by-row starting with $(A)_{11}$. 
+
+\begin{align}
+(A)_{11} &= 1 + F_1 = 1 + 0 = 1 \notag \\
+(A)_{12} &= 0 = (A)_{21} \notag \\
+(A)_{13} &= {1\over 2} ((A)_{11} + (A)_{12}) = 0.5 = (A)_{31} \notag \\
+(A)_{14} &= {1\over 2} (A)_{11} = 0.5 = (A)_{14}  \notag \\
+(A)_{15} &= {1\over 2} (A)_{14} + (A)_{13}) = 0.5 = (A)_{51} \notag \\
+(A)_{16} &= {1\over 2} (A)_{15} + (A)_{12}) = 0.25 \notag
+\end{align}
+
+The same computations are also done for all the other components of the matrix $A$. The final result for the matrix looks as follows
+
+```{r displaymatrixa, echo=FALSE, results='asis'}
+cat("$$\n")
+cat("A = \\left[")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = matA, pnDigits = 4), sep = "\n"), "\n")
+cat("\\right]")
+cat("$$")
+```
+
+As a result, we can see from the components of the above shown matrix $A$ that animals $1$ and $2$ are not related to each other. Furthermore from the diagonal elements of $A$, it follows that animals $5$ and $6$ are inbred while animals $1$ to $4$ are not inbred.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
