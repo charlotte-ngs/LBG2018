@@ -1,5 +1,5 @@
 ---
-title: Livestock Breeding and Genomics - Solution 6
+title: Livestock Breeding and Genomics - Exercise 6
 author: Peter von Rohr
 date: 2018-10-26
 #output: pdf_document 
@@ -67,6 +67,7 @@ $$\hat{a}_i = I = b * y^* = h^2(y - \mu)$$
 
 assuming $y^*$ to be the observation corrected for the population mean. The predicted breeding value for a trait which is the same as in the aggregate genotype using the selection method is the same as we found using the regression method. 
 
+
 \pagebreak
 
 ## Problem 1: Repeated Measurements
@@ -102,46 +103,7 @@ knitr::kable(dfWeightTable,
              caption = "Repeated Weight Measurements")
 ```
 
-
-### Solution
-The predicted breeding values using the regression method (see Solution 4, Problem 2) is computed as 
-
-```{r ResultHatARepMeasRegression}
-hat_a_rep_meas <- round((nr_measure * h2)/(1+(nr_measure - 1)*rep)*(mean_weight - mu2), digits = 2)
-```
-$$\hat{a}_i = \frac{nh^2}{1+(n-1)t}(\bar{y}_i - \mu) 
-            = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`)
-            = `r hat_a_rep_meas`$$
-            
-          
-The predicted breeding value $\hat{a}_i$ using the selection index $I$ corresponds to 
-
-\begin{equation}
-\hat{a}_i = I = b * \bar{y}^* = b * (\bar{y} - \mu)
-(\#eq:hatarepeatedmeasurementsselectionindex)
-\end{equation}
-
-The vector $b$ of index weights is computed according to equation \@ref(eq:IndexWeight). We first have to determine the matrices $P$ and $G$. 
-
-$$P = var(\bar{y}) = \frac{1 + (n-1)t}{n} * \sigma_y^2$$
-
-$$G = cov(a, \bar{y}) = \sigma_a^2$$
-
-Using the results for $P$ and $G$, we get
-
-$$b = P^{-1}G = \frac{n \sigma_a^2}{(1 + (n-1)t)\sigma_y^2} = \frac{nh^2}{1 + (n-1)t}$$
-
-Inserting the result of $b$ into \@ref(eq:hatarepeatedmeasurementsselectionindex) leads to 
-
-\begin{align}
-\hat{a}_i = I &=  b * (\bar{y} - \mu) \notag \\
-              &=  \frac{nh^2}{1 + (n-1)t} * (\bar{y} - \mu) \notag \\
-              &= \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`) \notag \\
-              &= `r hat_a_rep_meas` \notag
-\end{align}
-
-This result confirms that the predicted breeding values of both the regression method and the selection index are identical.
-
+\pagebreak
 
 ## Combining Information From Different Sources
 ```{r sourcecombinesetup}
@@ -370,177 +332,3 @@ knitr::kable(tbl_weigth_sib,
 ```
  
  
-### Solution
-The vector $b$ of index weights are computed from the index normal equations given in \@ref(eq:indexnormaleq). We start by inserting the numbers into the matrices $P$ and $G$ and then solve for $b$. 
-
-```{r computematp, echo=FALSE, results='hide'}
-n_var_weight_sib <- n_sd_weight_sib^2
-mat_p11 <- (1 + (n_nr_fullsib-1)*n_h2_sib/2)/n_nr_fullsib
-mat_p12 <- 1/4 * n_h2_sib 
-mat_p22 <- (1 + (n_nr_halfsib-1)*n_h2_sib/2)/n_nr_halfsib
-mat_p <- matrix(c(mat_p11, mat_p12, mat_p12, mat_p22), ncol = 2, byrow = TRUE)
-```
-
-\begin{align}
-P &= \left[ 
-   \begin{array}{lr}
-   \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}}  &   {1\over 4} h^2  \\
-    {1\over 4} h^2                     &  \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}}
-   \end{array}
-\right] \notag \\
-  &=
- \left[ 
-   \begin{array}{lr}
-   \frac{1 + (`r n_nr_fullsib`-1) * `r n_h2_sib`/2}{`r n_nr_fullsib`}  &   {1\over 4} `r n_h2_sib`  \\
-    {1\over 4} `r n_h2_sib`                                            &  \frac{1 + (`r n_nr_halfsib`-1) * `r n_h2_sib`/2}{`r n_nr_halfsib`}
-   \end{array}
-\right] \notag \\
-  &=
- \left[ 
-   \begin{array}{lr}
-   `r mat_p11` &  `r mat_p12` \\
-   `r mat_p12`  &  `r mat_p22`
-   \end{array}
-\right] \notag
-\end{align}
-
-
-The matrix $G$ 
-
-```{r computematg, echo=FALSE, results='hide'}
-mat_g11 <- 1/2 * n_h2_sib 
-mat_g12 <- 1/4 * n_h2_sib
-mat_g <- matrix(c(mat_g11, mat_g12), ncol = 1)
-```
-
-\begin{align}
-G  &=  \left[ 
-   \begin{array}{c}
-     {1\over 2} h^2 \\
-     {1\over 4} h^2
-   \end{array} 
- \right] \notag \\
-  &= \left[ 
-   \begin{array}{c}
-     {1\over 2} * `r n_h2_sib` \\
-     {1\over 4} * `r n_h2_sib`
-   \end{array} 
- \right] \notag \\
- &= \left[ 
-   \begin{array}{c}
-     `r mat_g11` \\
-     `r mat_g12`
-   \end{array} 
- \right] \notag
-\end{align}
-
-The vector $b$ can  be computed as
-
-```{r computevecb, echo=FALSE, results='hide'}
-vec_b_sib <- solve(mat_p) %*% mat_g
-```
-
-\begin{align}
-b  &=  P^{-1} * G \notag \\
-   &=   \left[ 
-   \begin{array}{lr}
-   `r mat_p11` &  `r mat_p12` \\
-   `r mat_p12`  &  `r mat_p22`
-   \end{array}
-\right]^{-1} * 
-\left[ 
-   \begin{array}{c}
-     `r mat_g11` \\
-     `r mat_g12`
-   \end{array} 
- \right] \notag \\
- &= 
- \left[ 
-   \begin{array}{c}
-   `r vec_b_sib[1,1]` \\
-   `r vec_b_sib[2,1]`
-   \end{array} 
- \right] \notag
-\end{align}
-
-The predicted breeding value $\hat{a}_i$ corresponds to the index $I$ which is computed as
-
-\begin{equation}
-\hat{a}_i = I = b^T * y^{*} \notag
-\end{equation}
-
-where $y^{*}$ corresponds to the information sources ($\bar{y}_{FS}$ and $\bar{y}_{HS}$) corrected for the population mean $\mu$. With that the vector $y^*$ can be written as
-
-```{r computeystart, echo=FALSE, results='hide'}
-### # compute averages of fullsibs and halfsibs, use the ungroup() function to avoid adding the grouping variable
-suppressPackageStartupMessages( library(dplyr) )
-tbl_bar_y_sib <- tbl_weigth_sib %>% 
-            group_by(Sire, Dam) %>% 
-            summarise(mean = mean(Weigth))
-tbl_bar_y_fs <- tbl_bar_y_sib %>% 
-             filter(Dam == 2) %>% 
-                    ungroup() %>% 
-                 select(mean)
-n_bar_y_fs <- as.vector(tbl_bar_y_fs$mean)
-tbl_var_y_hs <- tbl_bar_y_sib %>% 
-             filter(Dam == 3) %>% 
-                    ungroup() %>% 
-                 select(mean)
-n_bar_y_hs <- as.vector(tbl_var_y_hs$mean)
-vec_y_star_sib <- matrix(c(n_bar_y_fs - n_mean_weight_sib, n_bar_y_hs - n_mean_weight_sib), ncol = 1)
-
-### # index
-n_index_value <- crossprod(vec_b_sib, vec_y_star_sib)
-```
-
-
-\begin{equation}
-y^* = \left[ 
-   \begin{array}{c}
-      \bar{y}_{FS} - \mu \\
-      \bar{y}_{HS} - \mu
-   \end{array} 
- \right] 
- =
- \left[ 
-   \begin{array}{c}
-      `r n_bar_y_fs` - `r n_mean_weight_sib` \\
-      `r n_bar_y_hs` - `r n_mean_weight_sib`
-   \end{array} 
- \right]
- =
- \left[ 
-   \begin{array}{c}
-      `r vec_y_star_sib[1,1]` \\
-      `r vec_y_star_sib[2,1]`
-   \end{array} 
- \right]
- \notag 
-\end{equation}
-
-
-Together with the vector $b$, we get
-
-\begin{equation}
-\hat{a}_i = I = b^T * y^*
-  =  \left[ 
-   \begin{array}{c}
-   `r vec_b_sib[1,1]` \\
-   `r vec_b_sib[2,1]`
-   \end{array} 
- \right]^T * 
-  \left[ 
-   \begin{array}{c}
-      `r vec_y_star_sib[1,1]` \\
-      `r vec_y_star_sib[2,1]`
-   \end{array} 
- \right]
- = `r round(n_index_value, digits=2)` \notag
-\end{equation}
-
-
-
-
-
-
-
