@@ -1,0 +1,154 @@
+---
+title: "Selection Index To Predict Breeding Values"
+author: "Peter von Rohr"
+date: "02 November 2018"
+output:
+  beamer_presentation:
+    includes:
+      in_header: header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = "asis")
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+## Prediction of Breeding Values Using Selection Index
+
+* Goal: predict breeding value for one trait by selection index $I = b^T * y^*$
+* Index Normal Equations
+
+$$Pb = Gw$$
+
+* Set aggregate genotype $H$ to just one trait
+
+$$H = a \qquad \text{and} \qquad w=1$$
+
+* Leads to
+
+$$Pb = G \qquad \text{and} \qquad b = P^{-1}G$$
+
+
+## Example: Own Performance
+
+* Available source of information: 
+    + one own performance record 
+    + on the same trait as in $H$ and 
+    + for which we want to predict breeding values for
+    
+* Always the same strategy
+    + Determine $P$ and $G$ and compute $b$
+    + Compute $I$
+    
+* For our example: 
+    + $P$ is the variance-covariance between all information source
+    + phenotypic own performance record as the only information
+    + $P = \sigma_y^2$
+    + $G$: covariance between true breeding value and information source
+    + $G = cov(a, y^*) = cov(a, a + e) = cov(a, a) + cov(a, e) = \sigma_a^2$
+    + $b = P^{-1}G = \frac{\sigma_a^2}{\sigma_y^2} = h^2$
+    + $\hat{a}_i = I = b * y^* = h^2 * (y - \mu)$
+    
+    
+## Example: Repeated Records
+
+* Problem 1 in Exercise 6
+
+
+## Combining Information
+
+* Examples so far: nice to confirm what we knew already
+* Interesting property of selection index
+    + Combine different information sources
+* Example: Predict Breeding value for animal $i$ based on 
+    + Average of two full-sib records
+    + Average of four half-sib records
+    
+    
+## Records of Full- and Half-Sibs
+
+```{r testingstationanimal, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg"}
+#rmddochelper::use_odg_graphic(ps_path = "odg/testingstationanimal.odg")
+knitr::include_graphics(path = "odg/testingstationanimal.png")
+```
+
+ 
+## Data
+
+```{r}
+### # seed
+set.seed(3342)
+
+### # number of parents
+n_nr_parents_sib <- 3
+### # number of full sibs and number of half-sibs
+n_nr_fullsib <- 2
+n_nr_halfsib <- 4
+n_nr_sib <- n_nr_fullsib + n_nr_halfsib
+### # vector of sire ids
+sire_id <- rep(1,n_nr_sib)
+### # dam id
+dam_id <- c(rep(2, n_nr_fullsib), rep(3, n_nr_halfsib))
+
+### assume mean and sd to generate the full-sib and the half sib data
+n_mean_weight_sib <- 250.4
+n_sd_weight_sib <- 31.8
+n_h2_sib <- .36
+
+### # vector of observations
+vec_weigth_sib <- round(rnorm(n_nr_sib, mean = n_mean_weight_sib, sd = n_sd_weight_sib), digits = 2)
+
+### # put everything into a tibble
+tbl_weigth_sib <- tibble::data_frame(Measurement = c(1:n_nr_sib),
+                                     Sire        = sire_id,
+                                     Dam         = dam_id,
+                                     Weigth      = vec_weigth_sib)
+
+knitr::kable(tbl_weigth_sib, 
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+
+## Compute Matrix $P$
+
+$$P = \left[ 
+   \begin{array}{lr}
+   var(\bar{y}_{FS})  &  cov(\bar{y}_{FS}, \bar{y}_{HS}) \\
+   cov(\bar{y}_{FS}, \bar{y}_{HS})  &  var(\bar{y}_{HS})
+   \end{array}
+ \right]
+$$
+
+$$var(\bar{y}_{FS}) = \frac{1 + (n_{FS}-1)h^2/2}{n_{FS}} * \sigma_y^2$$
+$$var(\bar{y}_{HS}) = \frac{1 + (n_{HS}-1)h^2/2}{n_{HS}} * \sigma_y^2$$
+$$cov(\bar{y}_{FS}, \bar{y}_{HS}) = {1\over 4} h^2 \sigma_y^2 $$
+
+
+## Compute Matrix $G$
+
+$$G =  \left[ 
+   \begin{array}{c}
+   cov(a_i, \bar{y}_{FS}) \\
+   cov(a_i, \bar{y}_{HS})
+   \end{array} 
+ \right]
+$$
+ 
+$$cov(a_i, \bar{y}_{FS}) = {1\over 2} \sigma_a^2$$
+
+$$ cov(a_i, \bar{y}_{HS}) = {1\over 4} \sigma_a^2$$
+
+
+## Problem 2 in Exercise 6
+
+* Compute $b$
+* Compute $\hat{a}_i = I = b^T y^{*}$
+
+$$y^* = \left[ 
+   \begin{array}{c}
+      \bar{y}_{FS} - \mu \\
+      \bar{y}_{HS} - \mu
+   \end{array} 
+ \right] 
+$$

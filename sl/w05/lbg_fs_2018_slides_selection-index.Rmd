@@ -5,6 +5,18 @@ date: "19 Oktober 2018"
 output: beamer_presentation
 ---
 
+<!-- --------------------------------------------------------------- --
+  -- TODO:                                                           --
+  --       > Slide on "Aggregate Genotype" is not integrated well    --
+  --         Try to put concept of AG in the center and start with   --
+  --         The requirement to improve animals with respect to      --
+  --         several traits simultaneously.                          --
+  --       > Here, we are missing the use of the selection index for --
+  --         predicting breeding values of single traits, this was   --
+  --         done in lbg_fs_2018_slides_pbvsi.Rmd, should be         --
+  --         integrated here.                                        --
+  -- --------------------------------------------------------------- --> 
+  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = "asis")
 knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
@@ -146,5 +158,4 @@ P^{-1}Pb  &=  P^{-1}Gw  \notag \\
 \begin{equation}
 r_{HI}  =  \frac{cov(H,I)}{\sigma_H \sigma_I} =  \frac{\sigma_I}{\sigma_H} \notag
 \end{equation}
-
 

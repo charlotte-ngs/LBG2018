@@ -162,7 +162,8 @@ vecSlTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Selection
 vecSlTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[BLUP](https://charlotte-ngs.github.io/LBGFS2018/sl/w06/lbg_fs_2018_slides_blup.pdf)"
 
 
-### # w7 
+### # w7 w07/lbg_fs_2018_slides_pbvsi.pdf w07/lbg_fs_2018_slides_gencov.pdf
+vecSlTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Breeding Value Prediction Using Selection Index](https://charlotte-ngs.github.io/LBGFS2018/sl/w07/lbg_fs_2018_slides_pbvsi.pdf), [Genetic Covariance Between Animals](https://charlotte-ngs.github.io/LBGFS2018/sl/w07/lbg_fs_2018_slides_gencov.pdf)"
 
 ### # w8
 

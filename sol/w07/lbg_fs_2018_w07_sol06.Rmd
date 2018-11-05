@@ -7,8 +7,8 @@ output:
   bookdown::pdf_document2:
     toc: false
     number_sections: false
-    includes:
-      in_header: header.tex
+header-includes:
+ \usepackage{longtable}
 ---
 
 ```{r setup, include=FALSE}
