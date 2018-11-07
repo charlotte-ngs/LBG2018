@@ -1,5 +1,5 @@
 ---
-title: Livestock Breeding and Genomics - Solution 7
+title: Livestock Breeding and Genomics - Exercise 7
 author: Peter von Rohr
 date: 2018-11-09
 #output: pdf_document 

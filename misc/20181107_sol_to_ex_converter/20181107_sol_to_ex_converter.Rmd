@@ -1,0 +1,64 @@
+---
+title: "Solution To Exercise Converter"
+author: "Peter von Rohr"
+date: "2018-11-07"
+output: html_notebook
+---
+
+This notebook contains a few experiments with automated conversion of a solution document into an exercise document. The approach used here builds on the assumption that all solution documents are Rmarkdown (.Rmd) documents and have the same structure. This assumption can be satisfied using unique templates for the solution documents. 
+
+
+## Document Structure
+The following block shows the assumed structure of a solution document
+
+```
+---
+<YAML-Header>
+---
+
+## Problem 1: <Title of Problem 1>
+
+### Solution
+
+## Problem 2: <Title of Problem 2>
+
+### Solution
+
+...
+```
+
+
+## Identification of Blocks
+From this structure, we can see that Problem sections always start with `## Problem` and solution sections start with `### Solution`. Hence when reading a solutions document into a character vector, we can search for these starting tags of the different sections. This is shown in the following example.
+
+```{r}
+### # try to get path to solution document
+s_proj_path <- rprojroot::find_rstudio_root_file()
+### # read a solutions document
+s_sol_doc <- "sol/w08/lbg_fs_2018_w08_sol07.Rmd"
+s_sol_path <- file.path(s_proj_path, s_sol_doc)
+### # check that s_sol_doc exists
+stopifnot(file.exists(s_sol_path))
+con_sol_doc <- file(s_sol_path)
+vec_sol <- readLines(con = con_sol_doc)
+### # check its header
+head(vec_sol)
+close(con_sol_doc)
+```
+
+Now that we have read the solutions document, we do the actual search
+
+```{r}
+### # define patterns
+s_prob_pat <- '## Problem'
+s_sol_pat <- '### Solution'
+(vec_prob_start <- grep(s_prob_pat, vec_sol, fixed = TRUE))
+(vec_sol_start <- grep(s_sol_pat, vec_sol, fixed = TRUE))
+### # consistency, the number of blocks must be equal
+stopifnot(length(vec_prob_start) == length(vec_sol_start))
+```
+
+The above output shows us that the first problem section starts at line `r vec_prob_start[1]` and it ends at line `r vec_sol_start[1]-1`. The first solution section starts at line `r vec_sol_start[1]` and it ends at line `r vec_prob_start[2]-1`. 
+
+
+## Extracting Exercise Blocks
