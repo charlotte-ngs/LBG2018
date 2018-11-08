@@ -74,6 +74,9 @@ Figrure \@ref(fig:weightdatasibownperformance) shows the structure of the data s
 knitr::include_graphics(path = "odg/weightdatasibownperformance.png")
 ```
 
+
+### Your Solution
+ 
  
 ## Problem 2: Sire Model
 ```{r problem2datainput, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
@@ -130,3 +133,5 @@ $$var(e) = R = I * \sigma_e^2$$
 with $\sigma_e^2 = `r n_var_e`$. 
 
  
+
+### Your Solution
