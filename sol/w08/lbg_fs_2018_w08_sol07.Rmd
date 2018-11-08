@@ -330,27 +330,6 @@ Comparing this result to the result of Problem 2 in Exercise 6, we can see that 
 
 ## Problem 2: Sire Model
 ```{r problem2datainput, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
-### # fix the numbers parents and offspring
-# n_nr_sire <- 3
-# n_nr_dam <- 8
-# n_nr_parents <- n_nr_sire + n_nr_dam
-# n_nr_offspring <- 16
-# n_nr_animals <- n_nr_parents + n_nr_offspring
-# ### # assign parents to offspring and herds to records
-# vec_sire_id <- c(rep(1,8), rep(2,6), rep(3,2))
-# vec_dam_id <- rep(4:11,2)
-# vec_herd_codes <- c(rep(1,4), rep(2,4), rep(1,4), rep(2,4))
-# ### # vector of observations
-# vec_weaning_weight <-  c(2.61,2.31,2.44,2.41,2.51,2.55,2.14,2.61,2.34,1.99,3.1,2.81,2.14,2.41,2.54,3.16)
-# 
-# ### # create a tibble from the data
-# tbl_beef_data <- tibble::data_frame( Animal = (n_nr_parents + 1):n_nr_animals,
-#                                     Sire   = vec_sire_id,
-#                                     Dam    = vec_dam_id[order(vec_dam_id)],
-#                                     Herd   = vec_herd_codes,
-#                                     `Weaning Weight` = vec_weaning_weight )
-# readr::write_csv(tbl_beef_data, path = 'weaningweightbeef.csv')
-
 ### # read tibble from file
 s_wwg_path <- 'weaningweightbeef.csv'
 tbl_beef_data <- readr::read_csv(file = s_wwg_path)

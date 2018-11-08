@@ -1,0 +1,132 @@
+---
+title: Livestock Breeding and Genomics - Exercise 7
+author: Peter von Rohr
+date: 2018-11-09
+#output: pdf_document 
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_sections: false
+    keep_tex: false
+header-includes:
+ \usepackage{longtable}
+ \usepackage{float}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis', fig.pos = 'H')
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+## Problem 1: Predict Breeding Values Using Selection Index
+
+```{r problem1datasetup, echo=FALSE, results='hide'}
+### # seed
+set.seed(3342)
+
+### # number of parents
+n_nr_parents_op <- 3
+### # number of full sibs and number of half-sibs
+n_nr_fullsib <- 2
+n_nr_halfsib <- 4
+n_nr_sib <- n_nr_fullsib + n_nr_halfsib
+### # add own performance
+n_nr_obs <- n_nr_sib + 1
+### # vector of sire ids
+sire_id <- rep(1,n_nr_sib+1)
+### # dam id
+dam_id <- c(rep(2, n_nr_fullsib), rep(3, n_nr_halfsib), 2)
+### # vector of animal ids
+vec_ani_id <- c((n_nr_parents_op+1):(n_nr_parents_op+n_nr_sib+1))
+n_id_selcand <- vec_ani_id[length(vec_ani_id)]
+
+### assume mean and sd to generate the full-sib and the half sib data
+n_mean_weight_sib <- 250.4
+n_sd_weight_sib <- 31.8
+n_h2_sib <- .36
+
+### # vector of observations
+vec_Weight_sib <- round(rnorm(n_nr_obs, mean = n_mean_weight_sib, sd = n_sd_weight_sib), digits = 2)
+
+### # put everything into a tibble
+tbl_Weight_sib <- tibble::data_frame(Animal      = vec_ani_id,
+                                     Sire        = sire_id,
+                                     Dam         = dam_id,
+                                     Weight      = vec_Weight_sib)
+```
+
+The data set from exercise 6 was extended by an own performance record for our selection candidate $i$. The new data set is shown in the table below. Predict the breeding value $a_i$ for animal $i$ using all available information using the selection index.
+
+We assume that our selection candidate $i$ has animals $1$ and $2$ as parents and the observation for our selection candidate is shown last in the above table as `Measurement` `r n_id_selcand`. The heritability is assumed to be $h^2 = `r n_h2_sib`$ and the phenotypic standard deviation corresponds to $\sigma_y = `r n_sd_weight_sib`$. The population mean $\mu$ is assumed to be `r n_mean_weight_sib`. 
+ 
+```{r showweighttable, echo=FALSE}
+knitr::kable(tbl_Weight_sib, 
+             booktabs = TRUE,
+             longtable = TRUE, 
+             caption = "Phenotypic Measurements for Full-Sibs, Half-Sibs and an Own Performance Record")
+```
+ 
+
+Figrure \@ref(fig:weightdatasibownperformance) shows the structure of the data shown in Table \@ref(tab:showweighttable). 
+
+```{r weightdatasibownperformance, echo=FALSE, hook_convert_odg=TRUE, fig_path="odg", fig.cap="Information Sources To Predict Breeding Values", out.width='10cm', out.extra='', fig.align='center'}
+#rmddochelper::use_odg_graphic("odg/weightdatasibownperformance.odg")
+knitr::include_graphics(path = "odg/weightdatasibownperformance.png")
+```
+
+ 
+## Problem 2: Sire Model
+```{r problem2datainput, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+### # read tibble from file
+s_wwg_path <- 'weaningweightbeef.csv'
+tbl_beef_data <- readr::read_csv(file = s_wwg_path)
+
+### # count number of observations
+n_nr_observation <- nrow(tbl_beef_data)
+
+### # number of sires and dams
+n_nr_sire <- nlevels(as.factor(tbl_beef_data$Sire))
+n_nr_dam <- nlevels(as.factor(tbl_beef_data$Dam))
+n_nr_parent <- n_nr_sire + n_nr_dam
+n_nr_offspring <- n_nr_observation
+n_nr_animals <- n_nr_parent + n_nr_offspring
+n_nr_herd <- nlevels(as.factor(tbl_beef_data$Herd))
+
+### # parameters
+h2 <- .25
+n_var_p <- round(var(tbl_beef_data$`Weaning Weight`), digits = 4)
+n_var_g <- round(h2 * n_var_p, digits = 4)
+n_var_e <- n_var_p - n_var_g
+n_pop_mean <- round(mean(tbl_beef_data$`Weaning Weight`), digits = 2)
+```
+
+We are using the following dataset shown in Table \@ref(tab:tablebeefdatasiremodel) to predict breeding values using a sire model.
+
+```{r tablebeefdatasiremodel, echo=FALSE, results='asis'}
+### # show the data frame
+knitr::kable( tbl_beef_data, 
+              format = "latex",
+              booktabs = TRUE, 
+              longtable = TRUE,
+              caption = "Example Data Set for Weaning Weight in Beef Cattle" )
+```
+
+
+### Your Tasks
+* Specify the sire model for the dataset given in Table \@ref(tab:tablebeefdatasiremodel). 
+* Besides the model indicate also the expected values and the variances for all the random components in the model. 
+* Set up the mixed model equations for the sire model and compute the estimates for the fixed effects (Herd) and the predicted breeding values for the sires. 
+
+
+### Assumptions
+We assume that the sires are unrelated and that the genetic additive variance $\sigma_a^2 = `r n_var_g`$. Hence the variance-covariance matrix $G$ of all sire effects corresponds to 
+
+$$var(s) = G = I * \sigma_s^2 = I * {\sigma_a^2 \over 4}$$
+
+Furthermore, the residuals $e$ are not correlated which means that the variance-covariance matrix $R$ is 
+
+$$var(e) = R = I * \sigma_e^2$$
+
+with $\sigma_e^2 = `r n_var_e`$. 
+
+ 

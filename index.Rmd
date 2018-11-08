@@ -207,9 +207,10 @@ vecExTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[Breeding 
 # w7  w07/lbg_fs_2018_w07_ex06.pdf
 vecExTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Selection Index](https://charlotte-ngs.github.io/LBGFS2018/ex/w07/lbg_fs_2018_w07_ex06.pdf)"
 
-# w8
+# w8 ex/w08/lbg_fs_2018_w08_ex07.pdf
+vecExTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Selection Index and Sire Model](https://charlotte-ngs.github.io/LBGFS2018/ex/w08/lbg_fs_2018_w08_ex07.pdf)"
 
-# w9
+# w9 
 
 # w10
 
@@ -249,9 +250,10 @@ vecSolTopic[which(Date == format(as.Date("2018/10/26"), "%d.%m"))] <- "[Breeding
 vecSolTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Breeding Value Prediction, Own Performance and Progeny Records](https://charlotte-ngs.github.io/LBGFS2018/sol/w06/lbg_fs_2018_w06_sol05.pdf)"
 
 # w8 w07/lbg_fs_2018_w07_sol06.pdf
-# vecSolTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Selection Index](https://charlotte-ngs.github.io/LBGFS2018/sol/w07/lbg_fs_2018_w07_sol06.pdf)"
+vecSolTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Selection Index](https://charlotte-ngs.github.io/LBGFS2018/sol/w07/lbg_fs_2018_w07_sol06.pdf)"
 
-# w9
+# w9 sol/w08/lbg_fs_2018_w08_sol07.pdf
+# vecSolTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Selection Index and Sire Model](https://charlotte-ngs.github.io/LBGFS2018/sol/w08/lbg_fs_2018_w08_sol07.pdf)"
 
 # w10
 

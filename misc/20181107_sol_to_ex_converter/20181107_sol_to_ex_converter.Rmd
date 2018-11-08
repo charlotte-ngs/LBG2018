@@ -5,6 +5,11 @@ date: "2018-11-07"
 output: html_notebook
 ---
 
+## Disclaimer
+The experiments described in this document are implemented in package `teachtools` in the function `convert_sol_to_ex()`.
+
+
+## Backgroud
 This notebook contains a few experiments with automated conversion of a solution document into an exercise document. The approach used here builds on the assumption that all solution documents are Rmarkdown (.Rmd) documents and have the same structure. This assumption can be satisfied using unique templates for the solution documents. 
 
 
@@ -62,3 +67,41 @@ The above output shows us that the first problem section starts at line `r vec_p
 
 
 ## Extracting Exercise Blocks
+The exercise blocks that we want to extract are between line 1 and `r vec_sol_start[1]-1]` and `r vec_prob_start[2]` and `r vec_sol_start[2]-1`. We are putting these sections together using a simple `c()` over all problems. Initially, we modify the title of the solution document to fit the title of an exercise.
+
+```{r}
+### # replace Solution
+s_sol_title <- 'Solution'
+s_ex_title <- 'Exercise'
+vec_ex <- gsub(s_sol_title, s_ex_title, vec_sol[1:(vec_prob_start[1]-1)], fixed = TRUE)
+for (lidx in seq_along(vec_prob_start)){
+  cat("[INFO -- ] Line index: ", lidx, "\n")
+  ### # assign or concatenate
+  if (is.null(vec_ex)){
+    vec_ex <- vec_sol[vec_prob_start[lidx]:(vec_sol_start[lidx]-1)]
+  } else {
+    vec_ex <- c(vec_ex, vec_sol[vec_prob_start[lidx]:(vec_sol_start[lidx]-1)])
+  }
+}
+head(vec_ex)
+```
+
+Once we have done the extraction, we can write the exercise to a file. 
+
+```{r}
+### # generate directory and file name for ex
+s_ex_doc <- gsub('sol', 'ex', s_sol_doc, fixed = TRUE)
+s_ex_path <- file.path(s_proj_path, s_ex_doc)
+s_ex_dir <- dirname(s_ex_path)
+### # check whether s_ex_dir exists, create if not
+if (!dir.exists(s_ex_dir)) {
+  cat("[INFO -- ] Create directory: ", s_ex_dir, "\n")
+  dir.create(s_ex_dir)
+}
+### # write vec_ex to s_ex_path
+cat("[INFO -- ] Writing vec_ex to: ", s_ex_path, "\n")
+cat(paste(vec_ex, collapse  = "\n"), "\n", file = s_ex_path)
+```
+
+
+

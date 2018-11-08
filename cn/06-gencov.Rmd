@@ -110,6 +110,16 @@ cat("$$")
 As a result, we can see from the components of the above shown matrix $A$ that animals $1$ and $2$ are not related to each other. Furthermore from the diagonal elements of $A$, it follows that animals $5$ and $6$ are inbred while animals $1$ to $4$ are not inbred.
 
 
+\pagebreak
+
+## The Inverse Numerator Relationship Matrix {#inversenumeratorrelationshipmatrix}
+The general form of Henderson's mixed model equations as shown in \@ref(eq:mixedmodeleq) depend on four matrices
+
+1. Design matrix $X$ for the fixed effects
+2. Design matrix $Z$ for the random effects
+3. The inverse variance-covariance matrix $R^{-1}$ for the resiudals $e$ and
+4. The inverse variance-covariance matrix $G^{-1}$ for the random breeding values $a$. 
+
 
 
 
