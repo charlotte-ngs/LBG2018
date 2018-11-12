@@ -1,0 +1,20 @@
+---
+title: "Correction Section 6.2.1"
+author: "Peter von Rohr"
+date: "09-11-2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Error in Algorithm To Compute $A$
+In section 6.2.1 of [chapter 6](https://charlotte-ngs.github.io/LBGFS2018/cn/06-gencov.pdf) of the course notes (published on 2018-11-02), there is an error in the formula that computes the diagonal element $(A)_{ii}$
+
+
+## Corrected Version
+The diagonal element $(A)_{ii}$ is computed as
+
+* If both parents $s$ and $d$ of animal $i$ are known then 
+    + the diagonal element $(A)_{ii}$ corresponds to: $(A)_{ii} = 1 + F_i = 1 + {1\over 2} (A)_{sd}$ and

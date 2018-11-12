@@ -295,7 +295,7 @@ Now we are ready to set up the mixed model equations from \@ref(eq:mixedmodeleq)
 
 
 
-## Animal Model
+## Animal Model {#animalmodel}
 The mixed model equations are a universal tool to find BLUPs of random effects and BLUEs of fixed effect simultaneously. On the other hand it is not satisfactory that with the sire model only sires obtain predicted breeding values. All information that is known about the mothers was completely ignored when we specified the sire model. A better approach would be to combine all available information from a given population. This can be done by replacing in the sire model the random sire effects by random animals effects. As a result each animal in the dataset receives a random effect which models its breeding value. This type of model is called an __animal model__. Because the animal model has the breeding values of all animals as random effects, we now call them $a$ and no longer $s$ as in the sire model. The variance-covariance matrix ($var(a)$) between all animal effects is proportional to the additive genetic relationship matrix $A$ among all animals. We will see in a later chapter how to compute the matrix $A$.
 
 

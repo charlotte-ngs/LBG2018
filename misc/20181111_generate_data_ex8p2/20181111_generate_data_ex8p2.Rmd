@@ -1,0 +1,153 @@
+---
+title: "Generate Data for Problem 2 in Exercise 8"
+output:
+  html_document:
+    df_print: paged
+date: '2018-11-11'
+---
+
+## Disclaimer
+This notebook shows how data for problem 2 in exercise 8 are generated.
+
+
+## The General Setup
+The data generated depends on
+
+* a general mean $\mu$ or an intercept $\beta_0$
+* a herd effect with two levels
+* a random animal effect with a given variance-covariance structure specified by the pedigree
+* a random residual effect with a given variance component.
+
+```{r nrobsdef, echo=FALSE, results='hide'}
+n_nr_obs <- 6
+```
+
+The number of observations are fixed to `r n_nr_obs`. 
+
+## The Fixed Effects
+For the fixed effect, we are specifying the matrix $X$ and the vector $\beta$. 
+
+```{r betadef, echo=FALSE, results='asis'}
+vec_beta <- c(10.34, 5.2, -3.92)
+cat("$$\n")
+cat("\\beta = \\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_beta), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+The incidence matrix $X$ is defined as
+
+```{r xdef, echo=FALSE, results='asis'}
+mat_x <- matrix(c(1, 1, 0,
+                  1, 1, 0,
+                  1, 1, 0,
+                  1, 0, 1,
+                  1, 0, 1,
+                  1, 0, 1), nrow = n_nr_obs, byrow = TRUE)
+cat("$$\n")
+cat("X = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_x, pnDigits = 0), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+
+
+## The Variances and the Random Effects
+There are two random effects
+
+1. residuals $e$
+2. additive genetic breeding value $a$
+
+
+### Residuals
+```{r sigmaedef, echo=FALSE, results='hide'}
+n_sigmae <- 24
+```
+
+The random residuals are given by a fixed variance component $\sigma_e^2 = `r n_sigmae`$. The residual compontents are generated from a normal distribution with mean $0$ and variance equal to $\sigma_e^2$. 
+
+
+### Breeding Values
+```{r sigmaadef, echo=FALSE, results='hide'}
+n_sigmaa <- 8
+```
+
+The genetic additive variance is set to $\sigma_a^2 = `r n_sigmaa`$. The variance-covariance structure is given by the pedigree which is shown in the following table.
+
+```{r peddef, echo=FALSE, results='asis'}
+tbl_ped_ex8p1 <- tibble::data_frame(Animal = c(5, 6, 7, 8, 9, 10),
+                                    Sire   = c(1, 1, 4, 4, 4, 4),
+                                    Dam    = c(2, 3, 5, 5, 6, 6))
+
+n_nr_ani_ex8p1pedext <- max(tbl_ped_ex8p1$Animal)
+n_nr_founder_ex8p1pedext <- min(tbl_ped_ex8p1$Animal) - 1
+tbl_ped_exp8p1ext <- tibble::data_frame(Animal = c(1:n_nr_ani_ex8p1pedext),
+                                        Sire   = c(rep(NA, n_nr_founder_ex8p1pedext), tbl_ped_ex8p1$Sire),
+                                        Dam    = c(rep(NA, n_nr_founder_ex8p1pedext), tbl_ped_ex8p1$Dam))
+knitr::kable(tbl_ped_exp8p1ext,
+             booktabs  = TRUE,
+             longtable = TRUE,
+             caption   = "Extended Pedigree")
+```
+
+For the founders, the breeding values are generated from a normal distribution with mean $0$ and variance equal to $\sigma_a^2$. For animals $i$ with parents, the breeding values $a_i$ are computed by
+
+$$a_i = {1\over 2}a_s + {1\over 2}a_d + m_i$$
+
+where $a_s$ and $a_d$ are breeding values of parents $s$ and $d$ and $m_i$ is a random compnent with variance $var(m_i)$ which corresponds to the product of $\sigma_a^2$ times the $i$-th diagonal element of matrix $D$ from the `LDL`-decomposition of $A$. The matrix $D$ can be obtained using the function `pedigreemm::Dmat()`.
+
+```{r getafromped, echo=FALSE, results='asis'}
+suppressPackageStartupMessages( library(pedigreemm) )
+ped <- pedigree(sire = tbl_ped_exp8p1ext$Sire, dam = tbl_ped_exp8p1ext$Dam, label = as.character(1:n_nr_ani_ex8p1pedext))
+mat_d <- as.matrix(pedigreemm::Dmat(ped = ped))
+cat("$$\n")
+cat("diag(D) = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_d, pnDigits = 2), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+The design matrix $Z$ will be used to link breeding values to observations. The number of rows of matrix $Z$ corresponds to the number of observations and the number of columns is equal to the total number of animals in the pedigree.
+
+```{r matzdef, echo=FALSE, results='asis'}
+mat_z <- cbind(matrix(0, nrow = n_nr_obs, ncol = n_nr_founder_ex8p1pedext), diag(1, nrow = n_nr_obs, ncol = n_nr_obs))
+cat("$$\n")
+cat("Z = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_z, pnDigits = 0), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+
+## Generate Observations
+Phenotypic observations are generated according to the standard animal model
+
+$$y = X \beta + Za + e$$
+
+Except for the vector of breeding values $a$, all other components are easy to generate using built-in R-functions or can readily be computed using matrix-vector multiplication. The components of vector $a$ have this internal structure which depends on the pedigree. Hence we try to come up with a function that generates all components of vector $a$.
+
+
+```{r}
+generate_bv <- function(ptbl_ped, pn_sigmaa){
+  ### # get matrix D based on pedigree
+  ped <- pedigreemm::pedigree(sire = ptbl_ped$Sire, dam = ptbl_ped$Dam, label = as.character(ptbl_ped$Animal))
+  diag_mat_d <- as.matrix(pedigreemm::Dmat(ped = ped))
+  
+  ### # loop over animals in pedigree and generate the breeding values
+  for (idx in seq_along(ptbl_ped$Animal)){
+    ### # check on parents
+    sire_bv <- 0
+    if (!is.na(ptbl_ped$Sire[idx]))
+      sire_bv <- 
+  }
+  ### # generate breeding values for founders
+  
+}
+```
+
+
+## Further Experiments
+How can we find the founders
+
