@@ -63,18 +63,18 @@ There are two random effects
 
 ### Residuals
 ```{r sigmaedef, echo=FALSE, results='hide'}
-n_sigmae <- 24
+n_sigmae2 <- 24
 ```
 
-The random residuals are given by a fixed variance component $\sigma_e^2 = `r n_sigmae`$. The residual compontents are generated from a normal distribution with mean $0$ and variance equal to $\sigma_e^2$. 
+The random residuals are given by a fixed variance component $\sigma_e^2 = `r n_sigmae2`$. The residual compontents are generated from a normal distribution with mean $0$ and variance equal to $\sigma_e^2$. 
 
 
 ### Breeding Values
 ```{r sigmaadef, echo=FALSE, results='hide'}
-n_sigmaa <- 8
+n_sigmaa2 <- 8
 ```
 
-The genetic additive variance is set to $\sigma_a^2 = `r n_sigmaa`$. The variance-covariance structure is given by the pedigree which is shown in the following table.
+The genetic additive variance is set to $\sigma_a^2 = `r n_sigmaa2`$. The variance-covariance structure is given by the pedigree which is shown in the following table.
 
 ```{r peddef, echo=FALSE, results='asis'}
 tbl_ped_ex8p1 <- tibble::data_frame(Animal = c(5, 6, 7, 8, 9, 10),
@@ -130,24 +130,65 @@ Except for the vector of breeding values $a$, all other components are easy to g
 
 
 ```{r}
-generate_bv <- function(ptbl_ped, pn_sigmaa){
+set.seed(234)
+generate_bv <- function(ptbl_ped, pn_sigmaa2){
   ### # get matrix D based on pedigree
   ped <- pedigreemm::pedigree(sire = ptbl_ped$Sire, dam = ptbl_ped$Dam, label = as.character(ptbl_ped$Animal))
   diag_mat_d <- as.matrix(pedigreemm::Dmat(ped = ped))
   
+  ### # number of animals in pedigree
+  n_nr_ani_ped <- nrow(ptbl_ped)
+  ### # intialize a result vector
+  vec_bv_result <- rep(0, n_nr_ani_ped)
   ### # loop over animals in pedigree and generate the breeding values
   for (idx in seq_along(ptbl_ped$Animal)){
-    ### # check on parents
+    ### # get parent breeding values
     sire_bv <- 0
     if (!is.na(ptbl_ped$Sire[idx]))
-      sire_bv <- 
+      sire_bv <- vec_bv_result[ptbl_ped$Sire[idx]]
+    dam_bv <- 0
+    if (!is.na(ptbl_ped$Dam[idx]))
+      dam_bv <- vec_bv_result[ptbl_ped$Dam[idx]]
+    ### # sample mendelian sampling effect
+    n_mend_sampl <- rnorm(1, mean = 0, sd = sqrt(diag_mat_d[idx,1] * pn_sigmaa2))
+    vec_bv_result[idx] <- 0.5 * sire_bv + 0.5 * dam_bv + n_mend_sampl
   }
-  ### # generate breeding values for founders
-  
+  ### # return result vector
+  return(vec_bv_result)
 }
 ```
 
 
-## Further Experiments
-How can we find the founders
+The vector of breeding values is generated using the above specified function `generate_bv()` 
+
+```{r echo=FALSE, results='asis'}
+vec_a <- generate_bv(ptbl_ped = tbl_ped_exp8p1ext, pn_sigmaa2 = n_sigmaa2)
+cat("$$\n")
+cat("a = \\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_a), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Now we put together the observations using the above specified model
+
+```{r echo=FALSE, results='asis'}
+vec_y <- crossprod(t(mat_x), vec_beta) + crossprod(t(mat_z), vec_a) + rnorm(n_nr_obs, mean = 0, sd = sqrt(n_sigmae2))
+cat("$$\n")
+cat("y = \\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_y), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+
+## Writing the data to a file
+First, we have to convert the the design matrix into factors of herds. Then, we add the herds to the pedigree info and write this dataframe to a file.
+
+```{r}
+mat_herd <- crossprod(t(mat_x), c(0,1,2))
+tbl_dat_ex8p2 <- tbl_ped_ex8p1 %>% mutate(Herd = mat_herd[,1], Observation = round(vec_y, digits = 2))
+readr::write_csv(tbl_dat_ex8p2, path = "data_ex8_p2.csv")
+```
+
 

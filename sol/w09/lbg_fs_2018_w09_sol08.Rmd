@@ -253,8 +253,149 @@ In the above result all elements which are $0$ are represented by a dot.
 ## Problem 2: BLUP Animal Model
 Use the following dataset to predict breeding values for all animals.
 
+```{r ex8p2data, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+n_sigmae2 <- 24
+n_sigmaa2 <- 8
+s_ex8p2_data <- "data_ex8_p2.csv"
+tbl_ex8p2_data <- readr::read_csv(file = s_ex8p2_data)
+knitr::kable(tbl_ex8p2_data,
+             booktabs  = TRUE,
+             longtable = TRUE,
+             caption   = "Data for Animal Model")
+```
 
 
+### Assumptions
+
+* Random residuals are un-correlated and they all have equal variance $\sigma_e^2$ which is assumed to be `r n_sigmae2`.
+* The additive genetic variance $\sigma_a^2$ is assumed to be `r n_sigmaa2`.
+* The pedigree is the same as in Problem 1. You can use `solve()` in R or `pedigreemm::getAinv()` to invert $A$.
+
+
+### Your Tasks
+
+* Specify all components including expected values and variances of the animal model using the information from the dataset.
+* Set up mixed model equations
+* Solve mixed model equations for estimates of fixed effects and for predicted breeding values
 
 
 ### Solution
+The animal model in general has the following form
+
+$$y = X \beta + Za + e$$
+
+\begin{tabular}{lll}
+where  &    &    \\
+       &  $y$  &  vector of length $n$ of observations  \\
+       &  $\beta$  &  vector of length $p$ of unknown fixed effects \\
+       &  $X$      &  $n\times p$ design matrix linking fixed effects to observations \\
+       &  $a$      &  vector of length $q$ of unkown random breeding values \\
+       &  $Z$      &  $n\times q$ design matrix linking breeding values to observations \\
+       &  $e$      &  vector of length $n$ of unknown random residuals \\
+\end{tabular}
+
+The expected values of the fixed effects $\beta$ are the fixed effects themselves, hence $E(\beta) = \beta$. The expected values of the random components are defined as
+
+\begin{align}
+E(a)  &=  0  \notag \\
+E(e)  &=  0  \notag \\
+E(y)  &=  X\beta \notag 
+\end{align}
+
+The variances of fixed effects are always $0$. Based on the assumption of uncorrelated residuals, we know that $var(e) = I\sigma_e^2$. Because, we have an animal model, we also know that $var(a) = A \sigma_a^2$ where $A$ corresponds to the numerator relationship matrix. In summary, the variances of the random effects are
+
+\begin{align}
+var(a)  &=  G  =  A \sigma_a^2  \notag \\
+var(e)  &=  R  =  I \sigma_e^2  \notag \\
+var(y)  &=  ZGZ^T + R \notag 
+\end{align}
+
+Inserting the information from the dataset into the model gives the following results. 
+
+* Vector of observations
+
+```{r ex8p2vecy, echo=FALSE, results='asis'}
+vec_y <- as.vector(tbl_ex8p2_data$Observation)
+cat("$$\n")
+cat("y = \\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_y), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+* Herds as fixed effects. We have two herds, hence vector $\beta$ has length $p = 2$. Component $\beta_1$ will denote the effect of the first herd and component $\beta_2$ the effect of the second herd.
+
+```{r, echo=FALSE, results='asis'}
+n_nr_obs <- length(vec_y)
+mat_x <- matrix(c(1, 0,
+                  1, 0,
+                  1, 0,
+                  0, 1,
+                  0, 1,
+                  0, 1), nrow = n_nr_obs, byrow = TRUE)
+vec_beta <- rmddochelper::vecGetVecElem(psBaseElement = "\\beta", pnVecLen = ncol(mat_x), psResult = "latex")
+cat("$$\n")
+cat("X = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_x, pnDigits = 0), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat(" \\text{, } \n")
+cat("\\beta = \\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_beta), collapse = "\n"), "\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+```{r, echo=FALSE, results='hide'}
+n_nr_animals <- 10
+```
+
+* Breeding values as random effects. In total, there are `r n_nr_animals` animals in the pedigree and hence the length of the vector $a$ is $q = `r n_nr_animals`$. 
+
+```{r, echo=FALSE, results='asis'}
+mat_z <- cbind(matrix(0, nrow = n_nr_obs, ncol = n_nr_founder_ex8p1pedext), diag(1, nrow = n_nr_obs, ncol = n_nr_obs))
+vec_a <- rmddochelper::vecGetVecElem(psBaseElement = "a", pnVecLen = n_nr_animals, psResult = "latex")
+cat("$$\n")
+cat("Z = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_z, pnDigits = 0), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat(" \\text{, } \n")
+cat("a = \\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_a), collapse = "\n"), "\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+* The vector of random residuals is just
+
+```{r, echo=FALSE, results='asis'}
+vec_e <- rmddochelper::vecGetVecElem(psBaseElement = "e", pnVecLen = n_nr_obs, psResult = "latex")
+cat("$$\n")
+cat("e = \\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_e), collapse = "\n"), "\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+The solutions for $\hat{\beta}$ and $\hat{a}$ are obtained by solving the mixed model equations. The mixed model equations for the animal model and under the assumptions specified above are defined as
+
+$$
+\left[
+\begin{array}{lr}
+X^TX  &  X^TZ  \\
+Z^TX  &  Z^TZ + \lambda * A^{-1}
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\hat{\beta}  \\
+\hat{a}
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+X^Ty  \\
+Z^Ty
+\end{array}
+\right]
+$$
