@@ -269,7 +269,7 @@ knitr::kable(tbl_ex8p2_data,
 
 * Random residuals are un-correlated and they all have equal variance $\sigma_e^2$ which is assumed to be `r n_sigmae2`.
 * The additive genetic variance $\sigma_a^2$ is assumed to be `r n_sigmaa2`.
-* The pedigree is the same as in Problem 1. You can use `solve()` in R or `pedigreemm::getAinv()` to invert $A$.
+* The pedigree is the same as in Problem 1. You can use `solve()` in R or `pedigreemm::getAInv()` to invert $A$.
 
 
 ### Your Tasks
@@ -399,3 +399,118 @@ Z^Ty
 \end{array}
 \right]
 $$
+
+The single components are computed as
+
+```{r, echo=FALSE, results='asis'}
+### # design matrices
+mat_xtx <- crossprod(mat_x)
+mat_xtz <- crossprod(mat_x, mat_z)
+mat_ztz <- crossprod(mat_z)
+### # variance ratio
+lambda <- n_sigmae2 / n_sigmaa2
+### # pedigree
+suppressPackageStartupMessages( library(pedigreemm) )
+ped <- pedigree(sire  = c(rep(NA, (n_nr_animals-n_nr_obs)), tbl_ex8p2_data$Sire),
+                dam   =  c(rep(NA, (n_nr_animals-n_nr_obs)), tbl_ex8p2_data$Dam),
+                label = as.character(1:n_nr_animals))
+mat_ainv = as.matrix(getAInv(ped = ped))
+mat_ztzlainv = mat_ztz + lambda * mat_ainv
+### # coefficient matrix
+mat_coef <- rbind(cbind(mat_xtx, mat_xtz),cbind(t(mat_xtz), mat_ztzlainv))
+### # unknows
+vec_unknowns <- c("\\hat{\\beta}", "\\hat{a}")
+### # right hand side
+mat_xty <- crossprod(mat_x, vec_y)
+mat_zty <- crossprod(mat_z, vec_y)
+mat_rhs <- rbind(mat_xty, mat_zty)
+### # solution
+mat_sol <- solve(mat_coef, mat_rhs)
+
+### # show the components
+### # X^TX
+cat("$$\n")
+cat("X^TX = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_xtx, pnDigits = 0), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat(" \\text{, } \n")
+### # X^TZ
+cat("X^TZ = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix =  mat_xtz, pnDigits = 0), collapse = "\n"), "\n")
+cat("\\right]\n")
+cat("$$\n\n")
+cat("$$\n")
+### # Z^TZ
+cat("Z^TZ = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_ztz, pnDigits = 0), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+cat("$$\n")
+### # A^{-1}
+cat("A^{-1}= \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_ainv, pnDigits = 1), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+### # right hand side
+cat("$$\n")
+cat("X^Ty = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_xty, pnDigits = 2), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat(" \\text{, } \n")
+cat("Z^Ty = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_zty, pnDigits = 2), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Putting everything together into the mixed model equations leads to the following results
+
+```{r, echo=FALSE, results='asis'}
+cat("$$\n")
+cat("\\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_coef, pnDigits = 1), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("\\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_unknowns), collapse = "\n"), "\n")
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_rhs, pnDigits = 2), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+The solutions are computed as
+
+```{r, echo=FALSE, results='asis'}
+cat("$$\n")
+cat("\\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_unknowns), collapse = "\n"), "\n")
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_coef, pnDigits = 1), collapse = "\n"),"\n")
+cat("\\right]^{-1}\n")
+cat("\\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_rhs, pnDigits = 2), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+\pagebreak
+
+The solutions are
+
+```{r, echo=FALSE, results='asis'}
+vec_beta_hat <- rmddochelper::vecGetVecElem(psBaseElement = "\\hat{\\beta}", pnVecLen = ncol(mat_x), psResult = "latex")
+vec_a_hat <- rmddochelper::vecGetVecElem(psBaseElement = "\\hat{a}", pnVecLen = n_nr_animals, psResult = "latex")
+cat("$$\n")
+cat("\\left[\n")
+cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = c(vec_beta_hat, vec_a_hat)), collapse = "\n"), "\n")
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_sol, pnDigits = 4), collapse = "\n"),"\n")
+cat("\\right]\n")
+cat("$$\n")
+```
+
+
+
