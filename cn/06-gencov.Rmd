@@ -259,7 +259,7 @@ Inserting the relations from \@ref(eq:usedefnumeratorrelationshipmatrix) into \@
 \begin{align}
 var(m_i)  &=  var(a_i) - {1\over 4} var(a_s) - {1\over 4} var(a_d) - {1\over 2} cov(a_s, a_d) \notag \\
           &=  (1 + F_i) \sigma_a^2 - {1\over 4}(1 + F_s) \sigma_a^2 - {1\over 4} (1 + F_d) \sigma_a^2 - {1\over 2} * 2 * F_i * \sigma_a^2 \notag \\
-          &=  \left(1 - {1\over 4}(F_s + F_d)\right) \sigma_a^2
+          &=  \left({1\over 2} - {1\over 4}(F_s + F_d)\right) \sigma_a^2
 (\#eq:mendeliansamplingvariance)          
 \end{align}
 

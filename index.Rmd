@@ -120,7 +120,8 @@ vecCnTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Genetic C
 ### # w8 cn/063-matainv.pdf
 vecCnTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Inverse Numerator Relationship Matrix](https://charlotte-ngs.github.io/LBGFS2018/cn/063-matainv.pdf)"
 
-### # w9
+### # w9 cn/07-add-asp-blup.pdf
+vecCnTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Additional Aspects of BLUP](https://charlotte-ngs.github.io/LBGFS2018/cn/07-add-asp-blup.pdf)"
 
 ### # w10
 
@@ -169,7 +170,8 @@ vecSlTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Breeding 
 ### # w8 w08/lbg_fs_2018_slides_numrelmat.pdf
 vecSlTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Numerator Relationship Matrix](https://charlotte-ngs.github.io/LBGFS2018/sl/w08/lbg_fs_2018_slides_numrelmat.pdf)"
 
-### # w9
+### # w9 w09/lbg_fs_2018_slides_invnumrelmat.pdf
+vecSlTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Inverse Numerator Relationship Matrix](https://charlotte-ngs.github.io/LBGFS2018/sl/w09/lbg_fs_2018_slides_invnumrelmat.pdf)"
 
 ### # w10
 
@@ -212,7 +214,8 @@ vecExTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Selection
 # w8 ex/w08/lbg_fs_2018_w08_ex07.pdf
 vecExTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Selection Index and Sire Model](https://charlotte-ngs.github.io/LBGFS2018/ex/w08/lbg_fs_2018_w08_ex07.pdf)"
 
-# w9 
+# w9 ex/w09/lbg_fs_2018_w09_ex08.pdf
+vecExTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Numerator Relationship Matrix and Animal Model](https://charlotte-ngs.github.io/LBGFS2018/ex/w09/lbg_fs_2018_w09_ex08.pdf)"
 
 # w10
 
@@ -255,9 +258,10 @@ vecSolTopic[which(Date == format(as.Date("2018/11/02"), "%d.%m"))] <- "[Breeding
 vecSolTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Selection Index](https://charlotte-ngs.github.io/LBGFS2018/sol/w07/lbg_fs_2018_w07_sol06.pdf)"
 
 # w9 sol/w08/lbg_fs_2018_w08_sol07.pdf
-# vecSolTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Selection Index and Sire Model](https://charlotte-ngs.github.io/LBGFS2018/sol/w08/lbg_fs_2018_w08_sol07.pdf)"
+vecSolTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Selection Index and Sire Model](https://charlotte-ngs.github.io/LBGFS2018/sol/w08/lbg_fs_2018_w08_sol07.pdf)"
 
-# w10
+# w10 sol/w09/lbg_fs_2018_w09_sol08.pdf
+# vecSolTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Numerator Relationship Matrix and Animal Model](https://charlotte-ngs.github.io/LBGFS2018/sol/w08/lbg_fs_2018_w08_sol07.pdf)"
 
 # w11
 
@@ -290,6 +294,8 @@ vecAddMatTopic[which(Date == format(as.Date("2018/10/19"), "%d.%m"))] <- "[Speci
 # w8 misc/20181109_correction_section621/20181109_correction_section621.pdf
 vecAddMatTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Correction for Section 6.2.1](https://charlotte-ngs.github.io/LBGFS2018/misc/20181109_correction_section621/20181109_correction_section621.pdf)"
 
+# w09 misc/20181116_correct_mendelian_variance/20181116_correct_mendelian_sampling.pdf
+vecAddMatTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Correction for Mendelian Sampling Term](https://charlotte-ngs.github.io/LBGFS2018/misc/20181116_correct_mendelian_variance/20181116_correct_mendelian_sampling.pdf)"
 
 ### # construct the table
 dfAddMatTable <- data.frame(Woche, Date, vecAddMatTopic, stringsAsFactors = FALSE)
