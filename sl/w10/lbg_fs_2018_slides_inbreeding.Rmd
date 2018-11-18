@@ -1,0 +1,38 @@
+---
+title: "Inverse Numerator Relationship Matrix and Inbreeding"
+author: "Peter von Rohr"
+date: "16 November 2018"
+output:
+  beamer_presentation:
+header-includes:
+ \usepackage{longtable}
+ \usepackage{float}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = "asis")
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+## Inverse of $A$ Based on $L$ and $D$
+
+* Matrix $A$ was decomposed into $A = L \cdot D \cdot L^T$
+* Get $A^{-1}$ as $A^{-1} = (L^T)^{-1} D^{-1} L^{-1}$
+* $D^{-1}$ is diagonal again with elements
+
+$$(D^{-1})_{ii} = 1/(D)_{ii}$$
+
+## Inverse of $L$
+
+* Compute $m$ based on the two decompositions of $a$
+
+$$a = P \cdot a + m \quad \text{and} \quad a = L \cdot m$$
+
+* Solve both for $m$ and set them equal
+
+$$m = a - P \cdot a = (I-P)\cdot a \quad \text{and} \quad m = L^{-1} \cdot a$$
+
+$$(I-P) \cdot a = L^{-1} \cdot a$$
+and
+
+$$L^{-1} = I-P$$
