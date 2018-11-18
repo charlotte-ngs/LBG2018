@@ -42,6 +42,7 @@ matR <- t(chol(matA_simple))
 (matL <- matR %*% solve(matS))
 ```
 
+
 ## Verify
 ```{r}
 (matA_verify <- matL %*% matD %*% t(matL))
