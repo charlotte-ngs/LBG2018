@@ -1,0 +1,58 @@
+---
+title: "Verify LDL-Decomposition of A"
+author: "Peter von Rohr"
+date:   "2018-11-16"
+output: html_notebook
+---
+
+## Pedigree
+
+The pedigree used during the lecture corresponds to
+
+```{r}
+suppressPackageStartupMessages( library(pedigreemm) )
+n_nr_ani_ped <- 5
+n_nr_parent <- 3
+tbl_ped_simple <- dplyr::data_frame(Calf = c(1:n_nr_ani_ped),
+                             Sire = c(NA, NA, NA, 1, 3),
+                             Dam  = c(NA, NA, NA, 2, 2))
+### # pedigreemm
+(ped_simple <- pedigree(sire = tbl_ped_simple$Sire, dam = tbl_ped_simple$Dam, label = as.character(1:n_nr_ani_ped)))
+```
+
+
+## Numerator Relationship Matrix
+
+```{r}
+(matA_simple <- as.matrix(getA(ped = ped_simple)))
+```
+
+
+## Matrices L and D
+
+```{r}
+(matD <- diag(Dmat(ped = ped_simple), n_nr_ani_ped))
+```
+
+```{r}
+### # get diagonal matrix S with diagonal elements being sqrt of elements of matD
+matS <- sqrt(matD)
+### # LDL decomposition based on cholesky
+matR <- t(chol(matA_simple))
+(matL <- matR %*% solve(matS))
+```
+
+## Verify
+```{r}
+(matA_verify <- matL %*% matD %*% t(matL))
+```
+
+## Check
+```{r}
+matA_simple - matA_verify
+```
+
+
+
+
+
