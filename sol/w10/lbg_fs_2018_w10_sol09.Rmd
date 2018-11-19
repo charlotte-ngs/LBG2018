@@ -1,6 +1,6 @@
 ---
 title: Livestock Breeding and Genomics - Solution 9
-author: "`r Sys.info()[['user']]`"
+author: "Peter von Rohr"
 date: "`r Sys.Date()`"
 output:
   bookdown::pdf_document2:

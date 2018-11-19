@@ -1,0 +1,142 @@
+---
+title: Livestock Breeding and Genomics - Exercise 9
+author: "Peter von Rohr"
+date: "`r Sys.Date()`"
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_sections: false
+    keep_tex: false
+header-includes:
+ \usepackage{longtable}
+ \usepackage{float}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis', fig.pos = 'H')
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+## Problem 1: Decompositions
+Given is the following pedigree. 
+
+```{r pedsol09p01, echo=FALSE, results='asis'}
+n_nr_pedsol09p01 <- 6
+tbl_pedsol09p01 <- tibble::data_frame(Animal = 1:n_nr_pedsol09p01,
+                                      Sire   = c(NA, NA, 1, 1, 3, 5),
+                                      Dam    = c(NA, NA, 2, NA, 4, 4))
+knitr::kable(tbl_pedsol09p01,
+             booktabs = TRUE, 
+             longtable = TRUE)
+```
+
+### Your Tasks
+* Do the simple decomposition of the above pedigree
+* Do the recursive decomposition of the above pedigree until only $m_i$ terms appear on the right-hand side of the decomposition.
+ 
+## Problem 2: Covariance Between Animals
+So far we have assumed that the covariance between true breeding values $a_i$ and $a_j$ of animals $i$ and $j$ is defined as 
+
+$$cov(a_i, a_j) = (A)_{ij} * \sigma_a^2$$
+
+\begin{tabular}{lll}
+where  &  $(A)_{ij}$    &  element of numerator relationship matrix $A$ on row $i$ and column $j$  \\
+       &  $\sigma_a^2$  &  additive genetic variance
+\end{tabular}
+
+
+### Your Task
+* Compute the covariance $cov(a_i, a_j)$ between true breeding values $a_i$ and $a_j$ for all pairs of animals in the pedigree given in Problem 1.
+* The following procedure can be used to compute the covariances
+    + Recursively decompose $a_i$ and $a_j$ until common ancestors between $i$ and $j$ are found or until unrelated founder animals occur in the decomposition
+    + Expand the covariance between sums of true breeding values into sums of variances of true breeding values
+    + Collect the results of all pairwise covariances and compare them to the entries in $A$
+    
+    
+### Hints
+* The covariance $cov(a_i, a_j)$ between true breeding values $a_i$ and $a_j$ for unrelated animals $i$ and $j$ is set to $0$. An example in the pedigree from Problem 1 would be the covarance $cov(a_1, a_2)$ between the true breeding values of animals $1$ and $2$ which is equal to $0$, because animals $1$ and $2$ are unrelated, that means they do not have any known common ancestors. 
+* The covariances $cov(a_i, m_k)$ between any true breeding value $a_i$ and any mendelian sampling constant $m_k$ is $0$. 
+* Any previously compute covariance can be re-used.
+* The variances $var(a_i)$ of the true breeding values are $var(a_i) = (1 + F_i) \sigma_a^2$ where $F_i$ is the inbreeding coefficient of animal i.
+* The inbreeding coefficients for all animals in pedigree of Problem 1 are
+
+```{r, echo = FALSE, results='asis'}
+matA <- as.matrix(getA(ped = ped_sol09p01))
+tbl_inbreeding_sol09prob02 <- tibble::data_frame(Animal = 1:n_nr_pedsol09p01,
+                                                 `Inbreeding Coefficient` = inbreeding(ped = ped_sol09p01))
+knitr::kable(tbl_inbreeding_sol09prob02, 
+             booktabs = TRUE,
+             longtable = TRUE)
+```
+
+* As an example, it is shown how to compute $cov(a_3, a_4)$. First replace $a_3$ and $a_4$ by their simple decomposition into true breeding values of parents plus mendelian sampling terms. Then expand the covariance of two sums into sums of pairwise covariances. Then known values are inserted and the result is computed.
+
+\begin{align}
+cov(a_3, a_4)  &=  cov(({1\over 2}a_1 + {1\over 2}a_2 + m_3), ({1\over 2}a_1 + m_4)) \notag \\
+               &=  cov({1\over 2}a_1, {1\over 2}a_1) + cov({1\over 2} a_2,  {1\over 2}a_1) \notag \\
+               &=  {1\over 4} var(a_1) = {1\over 4} \sigma_a^2 \notag
+\end{align}
+
+ 
+### Solution
+
+\begin{align}
+cov(a_1, a_2) &=  \notag
+\end{align}
+
+\begin{align}
+cov(a_1, a_3)  &=  \notag
+\end{align}
+
+\begin{align}
+cov(a_1, a_4)  &=  \notag
+\end{align}
+
+\begin{align}
+cov(a_1, a_5)  &=   \notag
+\end{align}
+
+\begin{align}
+cov(a_1, a_6)  &=  \notag
+\end{align}
+
+
+\begin{align}
+cov(a_2, a_3)  &=  \notag
+\end{align}
+
+\begin{align}
+cov(a_2, a_4)  &=  \notag
+\end{align}
+
+\begin{align}
+cov(a_2, a_5)  &=   \notag
+\end{align}
+
+\begin{align}
+cov(a_2, a_6)  &=   \notag
+\end{align}
+
+\begin{align}
+cov(a_3, a_4)  &=   \notag
+\end{align}
+
+\begin{align}
+cov(a_3, a_5)  &=  \notag
+\end{align}
+
+\begin{align}
+cov(a_3, a_6)  &= \notag
+\end{align}
+
+\begin{align}
+cov(a_4, a_5)  &= \notag
+\end{align}
+
+\begin{align}
+cov(a_4, a_6)  &=  \notag
+\end{align}
+
+\begin{align}
+cov(a_5, a_6)  &=  \notag
+\end{align}
