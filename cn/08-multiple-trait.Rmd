@@ -1,0 +1,269 @@
+# Multiple Traits {#multipletraits}
+So far we have seen how to predict breeding values using the BLUP animal model. These breeding values were always only for one trait. From a statistical point of view, experts are calling such analyses __univariate__ evaluations. In reality, livestock breeders want to improve their animals in a population with respect to several traits simultaneosly. If there are genetic relationships (measured by genetic correlations) between traits, univariate predictions of breeding values do not make optimal use of the available information. This effect is stronger, if certain traits can only be observed in animals of one sex. According to [@Mrode2005] who cites [@Schaeffer1984] and [@TM1986], the increased accuracy of the evaluations is one of the main advantage of multivariate BLUP analyses. Predictions of breeding values for several traits in a single evaluation is called __multivariate__ prediction of breeding values. Such multivariate analyses can be implemented in different ways such as
+
+* combining different corrected information sources in a multivariate selection index as we have seen in chapter \@ref(selection-index). 
+* multivariate prediction of breeding values using BLUP animal model (method of choice).
+* combining predicted breeding values from univariate analyses. 
+
+Because we have already seen in earler chapters how to combine information using the selection index, we are directly introducing the multivariate BLUP methods. 
+
+
+## Multivariate Predictions Of Breeding Values Using BLUP
+The prediction of breeding values using a multivariate BLUP model is the optimal prediction procedure. It has advantages, if 
+
+* some traits have lower heritability than others
+* environmental correlations exist between traits measured on the same animal
+* some traits are available only a subset of all animals 
+* some traits were used for a first round of selection
+
+In principle, a multivariate analysis can be thought of as several univariate analyses which are stacked one on top of the other. Let us assume that we have two traits. For the first trait, we define the model 
+
+$$y_1 = X_1 \beta_1 + Z_1a_1 + e_1$$
+
+Similarly for the second trait, we define the model
+
+$$y_2 = X_2 \beta_2 + Z_2a_2 + e_2$$
+
+If we group the data by traits, then we can write the multivarite model as
+
+$$\left[
+\begin{array}{c} 
+  y_1 \\
+  y_2
+\end{array} 
+\right] 
+=
+\left[ 
+\begin{array}{lr}
+X_1  &  0 \\
+0    &  X_2
+\end{array}
+\right]
+\left[ 
+\begin{array}{c}
+\beta_1 \\
+\beta_2
+\end{array}
+\right]
++
+\left[ 
+\begin{array}{lr}
+Z_1  &  0 \\
+0    &  Z_2
+\end{array}
+\right]
+\left[ 
+\begin{array}{c}
+a_1 \\
+a_2
+\end{array}
+\right]
++
+\left[ 
+\begin{array}{c}
+e_1 \\
+e_2
+\end{array}
+\right]
+$$
+
+The genetic variance-covariance matrix $G_0$ for the two traits has the following structure.
+
+$$G_0 = \left[ 
+\begin{array}{lr}
+\sigma_{g_{1}}^2  &  \sigma_{g1,g2}  \\
+\sigma_{g1,g2}    &  \sigma_{g_{2}}^2
+\end{array}
+\right] = \left[ 
+\begin{array}{lr}
+g_{11}  &  g_{12}  \\
+g_{21}  &  g_{22}
+\end{array}
+\right]
+$$
+
+The inverse $G_0^{-1}$ of $G_0$ can be formulated as
+
+$$G_0^{-1} = \left[ 
+\begin{array}{lr}
+g^{11}  &  g^{12}  \\
+g^{21}  &  g^{22}
+\end{array}
+\right]
+$$
+
+For the random residual effects, the variance-covariance matrix $R_0$ for the two traits can be written as
+
+$$R_0 = \left[ 
+\begin{array}{lr}
+r_{11}  &  r_{12}  \\
+r_{21}  &  r_{22}
+\end{array}
+\right]$$
+
+Also the inverse $R_0^{-1}$ can be written as
+
+$$R_0^{-1} = \left[ 
+\begin{array}{lr}
+r^{11}  &  r^{12}  \\
+r^{21}  &  r^{22}
+\end{array}
+\right]$$
+
+The variance-covariance matrix for the complete set of true breeding values and for all random residuals can be written as
+
+$$var(a) = var\left[\begin{array}{c} a_1 \\ a_2 \end{array} \right]
+=  
+\left[ 
+\begin{array}{lr}
+g_{11}A  &  g_{12}A \\
+g_{21}A  &  g_{22}A
+\end{array}
+\right]
+= G_0 \otimes A = G
+$$
+
+where $A$ is the numerator relationship matrix and $\otimes$ denotes the so-called __Kroneckerproduct__ of two matrices.  The variance-covariance matrix $R$ for the random resiudals is given by
+
+$$
+R = var(e) = var\left[\begin{array}{c} e_1 \\ e_2 \end{array} \right]
+=  
+\left[ 
+\begin{array}{lr}
+r_{11}I_n  &  r_{12}I_n \\
+r_{21}I_n  &  r_{22}I_n
+\end{array}
+\right]
+= R_0 \otimes I_n
+$$
+
+where $n$ corresponds to the number of animals in the pedigree. The covariances between all elements of $a$ and $e$ are $0$. This is denoted by combining both random vectors into a single vector and writing down the variance-covariance matrix of the combined vector as
+
+$$
+var\left[\begin{array}{c} a \\ e \end{array} \right]
+=  
+\left[ 
+\begin{array}{lr}
+G  &  0 \\
+0  &  R
+\end{array}
+\right]
+=
+var\left[\begin{array}{c} a_1 \\ a_2 \\ e_1 \\ e_2 \end{array} \right]
+=  
+\left[ 
+\begin{array}{lccr}
+g_{11}A  &  g_{12}A &  0  &  0  \\
+g_{21}A  &  g_{22}A &  0  &  0  \\
+0        &  0       &  r_{11}I_n  &  r_{12}I_n \\
+0        &  0       &  r_{21}I_n  &  r_{22}I_n
+\end{array}
+\right]
+$$
+
+
+The solutions to get estimates of fixed effects and to get predictions for breeding values are obtained from the solutions of mixed model equations. These have exactly the same structure as in the univariate case. 
+
+$$
+\left[ 
+\begin{array}{lr}
+X^TR^{-1}X  &  Z^TR^{-1}X  \\
+Z^TR^{-1}X  &  Z^TR^{-1}Z + G^{-1}
+\end{array}
+\right]
+\left[ 
+\begin{array}{c}
+\hat{\beta} \\
+\hat{a}
+\end{array}
+\right]
+=
+\left[ 
+\begin{array}{c}
+X^TR^{-1}y \\
+Z^TR^{-1}y
+\end{array}
+\right]
+$$
+
+where 
+
+$$
+y = \left[
+\begin{array}{c} 
+  y_1 \\
+  y_2
+\end{array} 
+\right] 
+\text{, }
+X = \left[ 
+\begin{array}{lr}
+X_1  &  0 \\
+0    &  X_2
+\end{array}
+\right]
+\text{, }
+\hat{\beta} = \left[ 
+\begin{array}{c}
+\hat{\beta}_1 \\
+\hat{\beta}_2
+\end{array}
+\right]
+\text{, }
+Z = \left[ 
+\begin{array}{lr}
+Z_1  &  0 \\
+0    &  Z_2
+\end{array}
+\right]
+\text{, }
+\hat{a} = \left[ 
+\begin{array}{c}
+\hat{a}_1 \\
+\hat{a}_2
+\end{array}
+\right]
+$$
+
+
+Based on the specification of the variance-covariance matrices described earlier, we get $R^{-1} = R_0^{-1} \otimes I_n$ and $G^{-1} = G_0^{-1} \otimes A^{-1}$. 
+
+
+## Multitrait Selection
+Now that we have predicted breeding values for a collection of traits available, the question is how to integrate these predicted breeding values into a consistent selection criterion. As we have seen earlier, selection index theory provides a tool to optimally combine different sources of information in order to approximate the aggregate genotype $H$. Just as a reminder, the aggregate genotype $H$ combines all economically relevant traits into a single value using a linear function of the true breeding values $a$ and taking the economic values $w$ as weighting factors.
+
+
+### Selection Index
+In section \@ref(aggregate-genotype), we have already briefly described how we can use selection index theory to approximate the aggregate genotype $H$ in an optimal way. Given that $H$ corresponds to the linear function 
+
+$$H = w^Ta$$
+
+and we want to approximate $H$ by an Index $I$ which is a linear function of all predicted breeding values $\hat{a}$, we can write
+
+$$I = b^T\hat{a}$$
+
+where $b$ is a vector of unknown index weights. The vector $b$ is determined using the optimality condition of minimum prediction error variance which results in 
+
+\begin{equation}
+b = P^{-1}Gw
+(\#eq:vectorindexweight)
+\end{equation}
+
+where $P$ is the variance-covariance matrix between all information sources and $G$ is the covariance matrix between the information sources and the traits in the aggregate genotype. In case where the traits in the aggregate genotype $H$ and in the index $I$ are the same, the matrices $P$ and $G$ are defined as 
+
+$$P = var(\hat{a})$$
+
+and 
+
+$$G = cov(a, \hat{a})$$
+
+For predicted breeding values using BLUP, it can be shown that $cov(a, \hat{a}) = var(\hat{a})$ and therefore $P=G$. Using that equality in equation \@ref(eq:vectorindexweight), we get
+
+$$b = w$$
+which means that the vector $b$ of index weights corresponds to the vector of economic values $w$. 
+
+
+
+
+
+
