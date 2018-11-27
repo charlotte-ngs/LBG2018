@@ -61,6 +61,8 @@ where  &  $(A)_{ij}$    &  element of numerator relationship matrix $A$ on row $
 * The inbreeding coefficients for all animals in pedigree of Problem 1 are
 
 ```{r, echo = FALSE, results='asis'}
+suppressPackageStartupMessages( library(pedigreemm) )
+ped_sol09p01 <- pedigree(sire = tbl_pedsol09p01$Sire, dam = tbl_pedsol09p01$Dam, label = as.character(tbl_pedsol09p01$Animal))
 matA <- as.matrix(getA(ped = ped_sol09p01))
 tbl_inbreeding_sol09prob02 <- tibble::data_frame(Animal = 1:n_nr_pedsol09p01,
                                                  `Inbreeding Coefficient` = inbreeding(ped = ped_sol09p01))

@@ -1,0 +1,125 @@
+---
+title: Livestock Breeding and Genomics - Solution 10
+author: "Peter von Rohr"
+date: "`r Sys.Date()`"
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_sections: false
+    keep_tex: false
+header-includes:
+ \usepackage{longtable}
+ \usepackage{float}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis', fig.pos = 'H')
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+## Problem 1: Compute Inbreeding Coefficients
+Given the following pedigree.
+
+```{r}
+n_nr_ani_ped <- 6
+n_nr_parent <- 3
+tbl_ped_sol10p01 <- dplyr::data_frame(Animal = c(1:n_nr_ani_ped),
+                             Sire = c(NA, NA, 1, 3, 4, 4),
+                             Dam  = c(NA, NA, NA, 2, 2, 5))
+### # show the pedigree
+knitr::kable( tbl_ped_sol10p01,
+              booktabs = TRUE,
+              longtable = TRUE )
+```
+
+### Your Task
+Compute the inbreeding coefficients $F_i$ for all animals using the matrix $R$ that comes from the cholesky decomposition of the numerator relationship matrix $A$
+
+
+### Solution
+The cholesky decomposition of $A$ corresponds to 
+
+$$A = R \cdot R^T$$
+
+where $R$ is a lower triangular matrix. The diagonal elements $(A)_{ii}$ of $A$ can be computed as the sum of the squared elements of all elements of Matrix $R$ on row $i$. 
+
+$$(A)_{ii} = \sum_{j=1}^i (R)_{ij}^2$$
+
+Therefore to get $(A)_{ii}$, we have to compute all elements of $R$ on row $i$. Due to the relation of the cholesky-decomposition to the `LDL`-decomposition, we can write the matrix $R$ as a product of the two matrices $L$ and $S$
+
+\begin{equation}
+R = L \cdot S
+(\#eq:decomprintols)
+\end{equation}
+
+where $L$ is the lower triangular matrix from the `LDL`-decomposition and $S$ is a diagonal matrix with diagonal elements $(S)_{ii}$ corresponding to 
+
+$$(S)_{ii} = \sqrt{(D)_{ii}}$$
+
+where $(D)_{ii}$ correspond to the diagonal elements of the matrix $D$ from the `LDL`-decomposition. From the `LDL`, we know that 
+
+$$(D)_{ii} = {1\over 2} - {1\over 4}(F_s + F_d) = 1 - {1\over 4}(A_{ss} + A_{dd})$$
+
+Based on the decomposition of $R$ into the product of $L$ and $S$ given in \@ref(eq:decomprintols) and based on the property of the matrix $L$ which is to be shown in the additional problem 3 of this exercise, we can derive the following rules for computing the elements of the matrix $R$
+
+* Diagnoal elements $(R)_{ii}$:
+
+$$(R)_{ii} = (S)_{ii} = \sqrt{(D)_{ii}} = \sqrt{1 - {1\over 4}(A_{ss} + A_{dd})}$$
+where $s$ and $d$ are parents of animal $i$ and $(A)_{ss}$ and $(A)_{dd}$ are diagonal elements of the numerator relationship matrix $A$.
+
+* Off-diagonal elements $(R)_{ij}$ ($i \ne j$):
+
+$$(R)_{ij} = {1\over 2}(R_{sj} + R_{dj})$$
+
+where $s$ and $d$ are parents of animal $i$. 
+
+```{r compsolprep, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+suppressPackageStartupMessages( library(pedigreemm) )
+ped_sol10p01 <- pedigree(sire = tbl_ped_sol10p01$Sire, dam = tbl_ped_sol10p01$Dam, label = as.character(tbl_ped_sol10p01$Animal))
+matA_sol10p01 <- as.matrix(getA(ped = ped_sol10p01))
+matR_sol10p01 <- t(chol(matA_sol10p01))
+n_matA_na <- 0
+n_matR_na <- 0
+```
+
+The solution of this exercise is to compute $(A)_{ii}$ for all animals in the pedigree using the above described rules.
+
+```{r compsola11, echo=FALSE, results='hide'}
+n_ani_idx <- 1
+n_sire_idx <- tbl_ped_sol10p01$Sire[n_ani_idx]
+n_dam_idx <- tbl_ped_sol10p01$Dam[n_ani_idx]
+### # diagonal element
+n_matA_sire <- n_matA_na
+if (!is.na(n_sire_idx))
+  n_matA_sire <- matA_sol10p01[n_sire_idx,n_sire_idx]
+n_matA_dam <- n_matA_na
+if (!is.na(n_dam_idx))
+  n_matA_dam <- matA_sol10p01[n_dam_idx, n_dam_idx]
+n_matRii2 <- 1 - .25 * (n_matA_sire + n_matA_dam)
+cat("Animal: ", n_ani_idx, " -- matRii: ", n_matRii2, "\n")
+### # off-diagonal elements
+vec_col_idx <- NA
+if (n_ani_idx > 1)
+  vec_col_idx <- c(1:n_ani_idx)
+for (colidx in seq_along(vec_col_idx)){
+  n_matR_sire <- n_matR_na
+  if (!is.na(n_sire_idx))
+    n_matR_sire <- matR_sol10p01[n_ani_idx, n_sire_idx]
+  n_matR_dam <- n_matR_na
+  if (!is.na(n_dam_idx))
+    n_matR_dam <- matR_sol10p01[n_ani_idx, n_dam_idx]
+  n_matR_ani <- 0.5*(n_matR_sire + n_matR_dam)
+  cat("row: ", n_ani_idx, " -- col: ", colidx, " -- matR: ", n_matR_ani, "\n")
+}
+
+```
+
+$$(A)_{11} = (R)_{11}^2 = (D)_{11} = 1$$
+
+
+
+
+## Problem 2: Direct Construction of $A^{-1}$
+
+
+## Additional Problem 3: Property of Matrix $L$

@@ -123,7 +123,8 @@ vecCnTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Inverse N
 ### # w9 cn/07-add-asp-blup.pdf
 vecCnTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Additional Aspects of BLUP](https://charlotte-ngs.github.io/LBGFS2018/cn/07-add-asp-blup.pdf)"
 
-### # w10
+### # w10 08-multiple-traits.pdf
+vecCnTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Multiple Traits](https://charlotte-ngs.github.io/LBGFS2018/cn/08-multiple-traits.pdf)"
 
 ### # w11
 
@@ -173,7 +174,8 @@ vecSlTopic[which(Date == format(as.Date("2018/11/09"), "%d.%m"))] <- "[Numerator
 ### # w9 w09/lbg_fs_2018_slides_invnumrelmat.pdf
 vecSlTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Inverse Numerator Relationship Matrix](https://charlotte-ngs.github.io/LBGFS2018/sl/w09/lbg_fs_2018_slides_invnumrelmat.pdf)"
 
-### # w10
+### # w10 /w10/lbg_fs_2018_slides_inbreeding.pdf
+vecSlTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Inbreeding](https://charlotte-ngs.github.io/LBGFS2018/sl/w10/lbg_fs_2018_slides_inbreeding.pdf)"
 
 ### # w11
 
@@ -301,6 +303,10 @@ vecAddMatTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Corre
 
 # w10 misc/20181116_verify_ldl_of_a/20181116_verify_ldl_of_a.nb.nb.nb.html
 vecAddMatTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Verify LDL-decomposition of A](https://charlotte-ngs.github.io/LBGFS2018/misc/20181116_verify_ldl_of_a/20181116_verify_ldl_of_a.nb.nb.nb.html)"
+
+# w11 sol/w05/lbg_fs_2018_w05_sol04_corrected.pdf
+vecAddMatTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Correction in Solution to Exercise 4](https://charlotte-ngs.github.io/LBGFS2018/sol/w05/lbg_fs_2018_w05_sol04_corrected.pdf)"
+
 
 ### # construct the table
 dfAddMatTable <- data.frame(Woche, Date, vecAddMatTopic, stringsAsFactors = FALSE)
