@@ -126,7 +126,8 @@ vecCnTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Additiona
 ### # w10 08-multiple-traits.pdf
 vecCnTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Multiple Traits](https://charlotte-ngs.github.io/LBGFS2018/cn/08-multiple-traits.pdf)"
 
-### # w11
+### # w11 09-genomic-selection.pdf
+vecCnTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Genomic Selection](https://charlotte-ngs.github.io/LBGFS2018/cn/09-genomic-selection.pdf)"
 
 ### # w12
 
@@ -222,7 +223,8 @@ vecExTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Numerator
 # w10 w10/lbg_fs_2018_w10_ex09.pdf
 vecExTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Decomposition and Covariance](https://charlotte-ngs.github.io/LBGFS2018/ex/w10/lbg_fs_2018_w10_ex09.pdf)"
 
-# w11
+# w11 ex/w11/lbg_fs_2018_w11_ex10.pdf 
+vecExTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Inbreeding and Henderson's Rule](https://charlotte-ngs.github.io/LBGFS2018/ex/w11/lbg_fs_2018_w11_ex10.pdf)"
 
 # w12
 
@@ -267,9 +269,10 @@ vecSolTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Selectio
 vecSolTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Numerator Relationship Matrix and Animal Model](https://charlotte-ngs.github.io/LBGFS2018/sol/w09/lbg_fs_2018_w09_sol08.pdf)"
 
 # w11 w10/lbg_fs_2018_w10_sol09.pdf
-# vecSolTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Decomposition and Covariance](https://charlotte-ngs.github.io/LBGFS2018/sol/w10/lbg_fs_2018_w10_sol09.pdf)"
+vecSolTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Decomposition and Covariance](https://charlotte-ngs.github.io/LBGFS2018/sol/w10/lbg_fs_2018_w10_sol09.pdf)"
 
-# w12
+# w12 sol/w11/lbg_fs_2018_w11_sol10.pdf
+# vecExTopic[which(Date == format(as.Date("2018/12/07"), "%d.%m"))] <- "[Inbreeding and Henderson's Rule](https://charlotte-ngs.github.io/LBGFS2018/ex/w11/lbg_fs_2018_w11_sol10.pdf)"
 
 # w13
 
