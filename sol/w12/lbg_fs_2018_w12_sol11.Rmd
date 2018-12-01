@@ -1,0 +1,28 @@
+---
+title: Livestock Breeding and Genomics - Solution 11
+author: "Peter von Rohr"
+date: "`r Sys.Date()`"
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_sections: false
+    keep_tex: false
+header-includes:
+ \usepackage{longtable}
+ \usepackage{float}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis', fig.pos = 'H')
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+
+## Problem 1: Importance of Accuracy
+The importance of the accuracy of predicted breeding values is different between livestock species and even between farmers within the same breeding organisation. When considering the selection response per year as a relevant criterion for comparing different selection strategies, there is a clear trade-off between accuracy of predicted breeding values and length of the generation interval. The selection response per year is defined as 
+
+$$R = i * r_{a, \hat{a}} * \sigma_a / L$$
+
+
+## Problem 2: Decomposition of Predicted Breeding Values
+

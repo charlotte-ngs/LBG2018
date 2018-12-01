@@ -178,7 +178,9 @@ vecSlTopic[which(Date == format(as.Date("2018/11/16"), "%d.%m"))] <- "[Inverse N
 ### # w10 /w10/lbg_fs_2018_slides_inbreeding.pdf
 vecSlTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Inbreeding](https://charlotte-ngs.github.io/LBGFS2018/sl/w10/lbg_fs_2018_slides_inbreeding.pdf)"
 
-### # w11
+### # w11 w11/lbg_fs_2018_slides_additional_aspects.pdf
+vecSlTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Additional Aspects of BLUP](https://charlotte-ngs.github.io/LBGFS2018/sl/w11/lbg_fs_2018_slides_additional_aspects.pdf)"
+
 
 
 ### # construct the table

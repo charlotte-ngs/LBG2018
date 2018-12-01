@@ -277,7 +277,7 @@ cat("\\right]\n $$ \n \\normalsize \\")
 
 * Diagnoal elements $(R)_{ii} = (S)_{ii}$
 
-* Because $(S)_{ii} = \sqrt{(D)_{ii}}$, diagonal elements $(R)_{ii}$ of matrix $R$ can be computed as 
+* Because $(S)_{ii} = \sqrt{(D)_{ii}}$, if parents $s$ and $d$ are known diagonal elements $(R)_{ii}$ of matrix $R$ can be computed as 
 
 $$(R)_{ii} =  (S)_{ii} = \sqrt{(D)_{ii}} = \sqrt{\left(1 - {1\over 4}(A_{ss} + A_{dd}) \right)}$$
 
@@ -285,6 +285,20 @@ $$(R)_{ii} =  (S)_{ii} = \sqrt{(D)_{ii}} = \sqrt{\left(1 - {1\over 4}(A_{ss} + A
     + $0$ if $s$ and $d$ are unknown (NA) or
     + have been computed before
 
+
+## Recap matrix $D$
+
+* Both parents $s$ and $d$ of animal $i$ are known
+
+$$(D)_{ii} = {1\over 2} - {1\over 4}(F_s + F_d) = {1\over 2} - {1\over 4}((A)_{ss} - 1 + (A)_{dd} - 1) = 1 - {1\over 4}((A)_{ss}+ (A)_{dd})$$
+
+* Parent $s$ of animal $i$ is known
+
+$$ (D)_{ii} = {3\over 4} - {1\over 4}F_s = {3\over 4} - {1\over 4}((A)_{ss} - 1) = 1 - {1\over 4} (A)_{ss}$$
+
+* Both parents unknown
+
+$$(D)_{ii} = 1$$
 
 ## Offdiagonal Elements of $R$
 
@@ -334,7 +348,7 @@ knitr::kable(tbl_ped_ext,
 * Start with $(A)_{11}$
 
 \begin{align}
-(A)_{11}  &= (R)_{11}^2 = (D)_{11} = \left(1 - {1\over 4}(A_{NANA} + A_{NANA}) \right) = 1 \notag 
+(A)_{11}  &= (R)_{11}^2 = (D)_{11}  = 1 \notag 
 \end{align}
 
 * $(A)_{22}  = (R)_{21}^2 + (R)_{22}^2 = 0 + 1 = 1$
@@ -347,7 +361,7 @@ knitr::kable(tbl_ped_ext,
 \begin{align}
 (A)_{44}  &=  (R)_{41}^2 + (R)_{42}^2 + (R)_{43}^2 + (R)_{44}^2 \notag \\
           &=  ({1\over 2}(R_{11} + R_{21}))^2 + ({1\over 2}(R_{12} + R_{22}))^2 + ({1\over 2}(R_{13} + R_{23}))^2 \notag \\
-          & + \left(1 - {1\over 4}(A_{11} + A_{11}) \right) \notag \\
+          & + \left(1 - {1\over 4}(A_{11} + A_{22}) \right) \notag \\
           &=  {1\over 4} + {1\over 4} + {1\over 2} = 1\notag
 \end{align}
 
