@@ -18,11 +18,65 @@ knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
 ```
 
 
+```{r sol11prob01setup, echo=FALSE, results='hide'}
+n_sel_int <- 1.4
+n_sigma_a <- 16
+```
+
 ## Problem 1: Importance of Accuracy
 The importance of the accuracy of predicted breeding values is different between livestock species and even between farmers within the same breeding organisation. When considering the selection response per year as a relevant criterion for comparing different selection strategies, there is a clear trade-off between accuracy of predicted breeding values and length of the generation interval. The selection response per year is defined as 
 
-$$R = i * r_{a, \hat{a}} * \sigma_a / L$$
+$$R = \frac{i * r_{a, \hat{a}} * \sigma_a}{L}$$
+
+where $i$ is the selection intensity, $r_{a, \hat{a}}$, $\sigma_a$ is the genetic additive variance and $L$ denotes the generation interval. Assume the values for $i$ to be $`r n_sel_int`$ and for $\sigma$ to be $`r n_sigma_a`$. Compute the selection response $R$ for the accuracies and the generation intervals given in the following table.
+
+```{r exselresponsetable, echo=FALSE, results='asis'}
+n_nr_row <- (.9 - .45)/.05
+tbl_sel_int <- tibble::data_frame(Accuracy = c(0.45+(0:n_nr_row)*0.05),
+                                  `Generation Interval` = c(2+(0:n_nr_row)*.5),
+                                  `Selection Response (R)` = rep("", n_nr_row+1))
+knitr::kable(tbl_sel_int,
+             booktabs = TRUE, 
+             longtable = TRUE)
+```
+
+
+### Solution
+We use the above given forumla to compute $R$ and fill out the table
+
+```{r solselresponsetable, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
+library(dplyr)
+tbl_sel_int_sol <- tbl_sel_int %>%
+  select(Accuracy, `Generation Interval`) %>%
+  mutate(`Selection Response (R)` = round((n_sel_int * Accuracy * n_sigma_a) / `Generation Interval`, digits = 2))
+
+knitr::kable(tbl_sel_int_sol,
+             booktabs = TRUE, 
+             longtable = TRUE)
+```
+
+These results show that an increase in accuracy is not worth while to accept a longer generation interval, when looking at the selection response.
 
 
 ## Problem 2: Decomposition of Predicted Breeding Values
+```{r ex11prob02dataset, echo=FALSE, results='hide'}
+set.seed(99880)
+sigmae2 <- 40
+sigmaa2 <- 20
+### # constants
+nNrObsSmd <- 5
+### # design matrics
+matXSmd <- matrix(data = 1, nrow = nNrObsSmd)
+matZSmd <- diag(1, nrow = nNrObsSmd, ncol = nNrObsSmd)
+### # define the pedigree
+tbl_pedi_ex11prob02 <- tibble::data_frame(Animal = (1:nNrObsSmd),
+                    Sire = c(NA,NA,NA,1,4),
+                    Dam = c(NA,NA,NA,2,3))
+
+```
+
+Given is the following dataset. 
+
+
+
 
