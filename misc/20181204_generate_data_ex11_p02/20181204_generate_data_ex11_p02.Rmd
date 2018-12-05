@@ -1,0 +1,187 @@
+---
+title: "Generate Data for Problem 2 in Exercise 11"
+author: "Peter von Rohr"
+date: "`r Sys.Date()` (`r Sys.info()[['user']]`)"
+output: html_notebook
+---
+
+
+## Disclaimer
+This notebook shows how data for problem 2 in exercise 11 are generated.
+
+
+## The Model
+The animal model is used to generate the data. 
+
+$$y = X\beta + Za + e$$
+
+
+```{r datasetup, echo=FALSE, results='hide'}
+set.seed(4321)
+### # fixed effects
+n_nr_obs <- 5
+n_nr_fixed_effects <- 1
+n_mu <- 13.41
+mat_x <- matrix(1, nrow = n_nr_obs, ncol = n_nr_fixed_effects)
+
+### # variance components
+n_sigmaa2 <- 8
+n_sigmae2 <- 24
+
+### # pedigree
+tbl_pedi_ex11prob02 <- tibble::data_frame(Animal = (1:n_nr_obs),
+                    Sire = c(NA,NA,NA,1,4),
+                    Dam = c(NA,NA,NA,2,3))
+
+### # assuming all animals have an observation, we get the matrix z
+### # as identity matrix
+mat_z <- diag(nrow(tbl_pedi_ex11prob02))
+```
+
+The following function was used in `20181111_generate_data_ex8p2.Rmd`. 
+
+```{r loopfunctionbv}
+### # function to get breeding values
+#' @title Generate vector of breeding values 
+#'
+#' @description
+#' The breeding values are generated using a loop
+#' over scalar values
+generate_bv <- function(ptbl_ped, pn_sigmaa2){
+  ### # get matrix D based on pedigree
+  ped <- pedigreemm::pedigree(sire = ptbl_ped$Sire, dam = ptbl_ped$Dam, label = as.character(ptbl_ped$Animal))
+  diag_mat_d <- as.matrix(pedigreemm::Dmat(ped = ped))
+  
+  ### # number of animals in pedigree
+  n_nr_ani_ped <- nrow(ptbl_ped)
+  ### # intialize a result vector
+  vec_bv_result <- rep(0, n_nr_ani_ped)
+  ### # loop over animals in pedigree and generate the breeding values
+  for (idx in seq_along(ptbl_ped$Animal)){
+    ### # get parent breeding values
+    sire_bv <- 0
+    if (!is.na(ptbl_ped$Sire[idx]))
+      sire_bv <- vec_bv_result[ptbl_ped$Sire[idx]]
+    dam_bv <- 0
+    if (!is.na(ptbl_ped$Dam[idx]))
+      dam_bv <- vec_bv_result[ptbl_ped$Dam[idx]]
+    ### # sample mendelian sampling effect
+    n_mend_sampl <- rnorm(1, mean = 0, sd = sqrt(diag_mat_d[idx,1] * pn_sigmaa2))
+    vec_bv_result[idx] <- 0.5 * sire_bv + 0.5 * dam_bv + n_mend_sampl
+  }
+  ### # return result vector
+  return(vec_bv_result)
+}
+
+```
+
+We want to vectorize the above function. The core process is the generation of the vector $a$ of breeding values using the $P$ matrix in the simple decomposition
+
+$$a = P \cdot a + m$$
+
+The matrix $P$ can be computed by solving both decompositions for $m$ and getting $P$ as
+
+$$a = L \cdot m$$
+
+From this we get, 
+
+$$P = I - L^{-1}$$
+
+The matrix $L$ is computed based on the cholesky decomposition of $A$ given by
+
+$$A = R \cdot R^T$$
+
+Setting $R = L \cdot S$ with $D = S \cdot S$ and $A = L \cdot D \cdot L^T$. The following steps can be used
+
+* From the pedigree, we get $A$
+* $R$ is obained by `chol(A)`
+* $D$ is obtained by `pedigreemm::Dmat(ped)`
+* $S$ is obtained by `sqrt(D)`
+* $L$ is computed as $L = R \cdot S^{-1}$
+* $P$ is obtained as $P = I - L^{-1}$
+
+
+```{r vecfunctionbv}
+### # function to get breeding values
+#' @title Generate vector of breeding values 
+#'
+#' @description
+#' Breeding values are generated using a vectorized 
+#' version of the generation of breeding values
+generate_vec_bv <- function(ptbl_ped, pn_sigmaa2){
+  ### # get pedigree
+  ped <- pedigreemm::pedigree(sire = ptbl_ped$Sire, dam = ptbl_ped$Dam, label = as.character(ptbl_ped$Animal))
+  ### # number of animal
+  n_nr_ani <- nrow(ptbl_ped)
+  ### # get matrix D
+  diag_mat_d <- diag(pedigreemm::Dmat(ped = ped), nrow = n_nr_ani, ncol = n_nr_ani)
+  ### # get matrix A based on pedigree
+  mat_a <- as.matrix(pedigreemm::getA(ped = ped))
+  ### # cholesky of A
+  mat_r <- t(chol(mat_a))
+  ### # sqrt(D) to mat_s
+  mat_s <- sqrt(diag_mat_d)
+  ### # matrix L
+  mat_l <- mat_r %*% solve(mat_s)
+  ### # finally get matrix P
+  mat_p <- diag(n_nr_ani) - solve(mat_l)
+  ### # sample the vector of mendelian sampling
+  vec_a <- rnorm(n_nr_ani, mean = 0, sd = sqrt(diag(diag_mat_d) * pn_sigmaa2))
+  ### # adding pedigree Information
+  vec_a_result <- mat_p %*% vec_a + vec_a
+  ### # return result
+  return(vec_a_result)
+}
+```
+
+Computing the breeding values with the old function leads to
+
+```{r}
+# generate_bv(ptbl_ped = tbl_pedi_ex11prob02, pn_sigmaa2 = n_sigmaa2)
+# -1.2070522 -0.6324697  2.0296985  0.7631304  1.1396999
+```
+
+Use the new function
+
+```{r}
+vec_a <- generate_vec_bv(ptbl_ped = tbl_pedi_ex11prob02, pn_sigmaa2 = n_sigmaa2)
+```
+
+
+## Fixed Effects
+The fixed effects are reduced to a general mean $\mu$. 
+
+
+## Observations
+Observations are generated based on the given model as
+
+```{r}
+vec_y <- crossprod(t(mat_x), n_mu) + crossprod(t(mat_z), vec_a) + rnorm(n_nr_obs, mean = 0, sd = sqrt(n_sigmae2))
+```
+
+Add observations to pedigree and write data to a data file
+
+```{r}
+library(dplyr)
+tbl_data_ex11p02 <- tbl_pedi_ex11prob02 %>%
+  mutate(Observation = round(vec_y, digits = 2))
+readr::write_csv(tbl_data_ex11p02, path = "data_ex11_p02.csv")
+```
+
+## Sire Relationship Matrix
+
+In Mrode 2005, the inverse of a sire relationship matrix is given as
+
+```{r}
+Asireinv = matrix(c(1.3333, 0, -.6667,
+                    0, 1, 0,
+                    -.6667, 0, 1.333), nrow = 3, byrow = TRUE)
+Asireinv
+```
+
+The relationship matrix is
+
+```{r}
+solve(Asireinv)
+```
+

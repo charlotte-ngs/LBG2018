@@ -185,7 +185,8 @@ cat("$$\n")
 ## Writing the data to a file
 First, we have to convert the the design matrix into factors of herds. Then, we add the herds to the pedigree info and write this dataframe to a file.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
 mat_herd <- crossprod(t(mat_x), c(0,1,2))
 tbl_dat_ex8p2 <- tbl_ped_ex8p1 %>% mutate(Herd = mat_herd[,1], Observation = round(vec_y, digits = 2))
 readr::write_csv(tbl_dat_ex8p2, path = "data_ex8_p2.csv")
