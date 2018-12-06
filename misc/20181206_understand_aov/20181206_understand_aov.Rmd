@@ -1,0 +1,109 @@
+---
+title: "Understanding Variance Analysis Tables"
+output: html_notebook
+---
+
+
+## Disclaimer
+In Mrode (chpt 11), there is a variance analysis given by the following table.
+
+
+## Anova
+
+\begin{tabular}{lll}
+\hline \\
+Source           &  Degrees of Freedom ($df$)          &  Sums of Squares ($SSQ$) \\
+\hline \\
+Overall ($\mu$)  &  $Rank(X)=1$                  &  $y^TX(X^TX)^{-1}X^Ty = F$  \\
+Sires ($s$)      &  $Rank(Z) - Rank(X) = q - 1$  &  $y^TZ(Z^TZ)^{-1}Z^Ty - y^TX(X^TX)^{-1}X^Ty = S$  \\
+Residual ($e$)   &  $n - Rank(Z) = n - q$        &  $y^Ty - y^TZ(Z^TZ)^{-1}Z^Ty = R$ \\
+\hline \\
+Total            &  $n$                          &  $y^Ty$ \\
+\hline
+\end{tabular}
+
+
+## Numerical Example
+
+```{r}
+tbl_num_ex_chp12 <- tibble::data_frame( Animal = c(4, 5, 6, 7),
+                                        Sire   = c(2, 1, 3, 2),
+                                        WWG    =  c(2.9, 4.0, 3.5, 3.5) )
+knitr::kable(tbl_num_ex_chp12,
+             booktable = TRUE, 
+             longtable = TRUE)
+
+```
+
+The design matrices and the observation vector corresponds to
+
+```{r}
+n_nr_obs_p02 <- nrow(tbl_num_ex_chp12)
+### # design matrix X
+mat_x_p02 <- matrix(1, nrow = n_nr_obs_p02, ncol = 1)
+### # design matrix Z
+mat_z_p02 <- matrix(c(0, 1, 0,
+                      1, 0, 0,
+                      0, 0, 1,
+                      0, 1, 0), nrow = n_nr_obs_p02, byrow = TRUE)
+n_nr_sire <- ncol(mat_z_p02)
+### # Observations
+mat_obs <- matrix(tbl_num_ex_chp12$WWG, ncol = 1)
+
+(ytx <- crossprod(mat_obs,mat_x_p02))
+ytx == sum(mat_obs[,1])
+```
+
+Hence from the above, we can see that $y^TX$ is just the sum of all observations which is contained in the formula for $F$.
+
+Looking at the formula for $S$, we get
+
+```{r}
+(ytz <- crossprod(mat_obs, mat_z_p02))
+tcrossprod(ytz)
+```
+
+which means $y^TZZ^Ty$ corresponds to the sum of the squared observations within each sire, summed over all sires. The multiplication by $(Z^TZ) divides the sum of squared observations by the number of observations for each sire. 
+
+The expression $y^TZ$ is a vector with sums of observation for each sire. 
+
+
+```{r}
+crossprod(mat_z_p02)
+```
+
+Hence the complete expression is
+
+```{r}
+ytz %*%solve(crossprod(mat_z_p02)) %*% t(ytz)
+```
+
+```{r}
+ytz
+```
+
+```{r}
+ytz %*% crossprod(mat_z_p02)
+```
+
+
+The same result should be obtained by
+
+```{r}
+ytz^2 / diag(crossprod(mat_z_p02))
+```
+
+```{r}
+sum(ytz^2 / diag(crossprod(mat_z_p02)))
+```
+
+
+```{r}
+ytz
+(ytz / diag(crossprod(mat_z_p02)))
+```
+
+```{r}
+diag(crossprod(mat_z_p02))
+```
+
