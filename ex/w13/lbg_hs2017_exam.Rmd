@@ -1,0 +1,471 @@
+---
+output:
+  pdf_document:
+    includes:
+      in_header: header.tex
+    fig_caption: false
+    keep_tex: true
+documentclass: article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(conv.odg = rmddochelper::odg.graphics.conv.hook)
+```
+
+```{r TaskCounts, echo=FALSE}
+cnt <- rmddochelper::R6ClassCount$new()
+cnt$set_prefix(ps_prefix = "## Problem")
+```
+
+
+```{r Points, echo=FALSE}
+# Assign Points for Q1
+lPointsQ1 <- list(TaskA = 36,
+                  TaskB = 8,
+                  TaskC = 4)
+nPointQ1Total <- sum(unlist(lPointsQ1))
+# Assign Points for Q2
+lPointsQ2 <- list(TaskA = 12,
+                  TaskB = 6,
+                  TaskC = 4)
+nPointQ2Total <- sum(unlist(lPointsQ2))
+# Assign Points for Q3
+lPointsQ3 <- list(TaskA = 8,
+                  TaskB = 12,
+                  TaskC = 10)
+nPointQ3Total <- sum(unlist(lPointsQ3))
+# Assign Points for Q4
+lPointsQ4 <- list(TaskA = 25,
+                  TaskB = 5,
+                  TaskC = 0)
+nPointQ4Total <- sum(unlist(lPointsQ4))
+# Assign Points for Q5
+lPointsQ5 <- list(TaskA = 9,
+                  TaskB = 16,
+                  TaskC = 4)
+nPointQ5Total <- sum(unlist(lPointsQ5))
+# compute overal sum of points
+nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4Total + nPointQ5Total
+```
+
+
+\thispagestyle{empty}
+
+\begin{tabular}{l}
+ETH Zurich \\
+D-USYS\\
+Institute of Agricultural Sciences\\
+\end{tabular}
+
+\vspace{15ex}
+\begin{center}
+\huge
+Final Exam  \\ \vspace{1ex}
+Livestock Breeding and Genomics \\  \vspace{1ex}
+FS 2017 \\
+
+\normalsize
+\vspace{7ex}
+Peter von Rohr 
+\end{center}
+
+\vspace{7ex}
+\begin{tabular}{p{5cm}lr}
+  & \textsc{Date}  & \textsc{\emph{22. December 2017}} \\
+  & \textsc{Begin} & \textsc{\emph{09:15 }}\\
+  & \textsc{End}   & \textsc{\emph{11:15 }}\\ 
+\end{tabular}
+
+\vspace{5ex}
+<!-- Table with Name -->
+\large
+\begin{tabular}{p{2.5cm}p{3cm}p{6cm}}
+  &  Name:     &  \\
+  &            &  \\
+  &  Legi-Nr:  & \\
+\end{tabular}
+\normalsize
+
+<!-- Table with Points -->
+
+\vspace{9ex}
+\begin{center}
+\begin{tabular}{|p{3cm}|c|c|}
+\hline
+Problem  &  Maximal Number of Points  &  Number of Points Reached \\
+\hline
+1        &  `r nPointQ1Total`         & \\
+\hline
+2        &  `r nPointQ2Total`         & \\
+\hline
+3        &  `r nPointQ3Total`         & \\
+\hline
+4        &  `r nPointQ4Total`          & \\
+\hline
+5        &  `r nPointQ5Total`          & \\
+\hline
+Total    &  `r nPointOverallTotal`    & \\
+\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+\pagebreak
+
+
+
+```{r, echo=FALSE, results='asis'}
+cat(cnt$out(ps_suffix = "Relationship and Inbreeding"), "\n")
+lPointsQ1$TaskA <- 36
+```
+
+We are given the following pedigree
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages(require(pedigreemm))
+n_nr_ani <- 6
+ped <- pedigree(sire = c(NA,NA,1,1,4,4), dam = c(NA,NA,2,3,2,5), label = c(1:n_nr_ani))
+print(ped)
+```
+
+\begin{enumerate}
+\item[a)] Use the given pedigree to construct the numerator relationship matrix $A$
+\points{`r lPointsQ1$TaskA`}
+\end{enumerate}
+
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE}
+lPointsQ1$TaskB <- 8
+```
+
+\begin{enumerate}
+\item[b)] Which elements of the matrix $A$ contain the inbreeding coefficient $F_5$ of animal $5$? What is the value of the inbreeding coefficient $F_5$?
+\points{`r lPointsQ1$TaskB`}
+\end{enumerate}
+
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE}
+lPointsQ1$TaskC <- 4
+```
+
+\begin{enumerate}
+\item[c)] Which parents would $5$ need to have, such that $F_5 = 0$ would hold?
+\points{`r lPointsQ1$TaskC`}
+\end{enumerate}
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE, results='asis'}
+cat(cnt$out(ps_suffix = "Variance Components Estimation"), "\n")
+```
+We are given the following dataset for the traits body weight and breast circumference for cattle.
+
+```{r, echo=FALSE}
+set.seed(7)
+n_nr_obs <- 10
+n_mean_weight <- 642
+n_sd_weigt <- 5
+n_mean_bc <- 155
+n_sd_bc <- 12
+### # Betriebszuteilung zufaellig
+vec_betrieb <- sample(x = c(1,2), size = 10, replace = TRUE)
+### # Modellmatrix fuer Betriebe
+mat_x <- matrix(data = 0, nrow = n_nr_obs, ncol = max(vec_betrieb))
+vec_result <- sapply(1:nrow(mat_x), function(x) mat_x[x,vec_betrieb[x]] <<- 1)
+### # betriebseffekte
+vec_b_betrieb <- c(-10.6, 32.1)
+vec_gewicht <- round(crossprod(t(mat_x),vec_b_betrieb) + rnorm(n_nr_obs, mean = n_mean_weight, sd = n_sd_weigt), digits = 0)
+
+dfWtBc <- data.frame(Animal = c(1:n_nr_obs),
+                             Herd = as.factor(vec_betrieb),
+                             BodyWeight = vec_gewicht,
+                             BreastCircumference = round(rnorm(n_nr_obs, mean = n_mean_bc, sd = n_sd_bc), digits = 0))
+knitr::kable(dfWtBc)
+```
+
+```{r, echo=FALSE}
+lPointsQ2$TaskA = 12
+```
+\begin{enumerate}
+\item[a)] What is the value for the estimated resiudal variance for the trait `body weight`, when the following assumptions are met.
+\points{`r lPointsQ2$TaskA`}
+\end{enumerate}
+
+In a first model, we assume that `body weight` is influenced by the herd leading to the following model 
+
+$$y = Xb + e$$
+
+\begin{tabular}{lll}
+wobei  &  & \\
+       &  $y$  &  vector of observations for `body weight` \\
+       &  $b$  &  vector of herd effects \\
+       &  $X$  &  incidence matrix linking observations to herd effects \\
+       &  $e$  &  vector with random resiudals with $E[e] = 0$ and $var(e) = I \sigma^2$
+\end{tabular}
+
+The estimates of the herd effects were computed using the function `lm()` in R. The statement for that is given below
+
+```{r}
+lm_gewicht <- lm(BodyWeight ~ -1 + Herd, data = dfWtBc)
+round(coefficients(lm_gewicht), digits = 1)
+```
+
+### Your task
+Estimate the residual variance $\sigma^2$ for the given model for `body weight` with the method based on the residuals. The same value for the residual variance could also be obtained from the Output of the `summary()`-function in R.
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE}
+lPointsQ2$TaskB = 6
+```
+\begin{enumerate}
+\item[b)] What is the difference between the estimated residual variance from Problem 2a) and the estimate of the residual variance based on Maximum Likelhood? 
+\points{`r lPointsQ2$TaskB`}
+\end{enumerate}
+
+### Your Task
+
+- Describe the difference between the two estimates
+- Compute the value of the Maximum-Likelhood-Estimate for the residual variance
+- Which of the two estimate is considered to be "better" than the other?
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE}
+lPointsQ2$TaskC = 4
+```
+\begin{enumerate}
+\item[c)] When the body weight of animal $11$ in herd $1$ was recorded, the scale broke down.  The body weight of animal $11$ is estimated such that it is within the range of $\pm 2$ standard deviations around the mean body weight for herd $1$. 
+\points{`r lPointsQ2$TaskC`}
+\end{enumerate}
+
+### Hints
+- Use the estimate of the standard deviation computed from Problem 2a)
+- If you could not solve Problem 2a), use a value of $10$ as an approximation of the estimated residuals standard deviation.
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE, results='asis'}
+cat(cnt$out(ps_suffix = "Livestock Breeding"), "\n")
+lPointsQ3$TaskA <- 8
+```
+
+\begin{enumerate}
+\item[a)] What is the difference between livestock population and wildlife populations with respect to the terms `selection` and `mating`? Please complete the following table.
+\points{`r lPointsQ3$TaskA`}
+\end{enumerate}
+
+```{r, echo=FALSE}
+dfPop <- data.frame(Population = c("Wildlife", "Livestock"),
+                    Selektion  = c("", ""),
+                    Anpaarung  = c("", ""))
+#knitr::kable(dfPop)
+#xtable::xtable(dfPop)
+```
+\vspace{3ex}
+\begin{center}
+\begin{tabular}{p{2cm}|p{5.5cm}|p{5.5cm}}
+\hline
+& & \\
+Population & Selection & Mating \\
+& & \\
+\hline
+& & \\
+& & \\
+Wildlife &  &  \\ 
+& & \\
+& & \\
+\hline
+& & \\
+& & \\
+Livestock &  &  \\ 
+& & \\
+& & \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE}
+lPointsQ3$TaskB <- 12
+```
+
+\begin{enumerate}
+\item[b)] In a selection scheme based on phenotypic observations, the distribution of the parents and the progeny is compared in the following diagram. Please put names on the labels in the following diagram.
+\points{`r lPointsQ3$TaskB`}
+\end{enumerate}
+
+```{r GerichteteSelektionElternNk, conv.odg=TRUE, odg.path="odg", odg.graph.cache=TRUE, odg.out.format=c("pdf","png"), fig.align='center', echo=FALSE, results='asis'}
+knitr::include_graphics(path = "png/GerichteteSelektionElternNk.png")
+```
+
+\clearpage
+\pagebreak
+
+
+```{r, echo=FALSE}
+lPointsQ3$TaskC <- 10
+```
+
+```{r, echo=FALSE}
+vec_w <- c(5, 1)
+```
+
+\begin{enumerate}
+\item[c)] In pig breeding the two meat quality traits \textbf{tenderness} (ZH) and \textbf{juiciness} (SH) should be considered in the aggregate genotype $H$. The economic values for the two traits are $w_{ZH} = `r vec_w[1]`$ und $w_{SH} = `r vec_w[2]`$. Because both traits in the aggregate genotype are difficult to measure, $H$ is estimated using an index $I$ which contains the traits \textbf{sheer force} (SK) and \textbf{drip loss} (SV) beinhaltet. What is the vector $b$ of index weights which follows from selection index theory? 
+\end{enumerate}
+
+### Assumptions
+* Economic values $w$ are given as
+
+```{r, echo=FALSE, results='asis'}
+cat("$$w = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = as.matrix(vec_w), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+* The variance covariance matrix $P$ between the traits `SK` and `SV` in the index is
+
+```{r, echo=FALSE, results='asis'}
+matP <- diag(c(4, 10))
+cat("$$P = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = matP, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+* The covariance matrix $G$ between the traits in the index and in the aggregate genotype is 
+
+```{r, echo=FALSE, results='asis'}
+matG <- matrix(data = c(1, 0.2, -0.2, 2), ncol = 2)
+cat("$$G = \\left[\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = matG, pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+### Your Task
+Compute the vector $b$ of index weights.
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE, results='asis'}
+cat(cnt$out(ps_suffix = "Inbreeding"), "\n")
+lPointsQ4$TaskA <- 25
+```
+
+\begin{enumerate}
+\item[a)] The efficient computation of inbreeding in big pedigrees is baed on the Cholesky-Decomposition of the numerator relationship matrix $A$. Compute the matrix $R$ which results from the Cholesky-Decomposition for the following pedigree.
+\points{`r lPointsQ4$TaskA`}
+\end{enumerate}
+
+```{r SmallExamPed, echo=FALSE}
+suppressPackageStartupMessages(library(pedigreemm))
+nNrAni <- 5
+ped <- pedigree(sire = c(NA,NA,2,2,3), dam = c(NA,NA,1,1,4), label = 1:nNrAni)
+print(ped)
+```
+
+### Hint
+The Cholesky-Decomposition of the matrix $A$ is
+$$A = R*R^T$$
+
+\clearpage
+\pagebreak
+```{r, echo=FALSE}
+lPointsQ4$TaskB <- 5
+```
+
+\begin{enumerate}
+\item[b)] Compute the inbreeding coefficients of the five animals in the pedigree of Problem  4a) based on the values in matrix $R$. 
+\points{`r lPointsQ4$TaskB`}
+\end{enumerate}
+
+\clearpage
+\pagebreak
+
+
+```{r, echo=FALSE, results='asis'}
+cat(cnt$out(ps_suffix = "Prediction of Breeding Values"), "\n")
+lPointsQ5$TaskA <- 9
+```
+Breeding values should be predicted based on the following data set.
+
+```{r ShowDataSet, echo=FALSE, results='asis'}
+sigmaa2 <- 8
+sigmap2 <- 32
+h2 <- sigmaa2/sigmap2
+k <- (4-h2)/h2
+alpha <- (sigmap2 - sigmaa2)/sigmaa2
+nNrRecords <- 6
+dfMlrData <- data.frame(Animal      = as.character(c(1:nNrRecords)),
+                        Herd        = c(NA,NA,"B","A","A","B"),
+                        Observation = c(NA,NA,118,120,135,115))
+nNrHerde <- length(unique(dfMlrData$Herde))
+knitr::kable(dfMlrData)
+```
+
+The variances can be taken from the following table.
+
+```{r VarTable, echo=FALSE, results='asis'}
+dfVarTable <- data.frame(Component = c("phenotypic", "additive genetic"),
+                         Value        = c(sigmap2, sigmaa2))
+knitr::kable(dfVarTable)
+```
+
+```{r SetupProgMean, echo=FALSE, results='hide'}
+mu <- mean(dfMlrData$Observation[!is.na(dfMlrData$Observation)])
+```
+
+
+\begin{enumerate}
+\item[a)] Predict the breeding value of the 6 animals based on their own performance where the population mean $\mu$ corresponds to the average of the phenotypic observation 
+\points{`r lPointsQ5$TaskA`}
+\end{enumerate}
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE}
+lPointsQ5$TaskB <- 16
+```
+
+\begin{enumerate}
+\item[b)] Predict the breeding values for the animals in the table above using a BLUP animal model. Set up the model and the resulting mixed model equations. Transfer the information from the data into the model by filling the numeric values into the matrices and the vectors where possible. 
+\points{`r lPointsQ5$TaskB`}
+\end{enumerate}
+
+
+\clearpage
+\pagebreak
+
+```{r, echo=FALSE}
+lPointsQ5$TaskC <- 4
+```
+
+\begin{enumerate}
+\item[c)] What are the differences when comparing the result from Problem a) and b)?
+\points{`r lPointsQ5$TaskC`}
+\end{enumerate}
+
