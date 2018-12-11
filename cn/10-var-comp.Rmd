@@ -43,7 +43,7 @@ $$S= y^TZ_s(Z_s^TZ_s)^{-1}Z_s^Ty - y^TX(X^TX)^{-1}X^Ty = \sum_{i=1}^{q} {1 \over
 
 $$R = y^Ty - y^TZ_s(Z_s^TZ_s)^{-1}Z_s^Ty = \sum_{i=1}^n y_i^2 - S - F$$
 
-In principle effects $\beta$ and $s$ are treated as fixed effects in the above anova. If estimates of $\sigma_e^2$ and $\sigma_s^2$ are required the observed sums of squares $S$ and $R$ can be equated to their expected values $E(R) = (n-q) \sigma_e^2$ and $E(S) = (q-1) \sigma_e^2 - tr(Z_sMZ_s)\sigma_s^2$ where $M = I - X(X^TX)^{-1}X^T$.
+In principle effects $\beta$ and $s$ are treated as fixed effects in the above anova. If estimates of $\sigma_e^2$ and $\sigma_s^2$ are required the observed sums of squares $S$ and $R$ can be equated to their expected values $E(R) = (n-q) \sigma_e^2$ and $E(S) = (q-1) \sigma_e^2 + tr(Z_sMZ_s)\sigma_s^2$ where $M = I - X(X^TX)^{-1}X^T$.
 
 
 
