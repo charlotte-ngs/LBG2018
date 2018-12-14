@@ -542,7 +542,7 @@ Inserting the number leads to
 
 ```{r mmesetup, echo=FALSE, results='hide'}
 ### # variance ratio
-lambda <- n_var_g / n_var_e
+lambda <- n_var_e/n_var_g
 ### # components of coefficient matrix
 mat_xtx_sire <- crossprod(mat_x_sire)
 mat_xtz_sire <- crossprod(mat_x_sire, mat_z_sire)
@@ -567,7 +567,7 @@ vec_sol <- solve(mat_coeff_sire, vec_rhs_sire)
 ```{r mmedisplay, echo=FALSE, results='asis'}
 cat("$$ \n")
 cat("\\left[ \n")
-cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_coeff_sire, pnDigits = 0), sep = "\n"), "\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_coeff_sire, pnDigits = 4), sep = "\n"), "\n")
 cat("\\right] \n")
 cat("\\left[ \n")
 cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_estpred_sire), sep = "\n"),"\n")
@@ -590,7 +590,7 @@ cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_estpred_si
 cat("\\right] \n")
 cat("= \n")
 cat("\\left[ \n")
-cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_coeff_sire, pnDigits = 0), sep = "\n"), "\n")
+cat(paste(rmddochelper::sConvertMatrixToLaTexArray(pmatAMatrix = mat_coeff_sire, pnDigits = 4), sep = "\n"), "\n")
 cat("\\right]^{-1} \n")
 cat("\\left[ \n")
 cat(paste(rmddochelper::sConvertVectorToLaTexArray(pvec_avector = vec_rhs_sire), sep = "\n"),"\n")
