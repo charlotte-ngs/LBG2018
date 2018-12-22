@@ -236,7 +236,7 @@ vecExTopic[which(Date == format(as.Date("2018/12/07"), "%d.%m"))] <- "[Accuracy 
  
 
 # w13 w13/lbg_hs2017_exam.pdf
-vecExTopic[which(Date == format(as.Date("2018/12/14"), "%d.%m"))] <- "[Final Exam 2017](https://charlotte-ngs.github.io/LBGFS2018/ex/w13/lbg_hs2017_exam.pdf)"
+vecExTopic[which(Date == format(as.Date("2018/12/14"), "%d.%m"))] <- "[Final Exam 2017](https://charlotte-ngs.github.io/LBGFS2018/ex/w13/lbg_hs2017_exam.pdf), [Multivariate BLUP and Variance Components](https://charlotte-ngs.github.io/LBGFS2018/ex/w13/lbg_fs_2018_w13_ex12.pdf)"
 
 
 ### # generate table output
@@ -283,10 +283,10 @@ vecSolTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Decompos
 vecSolTopic[which(Date == format(as.Date("2018/12/07"), "%d.%m"))] <- "[Inbreeding and Henderson's Rule](https://charlotte-ngs.github.io/LBGFS2018/sol/w11/lbg_fs_2018_w11_sol10.pdf)"
 
 # w13 sol/w12/lbg_fs_2018_w12_sol11.pdf
-vecExTopic[which(Date == format(as.Date("2018/12/14"), "%d.%m"))] <- "[Accuracy and Decomposition of PBV](https://charlotte-ngs.github.io/LBGFS2018/sol/w12/lbg_fs_2018_w12_sol11.pdf)"
+vecSolTopic[which(Date == format(as.Date("2018/12/14"), "%d.%m"))] <- "[Accuracy and Decomposition of PBV](https://charlotte-ngs.github.io/LBGFS2018/sol/w12/lbg_fs_2018_w12_sol11.pdf)"
 
 # w14 
-# vecExTopic[which(Date == format(as.Date("2018/12/21"), "%d.%m"))] <- "[Final Exam 2017](https://charlotte-ngs.github.io/LBGFS2018/sol/w13/lbg_hs2017_exmsol.pdf)"
+vecSolTopic[which(Date == format(as.Date("2018/12/21"), "%d.%m"))] <- "[Final Exam 2017](https://charlotte-ngs.github.io/LBGFS2018/sol/w13/lbg_hs2017_exmsol.pdf), [Multivariate BLUP and Variance Components](https://charlotte-ngs.github.io/LBGFS2018/sol/w13/lbg_fs_2018_w13_sol12.pdf)"
 
 
 ### # construct the table

@@ -261,11 +261,11 @@ The term $a + (q-p)d$ appears in all three breeding values. We replace this term
   \hline
   Genotype  &  Breeding Value\\
   \hline
-  $G_1G_1$  &  $2q\alpha$\\
+  $G_1G_1$  &  $2q\alpha$    \\
   \hline
-  $G_1G_2$  &  $(q-p)\alpha$\\
+  $G_1G_2$  &  $(q-p)\alpha$ \\
   \hline
-  $G_2G_2$  &  $-2p\alpha$\\
+  $G_2G_2$  &  $-2p\alpha$   \\
   \hline
   \end{tabular}}
   \end{center}

@@ -161,7 +161,7 @@ vec_y <- crossprod(t(mat_x), n_mu) + crossprod(t(mat_z), vec_a) + rnorm(n_nr_obs
 
 Add observations to pedigree and write data to a data file
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 tbl_data_ex11p02 <- tbl_pedi_ex11prob02 %>%
   mutate(Observation = round(vec_y, digits = 2))
