@@ -122,10 +122,8 @@ Applying this definition and using the parameters that we have computed so far l
 Assume that we have a given parent $S$ with a genotype $G_1G_1$ and we want to compute its breeding value. Let us further suppose that our single parent $S$ is mated to a potentially infinite number of animals from the idealized population, then we can deduce the following mean genotypic value for the offspring of parent $S$. 
 
 \vspace{5ex}
-\begin{center}
-   {\renewcommand{\arraystretch}{1.7}
-   \renewcommand{\tabcolsep}{0.2cm}
-   \begin{tabular}{|c|c|c|}
+
+\begin{tabular}{|c|c|c|}
 \hline
 & \multicolumn{2}{|c|}{Mates of $S$} \\
 \hline
@@ -135,8 +133,7 @@ Parent $S$       &                    &                 \\
 \hline
 $f(G_1) = 1$ &  $f(G_1G_1) = p$   &  $f(G_1G_2) = q$\\
 \hline
-\end{tabular}}
-\end{center}
+\end{tabular}
 
 \vspace{5ex}
 
@@ -167,10 +164,8 @@ Breeding values for parents with genotypes $G_2G_2$ and $G_1G_2$ are derived ana
 First, we determine the expected genotypic value for offsprings of a parent $S$ with genotype $G_2G_2$
 
 \vspace{5ex}
-\begin{center}
-   {\renewcommand{\arraystretch}{1.7}
-   \renewcommand{\tabcolsep}{0.2cm}
-   \begin{tabular}{|c|c|c|}
+
+\begin{tabular}{|c|c|c|}
 \hline
 & \multicolumn{2}{|c|}{Mates of parent $S$} \\
 \hline
@@ -180,8 +175,7 @@ Parent $S$       &                    &                 \\
 \hline
 $f(G_2) = 1$ &  $f(G_1G_2) = p$   &  $f(G_2G_2) = q$\\
 \hline
-\end{tabular}}
-\end{center}
+\end{tabular}
 
 \vspace{5ex}
 
@@ -209,10 +203,8 @@ BV_{22} &=   2*(\mu_{22} - \mu)  \notag \\
 The genotype frequencies of the offsprings of a parent $S$ with a genotype $G_1G_2$ is determined in the following table.
 
 \vspace{5ex}
-\begin{center}
-   {\renewcommand{\arraystretch}{1.7}
-   \renewcommand{\tabcolsep}{0.2cm}
-   \begin{tabular}{|c|c|c|}
+
+\begin{tabular}{|c|c|c|}
 \hline
 & \multicolumn{2}{|c|}{Mates of parent $S$} \\
 \hline
@@ -224,8 +216,8 @@ $f(G_1) = 0.5$ &  $f(G_1G_1) = 0.5p$   &  $f(G_1G_2) = 0.5q$\\
 \hline
 $f(G_2) = 0.5$ &  $f(G_1G_2) = 0.5p$   &  $f(G_2G_2) = 0.5q$\\
 \hline
-\end{tabular}}
-\end{center}
+\end{tabular}
+
 
 \vspace{5ex}
 
@@ -254,10 +246,8 @@ ZW_{12} &=   2*(\mu_{12} - \mu) \notag \\
 #### Summary of Breeding Values
 The term $a + (q-p)d$ appears in all three breeding values. We replace this term by $\alpha$ and summarize the results in the following table.
 
- \begin{center}
-   {\renewcommand{\arraystretch}{1.7}
-   \renewcommand{\tabcolsep}{0.2cm}
-  \begin{tabular}{|c|c|}
+ 
+\begin{tabular}{|c|c|}
   \hline
   Genotype  &  Breeding Value\\
   \hline
@@ -267,8 +257,7 @@ The term $a + (q-p)d$ appears in all three breeding values. We replace this term
   \hline
   $G_2G_2$  &  $-2p\alpha$   \\
   \hline
-  \end{tabular}}
-  \end{center}
+  \end{tabular}
 
 
 ### Allele Substitution {#allele-substitution}
@@ -329,10 +318,8 @@ The difference all contain the population mean $\mu$ plus a certain deviation. T
 ### Summary of Values
 The following table summarizes all genotypic values all breeding values and the dominance deviations. 
 
-\begin{center}
-  {\renewcommand{\arraystretch}{1.7}
-   \renewcommand{\tabcolsep}{0.2cm}
-   \begin{tabular}{|c|c|c|c|}
+
+\begin{tabular}{|c|c|c|c|}
    \hline
    Genotyp  &  genotypic value     &  Breeding Value    &  Dominance Deviation \\
    $G_iG_j$ &  $V_{ij}$            &  $BV_{ij}$         &  $D_{ij}$           \\
@@ -343,8 +330,9 @@ The following table summarizes all genotypic values all breeding values and the 
    \hline
    $G_2G_2$ &  $-a$                &  $-2p\alpha$       & $-2p^2d$           \\
    \hline
-   \end{tabular}}
-\end{center}
+\end{tabular}
+   
+
 
 The formulas in the above shown table assume that $G_1$ is the favorable allele with frequency $f(G_1) = p$. The allele frequency of $G_2$ is $f(G_2) = q$. Since we have a bi-allelic locus $p+q=1$.
 
