@@ -322,6 +322,14 @@ vecAddMatTopic[which(Date == format(as.Date("2018/11/23"), "%d.%m"))] <- "[Verif
 # w11 sol/w05/lbg_fs_2018_w05_sol04_corrected.pdf
 vecAddMatTopic[which(Date == format(as.Date("2018/11/30"), "%d.%m"))] <- "[Correction in Solution to Exercise 4](https://charlotte-ngs.github.io/LBGFS2018/sol/w05/lbg_fs_2018_w05_sol04_corrected.pdf)"
 
+# exam solutions
+vecAddMatTopic[which(Date == format(as.Date("2018/12/21"), "%d.%m"))] <-"[Solutions to Final Exam](https://charlotte-ngs.github.io/LBGFS2018/exam/lbg_fs2018_exmsol.pdf)" 
+
+# post exam solutions
+Date <- c(Date, format(as.Date("2019/01/14"), "%d.%m"))
+Woche <- c(Woche,NA)
+
+vecAddMatTopic[which(Date == format(as.Date("2019/01/14"), "%d.%m"))] <-"[Solutions to Post-Final Exam](https://charlotte-ngs.github.io/LBGFS2018/exam/lbg_fs2018_postexmsol.pdf)" 
 
 ### # construct the table
 dfAddMatTable <- data.frame(Woche, Date, vecAddMatTopic, stringsAsFactors = FALSE)
