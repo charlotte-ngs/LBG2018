@@ -131,7 +131,7 @@ Sheep breeders are selecting male animals for rate of gain in body weight. After
 \pagebreak
 
 \begin{enumerate}
-\item[b)] The sheep breeders are selecting for rate of body weight gain until all sires have a rate of gain larger than $0.8 kg$ per day. Then the breeders start to select for wool weight gain. What is the name of this selection strategy for selecting for two traits? Please specify two other selection strategies when multiple traits should be considered in a breeding program. Which strategy is the best when multiple traits should be selected for? 
+\item[b)] The sheep breeders are selecting for rate of body weight gain until all sires have a rate of gain larger than $0.6 kg$ per day. Then the breeders start to select for wool weight gain. What is the name of this selection strategy for selecting for two traits? Please specify two other selection strategies when multiple traits should be considered in a breeding program. Which strategy is the best when multiple traits should be selected for? 
 \points{`r lPointsQ1$TaskB`}
 \end{enumerate}
 

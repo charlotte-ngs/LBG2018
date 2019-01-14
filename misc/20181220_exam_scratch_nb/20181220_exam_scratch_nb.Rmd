@@ -239,3 +239,81 @@ mat_a_exmp5[vec_name, vec_name]
 mat_ainv_exmp5[vec_name, vec_name]
 ```
 
+
+## Pedigree From Post-Final Exam
+
+The re-ordered version of the original pedigree
+
+```{r, echo=FALSE, results='asis'}
+tbl_ped_exmp5 <- tibble::data_frame(Animal = c("ANTONIA",      "PHILADELPHIA", "VERA",   "PRISCA"),
+                                    Sire   = c("SCHAERZ",      "PAUER",        "VITGOR", "HARRY"),
+                                    Dam    = c("PHILADELPHIA", "VERA",         "PRISCA", "REIA"))
+tbl_ped_exmp5_reord <- tibble::data_frame(Animal = rev(tbl_ped_exmp5$Animal),
+                                    Sire   = rev(tbl_ped_exmp5$Sire),
+                                    Dam    = rev(tbl_ped_exmp5$Dam))
+
+knitr::kable(tbl_ped_exmp5_reord, booktabs = TRUE, longtable = TRUE)
+```
+
+
+Recoding the pedigree to numers with the following mapping
+
+```{r, echo=FALSE, results='asis'}
+tbl_ped_exmp5_map <- tibble::data_frame(Name = c("HARRY","REIA","VITGOR","PAUER","SCHAERZ","PRISCA","VERA", "PHILADELPHIA", "ANTONIA"),
+                                        Code = c(1:9))
+knitr::kable(tbl_ped_exmp5_map, booktabs = TRUE, longtable = TRUE)
+```
+
+Applying the above shown mapping
+
+```{r, echo=FALSE, results='asis'}
+tbl_ped_exmp5_recode <- tibble::data_frame(Animal = c(6, 7, 8, 9),
+                                    Sire   = c(1, 3, 4, 5),
+                                    Dam    = c(2, 6, 7, 8))
+knitr::kable(tbl_ped_exmp5_recode, booktabs = TRUE, longtable = TRUE)
+```
+
+Extending the pedigree with founders
+
+```{r, echo=FALSE, results='asis'}
+n_nr_founder_emp5 <- min(tbl_ped_exmp5_recode$Animal)-1
+n_nr_ani_emp5 <- max(tbl_ped_exmp5_recode$Animal)
+tbl_ped_exmp5_ext <- tibble::data_frame(Animal = c(1:n_nr_ani_emp5),
+                                        Sire   = c(rep(NA, n_nr_founder_emp5), tbl_ped_exmp5_recode$Sire),
+                                        Dam    = c(rep(NA, n_nr_founder_emp5), tbl_ped_exmp5_recode$Dam))
+knitr::kable(tbl_ped_exmp5_ext, booktabs = TRUE, longtable = TRUE)
+```
+
+This pedigree can be used to compute the numerator relationship matrix
+
+```{r, echo=FALSE, results='asis'}
+ped_exmp5 <- pedigreemm::pedigree(sire = tbl_ped_exmp5_ext$Sire,
+                                  dam  = tbl_ped_exmp5_ext$Dam,
+                                  label = as.character(tbl_ped_exmp5_ext$Animal))
+mat_a_exmp5 <- as.matrix(pedigreemm::getA(ped = ped_exmp5))
+```
+
+```{r, echo=FALSE, results='asis'}
+mat_ainv_exmp5 <- as.matrix(pedigreemm::getAInv(ped = ped_exmp5))
+```
+
+Use row and column numbers to be able to specify an order
+
+```{r}
+colnames(mat_a_exmp5) <- tolower(tbl_ped_exmp5_map$Name)
+rownames(mat_a_exmp5) <- tolower(tbl_ped_exmp5_map$Name)
+colnames(mat_ainv_exmp5) <- tolower(tbl_ped_exmp5_map$Name)
+rownames(mat_ainv_exmp5) <- tolower(tbl_ped_exmp5_map$Name)
+ mat_a_exmp5
+```
+
+
+```{r}
+vec_name <- c("reia", "harry", "vitgor", "pauer", "schaerz", "prisca", "vera", "philadelphia", "antonia")
+mat_a_exmp5[vec_name, vec_name]
+```
+
+```{r}
+mat_ainv_exmp5[vec_name, vec_name]
+```
+
